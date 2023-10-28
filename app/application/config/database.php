@@ -76,7 +76,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' =>  $_ENV['DB_HOSTNAME'],
+	'hostname' => $_ENV['DB_HOSTNAME'],
 	'username' => $_ENV['DB_PBK_USERNAME'],
 	'password' => $_ENV['DB_PBK_PASSWORD'],
 	'database' => $_ENV['DB_PBK_DATABASE'],
