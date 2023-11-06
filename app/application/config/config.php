@@ -33,7 +33,7 @@ if (!empty($_SERVER['HTTPS']))
 else
 {
 //echo 'http is enabled'."\n";
- $config['base_url'] = 'http://localhost/powerbooks-v2/';
+ $config['base_url'] = 'http://localhost/powerbooks-v2/app';
 
 }
 

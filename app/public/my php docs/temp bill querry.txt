@@ -1,0 +1,1 @@
+SELECT sum(qty),sum(amount) FROM `temp_bill` group by `item_code`;

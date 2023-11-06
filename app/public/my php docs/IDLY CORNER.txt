@@ -1,0 +1,32 @@
+         LAVISH ENTERPRISES
+FS28-A, II FLOOR, MALL OF TRAVANCORE
+           32COPPM4935Z1
+
+DATE:12-DEC-2018      TIME:01:08 PM
+
+------------------------------------
+            TAX INVOICE
+------------------------------------
+
+ITEM	       RATE      QTY     AMT
+
+PODI IDLY       90       2      180
+
+PLAIN IDLY	70       2      140
+
+------------------------------------
+TAXABLE AMT		 4      320
+
+CGST :2.5%	     CGST AMT :   8
+SGST :2.5%           SGST AMT :   8
+
+		        TOTAL : 336
+------------------------------------
+CARD NO		:
+CASH TENDERED	: 350
+BALANCE		: -30
+
+************************************
+       THANK YOU VISIT AGAIN
+************************************
+		

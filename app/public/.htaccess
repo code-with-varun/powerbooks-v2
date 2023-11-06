@@ -1,0 +1,241 @@
+# Turn Rewrite Engine On
+RewriteEngine on
+
+# NC makes the rule non case sensitive
+# L makes this the last rule that this specific condition will match
+# $ in the regular expression makes the matching stop so that "customblah" will not work
+
+# Rewrite for projects.php
+#RewriteRule ^investors investor-login.php [NC,L]
+
+# Rewrite for user.php?u=xxxxx
+#RewriteRule ^user/([0-9a-zA-Z]+) user.php?u=$1 [NC,L]
+
+# Rewrite for article.php?id=1&title=Title-Goes-Here
+#RewriteRule ^article/([0-9]+)/([0-9a-zA-Z_-]+) article.php?id=$1&title=$2 [NC,L]
+
+# Rewrite for unsubscribe.php?id=1&otp=45aBf6-Goes-Here
+#RewriteRule ^unsubscribe/([0-9]+)/([0-9a-zA-Z]+)/([0-9]+) unsubscribe.php?cid=$1&siteid=$2&otp=$3 [NC,L]
+
+#general template ends 
+
+# Rewrite for home
+RewriteRule ^home index.php [NC,L]
+# Rewrite for signup
+RewriteRule ^sign-up sign-up.php [NC,L]
+# Rewrite for newmember
+RewriteRule ^new-member newmember.php [NC,L]
+
+# Rewrite for message
+RewriteRule ^message message.php [NC,L]
+
+
+# Rewrite for errormessage
+RewriteRule ^errormessage errormessage.php [NC,L]
+
+# Rewrite for forgotpassword
+RewriteRule ^forgot-password forgot-password.php [NC,L]
+
+# Rewrite for forgotpassword
+RewriteRule ^recover-password recover-password.php [NC,L]
+
+# Rewrite for dashboard
+RewriteRule ^onboarding onboarding.php [NC,L]
+
+# Rewrite for company update
+RewriteRule ^company-details-update company-details-update.php [NC,L]
+
+# Rewrite for company update
+RewriteRule ^password-update password-update.php [NC,L]
+
+# Rewrite for dashboard
+RewriteRule ^dashboard dashboard.php [NC,L]
+# Rewrite for Login
+RewriteRule ^login login.php [NC,L]
+# Rewrite for logout
+RewriteRule ^logout logout.php [NC,L]
+
+# Rewrite for Profile
+RewriteRule ^Setup setup.php [NC,L]
+
+# Rewrite for Profile
+RewriteRule ^opportunity opportunity.php [NC,L]
+
+# Rewrite for Profile
+RewriteRule ^estimate estimate.php [NC,L]
+
+# Rewrite for Profile
+RewriteRule ^billing billing.php [NC,L]
+
+# Rewrite for activate.php?id=1&otp=45aBf6-Goes-Here
+RewriteRule ^activate/([0-9]+)/([0-9a-zA-Z]+) verify.php?merchantid=$1&emailid=$2 [NC,L]
+
+# Rewrite for activation-success.php
+RewriteRule ^activation-success activation-success.php [NC,L]
+
+
+# Rewrite for brand-settings.php
+RewriteRule ^brand-settings brand-settings.php [NC,L]
+
+
+# Rewrite for staff-catalogue
+RewriteRule ^staff-catalogue staff-catalogue.php [NC,L]
+
+# Rewrite for new-staff
+RewriteRule ^new-staff new-staff.php [NC,L]
+
+
+# Rewrite for goods-inward
+RewriteRule ^goods-inward goods-inward.php [NC,L]
+
+# Rewrite for day-open
+RewriteRule ^day-open day-open.php [NC,L]
+
+# Rewrite for day-close
+RewriteRule ^day-close day-close.php [NC,L]
+
+# Rewrite for system-dayend
+RewriteRule ^system-dayend system-dayend.php [NC,L]
+
+# Rewrite for system-dayopen
+RewriteRule ^system-dayopen system-dayopen.php [NC,L]
+
+# Rewrite for add-vendor
+RewriteRule ^add-vendor add-vendor.php [NC,L]
+
+# Rewrite for goods-uploader
+RewriteRule ^goods-uploader goods-uploader.php [NC,L]
+
+# Rewrite for stock-register
+RewriteRule ^stock-register stock-register.php [NC,L]
+
+# Rewrite for new-mrp
+RewriteRule ^new-mrp new-mrp.php [NC,L]
+
+# Rewrite for billing
+RewriteRule ^billing billing.php [NC,L]
+
+# Rewrite for billing
+RewriteRule ^temp-bill temp-bill.php [NC,L]
+
+# Rewrite for checkout
+RewriteRule ^checkout checkout.php [NC,L]
+
+# Rewrite for cancel-bill-item.php
+RewriteRule ^cancel-bill-item cancel-bill-item.php [NC,L]
+
+# Rewrite for invoice-viewer.php
+RewriteRule ^invoice-viewer invoice-viewer.php [NC,L]
+
+# Rewrite for temp-opportunity.php
+RewriteRule ^temp-opportunity temp-opportunity.php [NC,L]
+
+
+# Rewrite for cancel-opportunity-item.php
+RewriteRule ^cancel-opportunity-item cancel-opportunity-item.php [NC,L]
+
+
+# Rewrite for create-opportunity.php
+RewriteRule ^create-opportunity create-opportunity.php [NC,L]
+
+
+# Rewrite for estimate.php
+RewriteRule ^estimate estimate.php [NC,L]
+
+
+# Rewrite for temp-estimate.php
+RewriteRule ^temp-estimate temp-estimate.php [NC,L]
+
+
+# Rewrite for cancel-estimate-item
+RewriteRule ^cancel-estimate-item cancel-estimate-item.php [NC,L]
+
+
+# Rewrite for create-estimate.php
+RewriteRule ^create-estimate create-estimate.php [NC,L]
+
+
+# Rewrite for billwise-sales.php
+RewriteRule ^billwise-sales billwise-sales.php [NC,L]
+
+
+# Rewrite for itemwise-sales
+RewriteRule ^itemwise-sales itemwise-sales.php [NC,L]
+
+
+# Rewrite for daywise-sales.php
+RewriteRule ^daywise-sales daywise-sales.php [NC,L]
+
+
+# Rewrite for return-billing.php
+RewriteRule ^return-billing return-billing.php [NC,L]
+
+
+# Rewrite for temp-exchange.php
+RewriteRule ^temp-exchange temp-exchange.php [NC,L]
+
+
+# Rewrite for cancel-inward-item.php
+RewriteRule ^cancel-inward-item cancel-inward-item.php [NC,L]
+
+
+# Rewrite for return-checkout.php
+RewriteRule ^return-checkout return-checkout.php [NC,L]
+
+
+# Rewrite for exchange-switch.php
+RewriteRule ^exchange-switch exchange-switch.php [NC,L]
+
+
+# Rewrite for reprint.php
+RewriteRule ^reprint reprint.php [NC,L]
+
+
+# Rewrite for return-invoice.php
+RewriteRule ^return-invoice return-invoice.php [NC,L]
+
+
+# Rewrite for staging.php
+RewriteRule ^staging staging.php [NC,L]
+
+# Rewrite for stage-estimate.php
+RewriteRule ^stage-estimate stage-estimate.php [NC,L]
+
+# Rewrite for stage-do.php
+RewriteRule ^stage-do stage-do.php [NC,L]
+
+# Rewrite for stage-billing.php
+RewriteRule ^stage-billing stage-billing.php [NC,L]
+
+
+# Rewrite for status-switch
+RewriteRule ^status-switch status-switch.php [NC,L]
+
+# Rewrite for doc-viewer.php
+RewriteRule ^doc-viewer doc-viewer.php [NC,L]
+
+
+# Rewrite for new-goods-uploader.php
+RewriteRule ^new-goods-uploader new-goods-uploader.php [NC,L]
+
+
+# Rewrite for DCC-updator.php
+RewriteRule ^DCC-updator DCC-updator.php [NC,L]
+
+
+# Rewrite for unload-ptfile.php
+RewriteRule ^unload-ptfile unload-ptfile.php [NC,L]
+
+# Rewrite for add-pt-item.php
+RewriteRule ^add-pt-item add-pt-item.php [NC,L]
+
+
+# Rewrite for single-goods-uploader.php
+RewriteRule ^single-goods-uploader single-goods-uploader.php [NC,L]
+
+# Rewrite for invoice-settings-updator
+RewriteRule ^invoice-settings-updator invoice-settings-updator.php [NC,L]
+
+# Rewrite for activate.php?id=1&otp=45aBf6-Goes-Here
+RewriteRule ^scanview/([0-9a-zA-Z]+)/([0-9]+) scanview.php?prefixno=$1&suffixno=$2 [NC,L]
+

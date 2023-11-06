@@ -1,8 +1,3 @@
-<IfModule mod_env.c>
-    #Set Environment(development,testing,production)
-    SetEnv CI_ENV development
-</IfModule>
-
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
