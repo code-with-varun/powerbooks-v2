@@ -26,7 +26,7 @@ class Login extends CI_Controller
 			foreach ($specific_user_fetch_login as $row) {
 
 				$eid = $row->eid;
-				$account_type = $row->account_type;
+				$user_type = $row->user_type;
 				$user_name = $row->user_name;
 				$merchant_id = $row->merchant_id;
 
@@ -35,7 +35,7 @@ class Login extends CI_Controller
 					'pbk_eid'  => $eid,
 					'pbk_name'  => $user_name,
 					'pbk_merchant_id'  => $merchant_id,
-					'pbk_account_type' => $account_type
+					'pbk_user_type' => $user_type
 
 				);
 
