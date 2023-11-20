@@ -57,7 +57,7 @@ $route['sign-in'] = 'Home/sign_in';
 $route['sign-up'] = 'Home/sign_up';
 $route['new-merchant'] = 'Home/add_new_merchant';
 
-$route['sign-in'] = 'Login/user_login';
+$route['login'] = 'Login/user_login';
 $route['logout'] = 'Login/user_logout';
 
 $route['dashboard'] = 'Dashboard/index';

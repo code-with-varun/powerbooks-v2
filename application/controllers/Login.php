@@ -48,14 +48,14 @@ class Login extends CI_Controller
 			}
 		} else {
 			//echo 'no user found';
-			redirect('home', 'location');
+			redirect('sign-in', 'location');
 		}
 	}
 
 	function user_logout()
 	{
 		$this->session->unset_userdata('pbk_sess');
-		redirect('home', 'location');
+		redirect('sign-in', 'location');
 	}
 
 	
