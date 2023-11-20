@@ -47,6 +47,31 @@ class Users_model extends CI_Model
 		}
 	}
 
+	public function check_merchant_otp($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('otp', $data['otp'])
+			->where('merchant_id', $data['merchant_id'])
+			->get('user_details')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function check_otp_expiry($data)
+	{
+
+		return $this->db->select('*')
+			->where('otp', $data['otp'])
+			->where('merchant_id', $data['merchant_id'])
+			->from('user_details')
+			->get()
+			->result();
+	}
 	
 	public function specific_user_fetch_login($data)
 	{
@@ -79,25 +104,74 @@ class Users_model extends CI_Model
 	{
 
 		return $this->db->select('*')
-			->where('option_key', 'business_structure')
+			->where('option_key', 'Business Structure')
 			// ->where('category', 'Education')
 			->from('options_master')
 			->get()
 			->result();
 	}
-	
-	// public function options_employee_type()
-	// {
 
-	// 	return $this->db->select('*')
-	// 		->where('OPTION_KEY', 'EMPLOYEE TYPE')
-	// 		// ->where('category', 'Education')
-	// 		->from('options_master')
-	// 		->get()
-	// 		->result();
-	// }
+	public function options_industry()
+	{
 
-	
+		return $this->db->select('*')
+			->where('option_key', 'Industry')
+			// ->where('category', 'Education')
+			->from('options_master')
+			->get()
+			->result();
+	}
+	public function options_business_category()
+	{
+
+		return $this->db->select('*')
+			->where('option_key', 'Business Category')
+			// ->where('category', 'Education')
+			->from('options_master')
+			->get()
+			->result();
+	}
+	public function options_business_model()
+	{
+
+		return $this->db->select('*')
+			->where('option_key', 'Business Model')
+			// ->where('category', 'Education')
+			->from('options_master')
+			->get()
+			->result();
+	}
+	public function options_invoice_print_type()
+	{
+
+		return $this->db->select('*')
+			->where('option_key', 'Invoice Print Type')
+			// ->where('category', 'Education')
+			->from('options_master')
+			->get()
+			->result();
+	}
+	public function options_membership()
+	{
+
+		return $this->db->select('*')
+			->where('option_key', 'Membership')
+			// ->where('category', 'Education')
+			->from('options_master')
+			->get()
+			->result();
+	}
+
+// ALL UPDATE QUERIES
+
+	public function account_activation_update($data)
+	{
+		return $this->db->set('profile_status', 'ACTIVE')
+			->where('merchant_id', $data['merchant_id'])
+			->where('otp', $data['otp'])
+			->update('user_details');
+	}
+
 // ALL MAX ID FETCH
 
 

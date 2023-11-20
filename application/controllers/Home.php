@@ -20,9 +20,39 @@ class Home extends CI_Controller {
 
 	public function account_activate($one,$two)
 	{
-		echo $one;
-		echo $two;
+		$data['merchant_id']= $one;
+		$data['otp']= $two;
 
+		$check_merchant_otp = $this->Users_model->check_merchant_otp($data);
+		if ($check_merchant_otp == 1) {
+
+			$check_otp_expiry = $this->Users_model->check_otp_expiry($data);
+			foreach ($check_otp_expiry as $row) {
+
+				$otp_expiry = $row->otp_expiry;
+				$otp_ago=strtotime($otp_expiry)-time();
+				if($otp_ago<0)
+				{
+					$this->session->set_flashdata('registration_status','Verification Link Expired! Please Register again');
+					redirect('messages', 'location');
+				}
+				else{
+
+					$account_activation_update = $this->Users_model->account_activation_update($data);
+					$this->session->set_flashdata('registration_status','Verified Succesfully! Please Login');
+					redirect('messages', 'location');
+				}
+
+			}
+
+		
+
+		}
+		else{
+			$this->session->set_flashdata('registration_status','Merchant Not Registered');
+			redirect('messages', 'location');
+		}
+		
 
 	}
 
@@ -71,7 +101,6 @@ $to =$mdata['eid'];
 $subject = 'Powerbook Account Activation Merchant ID - '.$mdata['merchant_id']; 
 
 $htmlContent = '
-
 <CENTER><br>
 
 <form style="padding:10px; background-color:#fe702e; width:776px; height:auto;">
@@ -79,21 +108,24 @@ $htmlContent = '
 
 
 <tr>
-<td style="float:left;">
-<a href="#"> <img src="https://cdn.1lybio.in/images/logos/powerbooks-logo.png" ></a>
+<td>
+<a href="#"> <img src="https://cdn.1lybio.in/images/logos/powerbooks-logo.png" style="float:left;width:30%; height:50%"> </a>
 </td>
 </tr>
 
 <tr>
-<td style="background-image: url(https://thamizhanda.in/ispark/ldpromo/templates/uni-imgs/footer-powerbook-mail.png);background-repeat: no-repeat;  background-size: 776px 435px;   width:776px; height:435px;  padding-left:310px; text-align:left; ">
+<td style="text-align:left; padding:50px;">
 
-Congratulations!,<br><br> Your Powerbook Account has been Created.<br> Please click the below  link to activate your account.<br><br>
+Congratulations!,<br><br> Your Powerbook Account has been Created.<br>
+ Please click the below  link to activate your account.<br><br>
 
- 
+  
  <a  href="'.base_url().'activate/'.$mdata['merchant_id'].'/'.$mdata['otp'].'">
   <input type="button" style="color:white; 
   text-decoration:none;
-  width:190px; height:80px; 
+  width:190px;
+  height:45px; 
+  border-radius:25px;
   
   background-color: #4CAF50;
   border: none;
@@ -103,18 +135,21 @@ Congratulations!,<br><br> Your Powerbook Account has been Created.<br> Please cl
   font-size: 16px;" value="Activate" ></a>
   <br><br><br> 
 
-
-<br><br><br><br><br><br>
-<h5 style="color:black; text-align:center;padding-right:-20px">
+  
+<h5 style="color:black; text-align:left;padding-right:-20px">
 All-in-one Small &  Medium Business Accounting software Solution. </h5>
 </td>
 </tr>
 <tr>
 <td>
-<a href="#" style="text-align:right; padding-left:130px;"> <img src="https://cdn.1lybio.in/images/logos/thamizhanda.png" width="200px" height="70px"></a><br>
-You have received this email because you are registered at Thamizhanda.in.<br>
+  <center>
+    <hr>
+<a href="#"> 
+<img src="https://cdn.1lybio.in/images/logos/thamizhanda.png" width="200px" height="70px"></a>
+</center><br>
+You have received this email because you are registered at Powerbooks.<br>
 
-&#169;'.$today=date("Y").' Thamizhanda.in <a href=#" target="new">Unsubscribe</a>
+&#169;'.$today=date("Y").' Thamizhanda.in <a href="https://helpdesk.thamizhanda.in/" target="new">Unsubscribe</a>
 </td>
 </tr>
 </table>

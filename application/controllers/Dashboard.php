@@ -100,14 +100,24 @@ class Dashboard extends CI_Controller
 		$data['eid'] = $sessdata['pbk_eid'];
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
 
-		$config_master_fetch = $this->Users_model->config_master_fetch($data);
+
+		$options_business_structure = $this->Users_model->options_business_structure();
+		$options_industry = $this->Users_model->options_industry();
+		$options_business_category = $this->Users_model->options_business_category();
+		$options_business_model = $this->Users_model->options_business_model();
+		$options_invoice_print_type = $this->Users_model->options_invoice_print_type();
+		$options_membership = $this->Users_model->options_membership();
 
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_menus_view');
 		$this->load->view('dashboard_onboarding_view',[
-		'config_master_fetch'=>$config_master_fetch,
-		
+		'options_business_structure'=>$options_business_structure,
+		'options_industry'=>$options_industry,
+		'options_business_category'=>$options_business_category,
+		'options_business_model'=>$options_business_model,
+		'options_invoice_print_type'=>$options_invoice_print_type,
+		'options_membership'=>$options_membership,	
 		]);
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_footer_view');

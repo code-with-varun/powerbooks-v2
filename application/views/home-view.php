@@ -101,14 +101,14 @@ $base=base_url()."public/";
                 <h2 class="head-title">Ledgers, ERP & POS<br>All in One</h2>
                 <p>Making Accounting process simple and easy for all small and medium startup companies. Powerbooks is an excelent product for your business developed by Plugins Technologies.</p>
                 <div class="header-button">
-                  <a href="https://Thamizhanda.in.com/powerbooks/app/sign-up" class="btn btn-common">Register Now</i></a>
-                  <a href="https://Thamizhanda.in.com/newspoint/new-launch/powerbooks/" class="btn btn-border video-popup">Learn More</i></a>
+                  <a href="https://Thamizhanda.in.com/powerbooks/sign-up" class="btn btn-common">Register Now</i></a>
+                  <a href="https://thamizhanda.in/blog/powebooks" target="new" class="btn btn-border video-popup">Learn More</i></a>
                 </div>
               </div>
             </div>
             <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
               <div class="intro-img">
-                <img class="img-fluid" src="assets/img/intro-mobile.png" alt="">
+                <img class="img-fluid" src="<?php echo $base?>assets/img/intro-mobile.png" alt="">
               </div>            
             </div>
           </div> 
@@ -226,7 +226,7 @@ $base=base_url()."public/";
             </div>
           </div>
           <div class="col-lg-6 col-md-12 col-xs-12 wow fadeInRight" data-wow-delay="0.3s">
-            <img class="img-fluid" src="assets/img/about/img-1.png" alt="" >
+            <img class="img-fluid" src="<?php echo $base?>assets/img/about/img-1.png" alt="" >
           </div>
         </div>
       </div>
@@ -274,7 +274,7 @@ $base=base_url()."public/";
           </div>
           <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
             <div class="show-box wow fadeInUp" data-wow-delay="0.3s">
-              <img src="assets/img/feature/intro-mobile.png" alt="">
+              <img src="<?php echo $base?>assets/img/feature/intro-mobile.png" alt="">
             </div>
           </div>
           <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
@@ -326,7 +326,7 @@ $base=base_url()."public/";
             <!-- Team Item Starts --><!-- 
             <div class="team-item wow fadeInRight" data-wow-delay="0.2s">
               <div class="team-img">
-                <img class="img-fluid" src="assets/img/team/team-01.png" alt="">
+                <img class="img-fluid" src="<?php echo $base?>assets/img/team/team-01.png" alt="">
               </div>
               <div class="contetn">
                 <div class="info-text">
@@ -347,7 +347,7 @@ $base=base_url()."public/";
             <!-- Team Item Starts --><!-- 
             <div class="team-item wow fadeInRight" data-wow-delay="0.4s">
               <div class="team-img">
-                <img class="img-fluid" src="assets/img/team/team-02.png" alt="">
+                <img class="img-fluid" src="<?php echo $base?>assets/img/team/team-02.png" alt="">
               </div>
               <div class="contetn">
                 <div class="info-text">
@@ -368,7 +368,7 @@ $base=base_url()."public/";
             <!-- Team Item Starts --><!-- 
             <div class="team-item wow fadeInRight" data-wow-delay="0.6s">
               <div class="team-img">
-                <img class="img-fluid" src="assets/img/team/team-03.png" alt="">
+                <img class="img-fluid" src="<?php echo $base?>assets/img/team/team-03.png" alt="">
               </div>
               <div class="contetn">
                 <div class="info-text">
@@ -389,7 +389,7 @@ $base=base_url()."public/";
             <!-- Team Item Starts --><!-- 
             <div class="team-item wow fadeInRight" data-wow-delay="0.8s">
               <div class="team-img">
-                <img class="img-fluid" src="assets/img/team/team-04.png" alt="">
+                <img class="img-fluid" src="<?php echo $base?>assets/img/team/team-04.png" alt="">
               </div>
               <div class="contetn">
                 <div class="info-text">

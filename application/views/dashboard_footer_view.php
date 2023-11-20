@@ -10,7 +10,7 @@ $base=base_url()."public/";
 <script src="<?php echo $base;?>plugins/bootstrap/js/bootstrap.js"></script>
 
 <!-- Select Plugin Js -->
-<script src="<?php echo $base;?>plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<!-- <script src="<?php echo $base;?>plugins/bootstrap-select/js/bootstrap-select.js"></script> -->
 
 <!-- Slimscroll Plugin Js -->
 <script src="<?php echo $base;?>plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
@@ -37,6 +37,9 @@ $base=base_url()."public/";
 
 <!-- Sparkline Chart Plugin Js -->
 <script src="<?php echo $base;?>plugins/jquery-sparkline/jquery.sparkline.js"></script>
+
+  <!-- Input Mask Plugin Js -->
+  <script src="<?php echo $base;?>plugins/jquery-inputmask/jquery.inputmask.bundle.js"></script>
 
 <!-- Custom Js -->
 <script src="<?php echo $base;?>js/admin.js"></script>
