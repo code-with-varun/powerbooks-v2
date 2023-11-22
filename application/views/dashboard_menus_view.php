@@ -7,6 +7,15 @@ $name = $sessdata['pbk_name'];
 $merchant_id= $sessdata['pbk_merchant_id'];
 $user_type= $sessdata['pbk_user_type'];
 $onboarding= $sessdata['pbk_onboarding'];
+$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+$data['eid'] = $sessdata['pbk_eid'];
+
+$specific_user_fetch_login = $this->Users_model->specific_user_fetch_login($data);
+	foreach ($specific_user_fetch_login as $row)
+	{
+	$onboarding = $row->onboarding;
+	}
+
 
 ?> 
 

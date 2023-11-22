@@ -151,7 +151,7 @@ $base=base_url()."public/";
                                  	
                                  </td>
                                 <td>
-                                  <input class="form-control"type="text" value="1" id="reqiredqty" selected="selected" name="qty">
+                                  <input class="form-control"type="number" value="1" min="1" id="reqiredqty" selected="selected" name="qty">
                                   <input type="checkbox" id="nostock" name="nostock" >
                                 </td>
                                 

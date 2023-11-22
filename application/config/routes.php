@@ -63,6 +63,7 @@ $route['logout'] = 'Login/user_logout';
 $route['dashboard'] = 'Dashboard/index';
 $route['billing'] = 'Dashboard/billing';
 $route['onboarding'] = 'Dashboard/onboarding';
+$route['merchant-onboard'] = 'Dashboard/merchant_onboard';
 
 $route['messages'] = 'Home/messages';
 

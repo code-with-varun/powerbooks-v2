@@ -78,7 +78,7 @@ class Users_model extends CI_Model
 
 		return $this->db->select('*')
 			->where('eid', $data['eid'])
-			//->or_where('mobile', $data['login_id'])
+			->or_where('merchant_id', $data['merchant_id'])
 			->from('user_details')
 			->get()
 			->result();
@@ -162,6 +162,19 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function options_membership_billed()
+	{
+
+		return $this->db->select('*')
+			->where('option_key', 'Membership Billed')
+			->from('options_master')
+			->order_by('rid')
+			->get()
+			->result();
+	}
+
+	
+
 // ALL UPDATE QUERIES
 
 	public function account_activation_update($data)
@@ -169,6 +182,14 @@ class Users_model extends CI_Model
 		return $this->db->set('profile_status', 'ACTIVE')
 			->where('merchant_id', $data['merchant_id'])
 			->where('otp', $data['otp'])
+			->update('user_details');
+	}
+
+	public function onboarding_update($data)
+	{
+		return $this->db->set('onboarding', 'YES')
+			->set('admin_mobile', $data['admin_mobile'])
+			->where('merchant_id', $data['merchant_id'])
 			->update('user_details');
 	}
 
@@ -236,12 +257,12 @@ class Users_model extends CI_Model
 
 		return $this->db->insert('user_details', $data);
 	}
-	// public function new_profile_kyc_insert($data)
-	// {
 
-	// 	return $this->db->insert('kyc_details', $data);
-	// }
-	
+	public function new_onboard_config_insert($data)
+	{
+
+		return $this->db->insert('config_master', $data);
+	}	
 	
 
 
