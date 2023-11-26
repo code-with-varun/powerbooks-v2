@@ -15,7 +15,17 @@ $specific_user_fetch_login = $this->Users_model->specific_user_fetch_login($data
 	{
 	$onboarding = $row->onboarding;
 	}
+if($onboarding=='YES')
 
+{
+	$config_master_fetch = $this->Users_model->config_master_fetch($data);
+	foreach ($config_master_fetch as $row)
+	{
+	$brand_name = $row->brand_name;
+	$company_name = $row->company_name;
+	}
+
+}
 
 ?> 
 
@@ -49,16 +59,20 @@ if($onboarding=='YES')
 					<i class="material-icons">assignment</i>
 					<span>Estimates</span>
 				</a>
-			</li> -->
-		
-			<li>
-				<a href="billing">
-					<i class="material-icons">shopping_cart</i>
-					<span>Billing</span>
-				</a>
-			</li>
-			
-			<!-- multy level -->
+			</li> -->';
+
+		if($user_type=='MANAGER' || $user_type=='STAFF')
+		{			
+		echo '<li>
+			<a href="billing">
+				<i class="material-icons">shopping_cart</i>
+				<span>Billing</span>
+			</a>
+		</li>';
+		}
+		if($user_type=='MANAGER' || $user_type=='ADMIN')
+		{
+		echo'<!-- multy level -->
 			<li>
 				<a href="#" class="menu-toggle">
 					<i class="material-icons">layers</i>
@@ -66,18 +80,19 @@ if($onboarding=='YES')
 				</a>
 				<ul class="ml-menu">
 					<li>
-						<a href="goods-inward">
-							<span>Goods Inward</span>
+						<a href="create-product">
+							<span>Create Product</span>
 						</a>
 					</li>
 					<li>
-						<a href="stock-register">
-							<span>Stock Register</span>
-						</a>
+					<a href="goods-inward">
+						<span>Goods Inward</span>
+					</a>
 					</li>
+
 					<li>
-						<a href="staff-catalogue">
-							<span>Staff Catalogue</span>
+						<a href="staffing">
+							<span>Staffing</span>
 							</a>
 					</li>
 				   
@@ -107,6 +122,7 @@ if($onboarding=='YES')
 							<span>Daywise Sales</span>
 						</a>
 					</li>
+					
 					<li>
 						<a href="#" class="menu-toggle">
 							<span>Analyse Report</span>
@@ -117,6 +133,16 @@ if($onboarding=='YES')
 									<span>Tax Register</span>
 								</a>
 							</li>
+							<li>
+					<a href="stock-balance">
+						<span>Stock Balance</span>
+					</a>
+					</li>
+					<li>
+						<a href="stock-register">
+							<span>Stock Register</span>
+						</a>
+					</li>
 							 <li>
 								<a href="report-designer">
 									<span>Report Designer</span>
@@ -132,17 +158,17 @@ if($onboarding=='YES')
 			<li>
 				<a href="#" class="menu-toggle">
 					<i class="material-icons">sync</i>
-					<span>Housekeeping</span>
+					<span>Sync & Backup</span>
 				</a>
 				<ul class="ml-menu">
 					<li>
-						<a href="day-close">
-							<span>Day Close</span>
+						<a href="day-open-close">
+							<span>Day Open/Close</span>
 						</a>
 					</li>
 					<li>
-						<a href="day-open">
-							<span>Day Open</span>
+						<a href="backups">
+							<span>Backups</span>
 						</a>
 					</li>
 					<li>
@@ -154,6 +180,30 @@ if($onboarding=='YES')
 				</ul>
 			</li>
 <!-- multy level end --> ';
+		}
+if($user_type=='MANAGER' || $user_type=='ADMIN')
+{
+echo '<li>
+		<a href="settings">
+			<i class="material-icons">settings</i>
+			<span>Settings</span>
+		</a>
+	  </li>';
+
+}
+
+}
+
+
+if($user_type=='SUPER ADMIN')
+{
+echo '<li>
+		<a href="options-master">
+			<i class="material-icons">list</i>
+			<span>Options Master</span>
+		</a>
+	  </li>';
+
 }
 ?>	  
 			<li>
@@ -185,7 +235,7 @@ if($onboarding=='YES')
 <aside id="rightsidebar" class="right-sidebar">
 	<ul class="nav nav-tabs tab-nav-right" role="tablist">
 		
-		<li role="presentation" class="active"><a href="#settings" data-toggle="tab">Settings</a></li>
+		<li role="presentation" class="active"><a href="#settings" data-toggle="tab">User Information</a></li>
 		
 	</ul>
    

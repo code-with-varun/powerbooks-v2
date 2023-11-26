@@ -97,6 +97,47 @@ class Users_model extends CI_Model
 
 	
 	
+	public function item_wise_sales($data)
+	{
+
+		return $this->db->select('*')
+		->where('pos_bill_date BETWEEN "' . $data['sdate'] . '" and "' . $data['edate'] . '"')
+			->where('merchant_id', $data['merchant_id'])
+			->from('itemwise_sales')
+			->get()
+			->result();
+	}
+
+	
+	public function item_wise_check($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('pos_bill_date BETWEEN "' . $data['sdate'] . '" and "' . $data['edate'] . '"')
+			->where('merchant_id', $data['merchant_id'])
+			->get('itemwise_sales')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function staff_manager_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('user_type', "MANAGER")
+			->or_where('user_type', "STAFF")
+			->where('merchant_id', $data['merchant_id'])
+			->from('user_details')
+			->get()
+			->result();
+	}
+
+	
+	
 
 // options master
 
@@ -174,6 +215,18 @@ class Users_model extends CI_Model
 	}
 
 	
+	public function options_user_type()
+	{
+
+		return $this->db->select('*')
+			->where('option_key', 'Membership Billed')
+			->from('options_master')
+			->order_by('rid')
+			->get()
+			->result();
+	}
+
+	
 
 // ALL UPDATE QUERIES
 
@@ -199,6 +252,14 @@ class Users_model extends CI_Model
 	public function min_merchant_id_fetch()
 	{
 		return $this->db->select('MIN(merchant_id) AS min_merchant')
+			->from('user_details')
+			->get()
+			->result();
+	}
+
+	public function min_staff_id_fetch()
+	{
+		return $this->db->select('MIN(staff_id) AS min_staff')
 			->from('user_details')
 			->get()
 			->result();

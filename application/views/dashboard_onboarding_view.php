@@ -48,7 +48,7 @@ $onboarding= $sessdata['pbk_onboarding'];
 											<label for="admin_email" class="col-sm-2 control-label">Admin Email</label>
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-                                                        <input type="email" class="form-control" id="admin_email" name="admin_email" placeholder="Admin Email" value="<?php echo$eid;?>">
+                                                        <input type="email" class="form-control" id="admin_email" name="admin_email" placeholder="Admin Email" value="<?php echo$eid;?>" disabled>
                                                     </div>
                                                 </div>
 												<label for="admin_mobile" class="col-sm-2 control-label">Admin Mobile</label>
@@ -152,7 +152,7 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                 <label for="door_no" class="col-sm-2 control-label">Door No</label>
                                                 <div class="col-sm-3">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="door_no" name="door_no" placeholder="Company Name" required>
+                                                        <input type="text" class="form-control" id="door_no" name="door_no" placeholder="Door No" required>
                                                     </div>
                                                 </div>
 												<label for="street" class="col-sm-1 control-label">Street</label>
@@ -288,16 +288,43 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                 </div>
 											</div>
 											<div class="form-group">
-											<label for="gst_tax_invoice" class="col-sm-2 control-label">GST/TAX Invoice</label>
+											<label for="billing_group" class="col-sm-2 control-label">Billing Group</label>
                                                 <div class="col-sm-4">
-												<div class="switch">
-														<label><input type="checkbox" onchange="check_gstin()" id="gst_tax_invoice" name="gst_tax_invoice" value="YES"><span class="lever"></span></label>
+												<div class="form-line">
+												<select  name="invoice_print_type" id="invoice_print_type" class="form-control" required>
+                                                        <option value="" selected disabled>Please Select</option>
+                                                        <?php 
+                                                        foreach ($options_invoice_print_type as $row) 
+                                                        {
+
+                                                        $value=$row->option_value;
+                                                        echo '<option value="'.$value.'">'.$value.'</option>'; 
+                                                        }
+                                                        ?>
+                                                        </select> 
 													</div>
                                                 </div>
 												<label for="staging_invoice" class="col-sm-2 control-label">Staging Invoice</label>
                                                 <div class="col-sm-4">
 												<div class="switch">
 												<label><input type="checkbox" onchange="stage_direct()" id="staging_invoice" name="staging_invoice" value="YES"><span class="lever"></span></label>
+													</div>
+                                                </div>
+												
+											</div>
+											<div class="form-group">
+
+											<label for="gst_tax_invoice" class="col-sm-2 control-label">GST/TAX Invoice</label>
+                                                <div class="col-sm-4">
+												<div class="switch">
+														<label><input type="checkbox" onchange="check_gstin()" id="gst_tax_invoice" name="gst_tax_invoice" value="YES"><span class="lever"></span></label>
+													</div>
+                                                </div>
+
+												<label for="inventory" class="col-sm-2 control-label">Inventory</label>
+                                                <div class="col-sm-4">
+												<div class="switch">
+												<label><input type="checkbox"  id="inventory" name="inventory" value="YES"><span class="lever"></span></label>
 													</div>
                                                 </div>
 												
@@ -319,11 +346,10 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                 </div>
 												
                                             </div>
-											
-                                           
+
                                             <div class="form-group">
                                                 <div class="col-sm-offset-2 col-sm-10">
-                                                    <button type="submit" class="btn btn-success">Onboard</button>
+                                                    <button type="submit" class="btn btn-success">Save</button>
 													<button type="reset" class="btn btn-danger">Clear</button>
                                                 </div>
                                             </div>
@@ -332,13 +358,13 @@ $onboarding= $sessdata['pbk_onboarding'];
 
 										<script>
 											function direct_stage(){
-												document.getElementById("staging_invoice").checked = true;
-												document.getElementById("direct_billing").checked = false;
+												document.getElementById("staging_invoice").checked = false;
+												document.getElementById("direct_billing").checked = true;
 												
 											}
 											function stage_direct(){
-												document.getElementById("staging_invoice").checked = false;
-												document.getElementById("direct_billing").checked = true;
+												document.getElementById("staging_invoice").checked = true;
+												document.getElementById("direct_billing").checked = false;
 												
 											}
 											function check_gstin(){

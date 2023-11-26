@@ -55,6 +55,7 @@ class Dashboard extends CI_Controller
 		$sessdata = $this->session->userdata('pbk_sess');
 		$data['eid'] = $sessdata['pbk_eid'];
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		$data['user_type'] = $sessdata['pbk_user_type'];
 		$onboarding = $sessdata['pbk_onboarding'];
 	
 		$specific_user_fetch_login = $this->Users_model->specific_user_fetch_login($data);
@@ -62,10 +63,21 @@ class Dashboard extends CI_Controller
 			$onboarding = $row->onboarding;
 		}
 
-		if($onboarding=='NO'){
+		$config_master_fetch = $this->Users_model->config_master_fetch($data);
+		foreach ($config_master_fetch as $row) {
+			$direct_billing = $row->direct_billing;
+		}
+
+		if($onboarding=='NO')
+		{
 			redirect('onboarding', 'location');
-			}
-		else{
+		}
+		elseif($direct_billing=='YES' && ($data['user_type']!="ADMIN"))
+		{
+			redirect('billing', 'location');
+		}
+		else
+		{
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_menus_view');
@@ -96,6 +108,176 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_footer_view');
 	}
+
+	
+	public function staffing()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$staff_manager_fetch = $this->Users_model->staff_manager_fetch($data);
+		
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_staffing_view',[
+		'staff_manager_fetch'=>$staff_manager_fetch,
+		
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_footer_view');
+	}
+
+	public function new_staff()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$username= $_POST['name'];
+		 $mdata['name'] = preg_replace("/[^a-zA-Z\s]/", " ", $username);
+		 $mdata['admin_mobile']=$_POST['mobile'];
+		 $mdata['eid'] =$_POST['user_id'];
+		 $userpass=$_POST['password'];
+		 $userrepass=$_POST['confirm'];
+		 $mdata['user_type']=$_POST['usertype'];		
+		 $mdata['merchant_id']=$data['merchant_id'];
+		 $mdata['onboarding']="YES";
+		
+		if($userpass==$userrepass)
+		{
+		    $mdata['pass']=md5($userpass);
+		    
+		}
+
+		$check_mail_exists = $this->Users_model->check_mail_exists($mdata);
+				if ($check_mail_exists == 0) 
+				{
+					// echo 'Unique staff';
+					$min_staff_id_fetch = $this->Users_model->min_staff_id_fetch();
+					foreach ($min_staff_id_fetch as $row) 
+					{
+						$rid= $row->min_staff;					//merchant id
+						$mdata['staff_id']=$rid-1;
+					}	
+					$mdata['otp']=md5(rand(1000,9999));	
+					$mdata['otp_expiry']=date('Y-m-d H:i:s',strtotime('+15 minutes',strtotime(date('Y-m-d H:i:s'))));	
+					
+
+					$new_user_details_insert = $this->Users_model->new_user_details_insert($mdata);
+				}
+				redirect('staffing', 'location');
+	}
+
+	
+	public function item_wise_sales()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_itemwise_sales_view');
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_footer_view');
+	}
+
+	public function IWS_reporter()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['rmerchantid'])) {
+		 	$data['sdate'] = $this->input->post('sdate');
+			$data['edate'] = $this->input->post('edate');
+
+		$item_wise_check = $this->Users_model->item_wise_check($data);
+		if ($item_wise_check == 1) 
+		{
+
+				echo ' <table class="table table-hover dashboard-task-infos">
+				<thead>
+					<tr>
+						<th>SI NO</th>
+						<th>DATE</th>
+						<th>BILL NO</th>
+						<th>BARCODE</th>
+						<th>SKU</th>
+						<th>PRODUCT</th>
+						<th>ITEM DESCRIPTION</th>
+						<th>MRP</th>
+						<th>QTY</th>
+						<th>AMOUNT</th>
+					  
+					</tr>
+				</thead>
+				<tbody>';
+
+
+
+				$item_wise_sales = $this->Users_model->item_wise_sales($data);
+				//var_dump($item_wise_sales);
+				// echo $this->db->last_query();
+				foreach ($item_wise_sales as $row) {
+
+					$rbill_no = $row->bill_no;
+					$rbarcode = $row->LD_Barcode;
+					$rqty = $row->qty;
+					$rsku = $row->SKU;
+					$ramount = $row->amount;
+					$rmrp = $row->mrp;
+					$rproduct = $row->Product_Name;
+					$ridiscr = $row->Item_Description;
+					$rposdate = $row->pos_bill_date;
+
+					$i=1;
+					echo '
+					<tr>   
+					<td>'.$i.'</td>
+					<td>'.$rposdate.'</td>
+					<td>'.$rbill_no.'</td>
+					<td>'.$rbarcode.'</td>
+					<td>'.$rsku.'</td>
+					<td>'.$rproduct.'</td>
+					<td>'.$ridiscr.'</td>
+					<td>'.$rmrp.'</td>
+					<td>'.$rqty.'</td>
+					<td>'.$ramount.'</td>
+					
+					
+					
+				</tr>';
+$i=$i+1;	 
+
+						echo '</div>';
+				}
+
+
+				echo '</tbody>
+				</table>';
+			}
+			else
+			{
+				echo 'NO DATA FOUND';
+			}
+		} else {
+			echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
+		}
+		
+		
+	 
+	}
+
+
 
 	
 	public function onboarding()

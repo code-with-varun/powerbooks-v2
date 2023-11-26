@@ -63,7 +63,19 @@ $route['logout'] = 'Login/user_logout';
 $route['dashboard'] = 'Dashboard/index';
 $route['billing'] = 'Dashboard/billing';
 $route['onboarding'] = 'Dashboard/onboarding';
+$route['staffing'] = 'Dashboard/staffing';
+$route['new-staff'] = 'Dashboard/new_staff';
+$route['settings'] = 'Dashboard/onboarding';
 $route['merchant-onboard'] = 'Dashboard/merchant_onboard';
+
+$route['itemwise-sales'] = 'Dashboard/item_wise_sales';
+$route['billwise-sales'] = 'Dashboard/bill_wise_sales';
+$route['daywise-sales'] = 'Dashboard/day_wise_sales';
+
+$route['IWS-reporter'] = 'Dashboard/IWS_reporter';
+$route['BWS-reporter'] = 'Dashboard/BWS_reporter';
+$route['DWS-reporter'] = 'Dashboard/DWS_reporter';
+
 
 $route['messages'] = 'Home/messages';
 

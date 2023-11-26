@@ -2,6 +2,32 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $base=base_url()."public/";
 
+$sessdata = $this->session->userdata('pbk_sess');
+$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+$data['eid'] = $sessdata['pbk_eid'];
+
+$specific_user_fetch_login = $this->Users_model->specific_user_fetch_login($data);
+	foreach ($specific_user_fetch_login as $row)
+	{
+	$onboarding = $row->onboarding;
+	}
+if($onboarding=='YES')
+
+{
+	$config_master_fetch = $this->Users_model->config_master_fetch($data);
+	foreach ($config_master_fetch as $row)
+	{
+	$brand_name = $row->brand_name;
+	$company_name = $row->company_name;
+	}
+
+}
+
+else{
+	$brand_name = "Brand Name";
+	$company_name = "Company Name";;
+}
+
 ?>
 
 			
@@ -35,7 +61,7 @@ $base=base_url()."public/";
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="#" class="bars"></a>
-                <a class="navbar-brand" href="#"> company name - brand name </a>
+                <a class="navbar-brand" href="#"> <?php echo $company_name." - ".$brand_name; ?></a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
