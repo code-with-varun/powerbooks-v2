@@ -64,8 +64,8 @@ $onboarding= $sessdata['pbk_onboarding'];
         		 $ruser_type=$row->user_type;
         		 $staff_contact=$row->admin_mobile;
         		 $status=$row->profile_status;
-        		 if($status=='INACTIVE'){$bg='red';}
-        		 elseif($status=='ACTIVE'){$bg='green';}
+        		 if($status=='INACTIVE'){$bg='red';$lstatus="";}
+        		 elseif($status=='ACTIVE'){$bg='green';$lstatus="CHECKED";}
         		  else{$bg='blue';}
         		 $staff_id=$row->staff_id;
         		 
@@ -79,7 +79,10 @@ $onboarding= $sessdata['pbk_onboarding'];
                                             <td>'.$staff_id.'</td>
                                           	<td><form action="#" method="post">
                                             <input type="hidden" name="oppid" value="'.$staff_mail.'">
-                                            <input class="btn btn-info waves-effect" type="button" value="View"></form>
+											<div class="switch">
+											<label><input type="checkbox" '.$lstatus.' id="account_status" name="account_status" value="YES"><span class="lever"></span></label>
+												</div>
+											</form>
                                             </td>
                                         </tr>';
         		 

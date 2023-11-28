@@ -131,6 +131,112 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_footer_view');
 	}
 
+	public function item_master()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$staff_manager_fetch = $this->Users_model->staff_manager_fetch($data);
+		$division_fetch = $this->Users_model->division_fetch($data);
+		$category_fetch = $this->Users_model->category_fetch($data);
+		$classification_fetch = $this->Users_model->classification_fetch($data);
+		$product_fetch = $this->Users_model->product_fetch($data);
+		
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_item_master_view',[
+		'division_fetch'=>$division_fetch,
+		'category_fetch'=>$category_fetch,
+		'classification_fetch'=>$classification_fetch,
+		'product_fetch'=>$product_fetch,
+		
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_footer_view');
+	}
+
+	public function new_division()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$data['division_name']= $_POST['division_name'];
+		
+
+		$check_division_exists = $this->Users_model->check_division_exists($data);
+				if ($check_division_exists == 0) 
+				{
+					// echo 'Unique staff';
+					$max_division_id_fetch = $this->Users_model->max_division_id_fetch();
+					foreach ($max_division_id_fetch as $row) 
+					{
+						$rid= $row->max_division;					//merchant id
+						$data['rid']=$rid+1;
+						$data['division_code']='DIV'.$data['rid'];
+					}	
+
+					$new_division_insert = $this->Users_model->new_division_insert($data);
+				}
+				redirect('item-master', 'location');
+	}
+
+	public function new_category()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$data['category_name']= $_POST['category_name'];
+		$data['division_code']= $_POST['division_code'];
+		
+
+		$check_category_exists = $this->Users_model->check_category_exists($data);
+				if ($check_category_exists == 0) 
+				{
+					// echo 'Unique staff';
+					$max_category_id_fetch = $this->Users_model->max_category_id_fetch();
+					foreach ($max_category_id_fetch as $row) 
+					{
+						$rid= $row->max_category;					//merchant id
+						$data['rid']=$rid+1;
+
+					}	
+
+					$new_category_insert = $this->Users_model->new_category_insert($data);
+				}
+				redirect('item-master', 'location');
+	}
+
+	public function new_classification()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$data['classification_name']= ucwords($_POST['classification_name']);
+		
+		$check_classification_exists = $this->Users_model->check_classification_exists($data);
+				if ($check_classification_exists == 0) 
+				{
+					// echo 'Unique staff';
+					$max_classification_id_fetch = $this->Users_model->max_classification_id_fetch();
+					foreach ($max_classification_id_fetch as $row) 
+					{
+						$rid= $row->max_classification;					//merchant id
+						$data['rid']=$rid+1;
+
+					}	
+
+					$new_classification_insert = $this->Users_model->new_classification_insert($data);
+				}
+				redirect('item-master', 'location');
+	}
+
 	public function new_staff()
 	{
 

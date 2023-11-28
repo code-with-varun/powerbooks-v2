@@ -80,8 +80,8 @@ if($onboarding=='YES')
 				</a>
 				<ul class="ml-menu">
 					<li>
-						<a href="create-product">
-							<span>Create Product</span>
+						<a href="item-master">
+							<span>Item Master</span>
 						</a>
 					</li>
 					<li>

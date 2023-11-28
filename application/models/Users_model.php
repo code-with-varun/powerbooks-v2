@@ -108,6 +108,52 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+
+	public function check_division_exists($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('division_name', $data['division_name'])
+			->where('merchant_id', $data['merchant_id'])
+			->get('division_details')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public function check_category_exists($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('category_name', $data['category_name'])
+			->where('merchant_id', $data['merchant_id'])
+			->get('category_details')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	
+	public function check_classification_exists($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('classification_name', $data['classification_name'])
+			->where('merchant_id', $data['merchant_id'])
+			->get('classification_details')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	public function item_wise_check($data)
 	{
@@ -137,6 +183,55 @@ class Users_model extends CI_Model
 	}
 
 	
+	public function division_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->from('division_details')
+			->get()
+			->result();
+	}
+
+	public function specific_division_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('division_code', $data['division_code'])
+			->from('division_details')
+			->get()
+			->result();
+	}
+
+	public function category_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->from('category_details')
+			->get()
+			->result();
+	}
+
+	public function classification_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->from('classification_details')
+			->get()
+			->result();
+	}
+
+	public function product_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->from('item_master')
+			->get()
+			->result();
+	}
 	
 
 // options master
@@ -265,6 +360,31 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	
+	public function max_division_id_fetch()
+	{
+		return $this->db->select('MAX(rid) AS max_division')
+			->from('division_details')
+			->get()
+			->result();
+	}
+
+	public function max_category_id_fetch()
+	{
+		return $this->db->select('MAX(rid) AS max_category')
+			->from('category_details')
+			->get()
+			->result();
+	}
+
+	public function max_classification_id_fetch()
+	{
+		return $this->db->select('MAX(rid) AS max_classification')
+			->from('classification_details')
+			->get()
+			->result();
+	}
+
 	public function tickets_stage_count_fetch($data)
 	{
 		$my_query = "SELECT stage,count(*)AS COUNTSTAGE FROM  `opportunity_tickets` WHERE merchant_id='".$data['merchant_id']."' GROUP BY stage";
@@ -324,7 +444,21 @@ class Users_model extends CI_Model
 
 		return $this->db->insert('config_master', $data);
 	}	
-	
+	public function new_division_insert($data)
+	{
+
+		return $this->db->insert('division_details', $data);
+	}	
+	public function new_category_insert($data)
+	{
+
+		return $this->db->insert('category_details', $data);
+	}
+	public function new_classification_insert($data)
+	{
+
+		return $this->db->insert('classification_details', $data);
+	}
 
 
 	// modal ends here

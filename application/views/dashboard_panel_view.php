@@ -10,17 +10,17 @@ $base=base_url()."public/";
                 <h2>DASHBOARD</h2>
             </div>
 <?php
-$result3 = mysqli_query($pbcon,"SELECT stage,count(*)AS COUNTSTAGE FROM  `opportunity_tickets` WHERE merchant_id='$merchantid' GROUP BY stage");
-	  while($row = mysqli_fetch_array($result3))
-		    {
-		         $stagecountname=$row['stage'];
-        		 $stagecount=$row['COUNTSTAGE'];
-        		if($stagecountname=='BILLING'){$billingstage=$stagecount;}
-        		if($stagecountname=='DO'){$dostage=$stagecount;}
-        		if($stagecountname=='ESTIMATE'){$estimatestage=$stagecount;}
-        		if($stagecountname=='OPPORTUNITY'){$opportunitystage=$stagecount;}
+// $result3 = mysqli_query($pbcon,"SELECT stage,count(*)AS COUNTSTAGE FROM  `opportunity_tickets` WHERE merchant_id='$merchantid' GROUP BY stage");
+// 	  while($row = mysqli_fetch_array($result3))
+// 		    {
+// 		         $stagecountname=$row['stage'];
+//         		 $stagecount=$row['COUNTSTAGE'];
+//         		if($stagecountname=='BILLING'){$billingstage=$stagecount;}
+//         		if($stagecountname=='DO'){$dostage=$stagecount;}
+//         		if($stagecountname=='ESTIMATE'){$estimatestage=$stagecount;}
+//         		if($stagecountname=='OPPORTUNITY'){$opportunitystage=$stagecount;}
         		
-        }
+//         }
 ?>
             <!-- Widgets -->
             <div class="row clearfix">
@@ -31,7 +31,7 @@ $result3 = mysqli_query($pbcon,"SELECT stage,count(*)AS COUNTSTAGE FROM  `opport
                         </div>
                         <div class="content">
                             <div class="text">OPPORTUNITIES</div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo$opportunitystage;?>" data-speed="15" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="25" data-speed="15" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@ $result3 = mysqli_query($pbcon,"SELECT stage,count(*)AS COUNTSTAGE FROM  `opport
                         </div>
                         <div class="content">
                             <div class="text">ESTIMATES</div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo$estimatestage;?>" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="15" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@ $result3 = mysqli_query($pbcon,"SELECT stage,count(*)AS COUNTSTAGE FROM  `opport
                         </div>
                         <div class="content">
                             <div class="text">DELIVERY ORDERS</div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo$dostage;?>" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="35" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>
@@ -64,7 +64,7 @@ $result3 = mysqli_query($pbcon,"SELECT stage,count(*)AS COUNTSTAGE FROM  `opport
                         </div>
                         <div class="content">
                             <div class="text">BILLS</div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo$billingstage;?>" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="45" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>
@@ -167,375 +167,6 @@ $result3 = mysqli_query($pbcon,"SELECT stage,count(*)AS COUNTSTAGE FROM  `opport
                 </div>
                 <!-- #END# Answered Tickets -->
             
-			</div>
-
-            <div class="row clearfix">
-                <!-- Task Info -->
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>PROCESSING Opportunities</h2>
-                            <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                       
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="body">
-                            <div class="table-responsive">
-                                <table class="table table-hover dashboard-task-infos">
-                                    <thead>
-                                        <tr>
-                                            <th>Opportunity ID</th>
-                                            <th>Customer Name</th>
-                                            <th>items</th>
-                                            <th>Status</th>
-                                            <th>Staff</th>
-                                            <th>Progress</th>
-                                            <th>Stage</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-<?php
-
-
-$result2 = mysqli_query($pbcon,"SELECT * FROM  `opportunity_tickets` WHERE merchant_id='$merchantid' AND status='PROCESSING' ORDER BY stage");
-	  while($row = mysqli_fetch_array($result2))
-		    {
-        		 $opportunity_id=$row['opportunity_id'];
-        		 $cust_name=$row['cust_name'];
-        		 $purchase_item=$row['purchase_item'];
-        		 $status=$row['status'];
-        		 if($status=='ON HOLD'){$bg='red';}
-        		 elseif($status=='FINISHED'){$bg='green';}
-        		 elseif($status=='PROCESSING'){$bg='orange';}
-        		 else{$bg='blue';}
-        		 $stage=$row['stage'];
-        		 if($stage=='BILLING'){$stbg='success';$stpct='100';}
-        		 elseif($stage=='DO'){$stbg='info';$stpct='75';}
-        		 elseif($stage=='ESTIMATE'){$stbg='warning';$stpct='50';}
-        		 elseif($stage=='OPPORTUNITY'){$stbg='danger';$stpct='25';}
-        		 $opportunity_owner=$row['opportunity_owner'];
-        		 
-        		 
-        		 echo'<tr>   
-                                            <td>'.$opportunity_id.'</td>
-                                            <td>'.$cust_name.'</td>
-                                            <td>'.$purchase_item.'</td>
-                                            <td><span class="label bg-'.$bg.'">'.$status.'</span></td>
-                                            <td>'.$opportunity_owner.'</td>
-                                            <td>
-                                            
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-'.$stbg.' progress-bar-striped active" role="progressbar" aria-valuenow="'.$stpct.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$stpct.'%"></div>
-                                                </div>
-                                               <br> <center>'.$stpct.'%</center>
-                                            </td>
-                                            <td>'.$stage.'</td>
-                                            
-                                            <td>';
-                                           
-                                            echo'<form action="staging" method="post">
-                                            
-                                            <input type="hidden" value="'.$opportunity_id.'" name="optid">
-                                            <input class="btn btn-info waves-effect" type="submit" value="View Ticket"></form>';
-                                        
-                                           echo' </td>
-                                        </tr>';
-        		 
-        		 
-		    }
-?>  
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- #END# Task Info -->
-         
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>CREATED Opportunities</h2>
-                            <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                       
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="body">
-                            <div class="table-responsive">
-                                <table class="table table-hover dashboard-task-infos">
-                                    <thead>
-                                        <tr>
-                                            <th>Opportunity ID</th>
-                                            <th>Customer Name</th>
-                                            <th>items</th>
-                                            <th>Status</th>
-                                            <th>Staff</th>
-                                            <th>Progress</th>
-                                            <th>Stage</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-<?php
-
-
-$result2 = mysqli_query($pbcon,"SELECT * FROM  `opportunity_tickets` WHERE merchant_id='$merchantid' AND status='CREATED' ORDER BY stage");
-	  while($row = mysqli_fetch_array($result2))
-		    {
-        		 $opportunity_id=$row['opportunity_id'];
-        		 $cust_name=$row['cust_name'];
-        		 $purchase_item=$row['purchase_item'];
-        		 $status=$row['status'];
-        		 if($status=='ON HOLD'){$bg='red';}
-        		 elseif($status=='FINISHED'){$bg='green';}
-        		 elseif($status=='PROCESSING'){$bg='orange';}
-        		 else{$bg='blue';}
-        		 $stage=$row['stage'];
-        		 if($stage=='BILLING'){$stbg='success';$stpct='100';}
-        		 elseif($stage=='DO'){$stbg='info';$stpct='75';}
-        		 elseif($stage=='ESTIMATE'){$stbg='warning';$stpct='50';}
-        		 elseif($stage=='OPPORTUNITY'){$stbg='danger';$stpct='25';}
-        		 $opportunity_owner=$row['opportunity_owner'];
-        		 
-        		 
-        		 echo'<tr>   
-                                            <td>'.$opportunity_id.'</td>
-                                            <td>'.$cust_name.'</td>
-                                            <td>'.$purchase_item.'</td>
-                                            <td><span class="label bg-'.$bg.'">'.$status.'</span></td>
-                                            <td>'.$opportunity_owner.'</td>
-                                            <td>
-                                            
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-'.$stbg.' progress-bar-striped active" role="progressbar" aria-valuenow="'.$stpct.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$stpct.'%"></div>
-                                                </div>
-                                               <br> <center>'.$stpct.'%</center>
-                                            </td>
-                                            <td>'.$stage.'</td>
-                                            
-                                            <td>';
-                                           
-                                            echo'<form action="staging" method="post">
-                                            
-                                            <input type="hidden" value="'.$opportunity_id.'" name="optid">
-                                            <input class="btn btn-info waves-effect" type="submit" value="View Ticket"></form>';
-                                        
-                                           echo' </td>
-                                        </tr>';
-        		 
-        		 
-		    }
-?>  
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- #END# Task Info -->
-                
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>HOLDED Opportunities</h2>
-                            <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                       
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="body">
-                            <div class="table-responsive">
-                                <table class="table table-hover dashboard-task-infos">
-                                    <thead>
-                                        <tr>
-                                            <th>Opportunity ID</th>
-                                            <th>Customer Name</th>
-                                            <th>items</th>
-                                            <th>Status</th>
-                                            <th>Staff</th>
-                                            <th>Progress</th>
-                                            <th>Stage</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-<?php
-
-
-$result2 = mysqli_query($pbcon,"SELECT * FROM  `opportunity_tickets` WHERE merchant_id='$merchantid' AND status='ON HOLD' ORDER BY stage");
-	  while($row = mysqli_fetch_array($result2))
-		    {
-        		 $opportunity_id=$row['opportunity_id'];
-        		 $cust_name=$row['cust_name'];
-        		 $purchase_item=$row['purchase_item'];
-        		 $status=$row['status'];
-        		 if($status=='ON HOLD'){$bg='red';}
-        		 elseif($status=='FINISHED'){$bg='green';}
-        		 elseif($status=='PROCESSING'){$bg='orange';}
-        		 else{$bg='blue';}
-        		 $stage=$row['stage'];
-        		 if($stage=='BILLING'){$stbg='success';$stpct='100';}
-        		 elseif($stage=='DO'){$stbg='info';$stpct='75';}
-        		 elseif($stage=='ESTIMATE'){$stbg='warning';$stpct='50';}
-        		 elseif($stage=='OPPORTUNITY'){$stbg='danger';$stpct='25';}
-        		 $opportunity_owner=$row['opportunity_owner'];
-        		 
-        		 
-        		 echo'<tr>   
-                                            <td>'.$opportunity_id.'</td>
-                                            <td>'.$cust_name.'</td>
-                                            <td>'.$purchase_item.'</td>
-                                            <td><span class="label bg-'.$bg.'">'.$status.'</span></td>
-                                            <td>'.$opportunity_owner.'</td>
-                                            <td>
-                                            
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-'.$stbg.' progress-bar-striped active" role="progressbar" aria-valuenow="'.$stpct.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$stpct.'%"></div>
-                                                </div>
-                                               <br> <center>'.$stpct.'%</center>
-                                            </td>
-                                            <td>'.$stage.'</td>
-                                            
-                                            <td>';
-                                           
-                                            echo'<form action="staging" method="post">
-                                            
-                                            <input type="hidden" value="'.$opportunity_id.'" name="optid">
-                                            <input class="btn btn-info waves-effect" type="submit" value="View Ticket"></form>';
-                                        
-                                           echo' </td>
-                                        </tr>';
-        		 
-        		 
-		    }
-?>  
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- #END# Task Info -->
-                
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>FINISHED Opportunities</h2>
-                            <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                       
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="body">
-                            <div class="table-responsive">
-                                <table class="table table-hover dashboard-task-infos">
-                                    <thead>
-                                        <tr>
-                                            <th>Opportunity ID</th>
-                                            <th>Customer Name</th>
-                                            <th>items</th>
-                                            <th>Status</th>
-                                            <th>Staff</th>
-                                            <th>Progress</th>
-                                            <th>Stage</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-<?php
-
-
-$result2 = mysqli_query($pbcon,"SELECT * FROM  `opportunity_tickets` WHERE merchant_id='$merchantid' AND status='FINISHED'");
-	  while($row = mysqli_fetch_array($result2))
-		    {
-        		 $opportunity_id=$row['opportunity_id'];
-        		 $cust_name=$row['cust_name'];
-        		 $purchase_item=$row['purchase_item'];
-        		 $status=$row['status'];
-        		 if($status=='ON HOLD'){$bg='red';}
-        		 elseif($status=='FINISHED'){$bg='green';}
-        		 elseif($status=='PROCESSING'){$bg='orange';}
-        		 else{$bg='blue';}
-        		 $stage=$row['stage'];
-        		 if($stage=='BILLING'){$stbg='success';$stpct='100';}
-        		 elseif($stage=='DO'){$stbg='info';$stpct='75';}
-        		 elseif($stage=='ESTIMATE'){$stbg='warning';$stpct='50';}
-        		 elseif($stage=='OPPORTUNITY'){$stbg='danger';$stpct='25';}
-        		 $opportunity_owner=$row['opportunity_owner'];
-        		 
-        		 
-        		 echo'<tr>   
-                                            <td>'.$opportunity_id.'</td>
-                                            <td>'.$cust_name.'</td>
-                                            <td>'.$purchase_item.'</td>
-                                            <td><span class="label bg-'.$bg.'">'.$status.'</span></td>
-                                            <td>'.$opportunity_owner.'</td>
-                                            <td>
-                                            
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-'.$stbg.' progress-bar-striped active" role="progressbar" aria-valuenow="'.$stpct.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$stpct.'%"></div>
-                                                </div>
-                                               <br> <center>'.$stpct.'%</center>
-                                            </td>
-                                            <td>'.$stage.'</td>
-                                            
-                                            <td>';
-                                           
-                                            echo'<form action="staging" method="post">
-                                            
-                                            <input type="hidden" value="'.$opportunity_id.'" name="optid">
-                                            <input class="btn btn-info waves-effect" type="submit" value="View Ticket"></form>';
-                                        
-                                           echo' </td>
-                                        </tr>';
-        		 
-        		 
-		    }
-?>  
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- #END# Task Info -->
-               
-               
                 <!-- #END# Browser Usage -->
             </div>
         </div>
