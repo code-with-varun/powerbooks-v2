@@ -354,74 +354,98 @@ $onboarding= $sessdata['pbk_onboarding'];
                 <div class="card">
             <div class="body">
                 <form id="sign_up" action="new-staff" method="POST">
-                    <div class="msg">Register a New Staff</div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">person</i>
-                        </span>
-                        <div class="form-line">
-                            <input type="text" class="form-control" name="name" placeholder="Name" required autofocus>
-                        </div>
+				<h4>Create New Product</h4><hr>
+					<div class="input-group">
+						<label for="merchant_id" class="col-sm-2 control-label">Inventory Type</label>
+						<div class="col-sm-4">
+							<div class="form-line">
+							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Inventory Type simple variable group" >
+							</div>
+						</div>
+						<label for="merchant_id" class="col-sm-2 control-label">Item Type</label>
+						<div class="col-sm-4">
+							<div class="form-line">
+							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
+							</div>
+						</div>
                     </div>
                     <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">phone</i>
-                        </span>
-                        <div class="form-line">
-                            <input type="text" class="form-control" name="mobile" maxlength="10" minlength="10" placeholder="Mobile Number" required >
-                        </div>
+						<label for="barcode" class="col-sm-2 control-label">Barcode</label>
+						<div class="col-sm-4">
+							<div class="form-line">
+								<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
+							</div>
+						</div>
+						<label for="merchant_id" class="col-sm-2 control-label"></label>
+						<div class="col-sm-4">
+							<div class="form-line">
+							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
+							</div>
+						</div>
                     </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">login</i>
-                        </span>
-                        <div class="form-line">
-                            <input type="text" class="form-control" name="user_id" placeholder="User Id" required>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">lock</i>
-                        </span>
-                        <div class="form-line">
-                            <input type="password" class="form-control" name="password" minlength="6" placeholder="Password" required>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">lock</i>
-                        </span>
-                        <div class="form-line">
-                            <input type="password" class="form-control" name="confirm" minlength="6" placeholder="Confirm Password" required>
-                        </div>
-                    </div>
-                     <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">user</i>
-                        </span>
-                        <div class="form-group">
-                            <?php
-                            if($user_type=='ADMIN')
-                            {
-                                echo'<input type="radio" name="usertype" id="male" class="with-gap" value="STAFF" checked>
-                                    <label for="male">STAFF</label>
 
-                                    <input type="radio" name="usertype" id="female" class="with-gap" VALUE="MANAGER">
-                                    <label for="female" class="m-l-20">MANAGER</label>';  
-                            }
-                            else
-                            {
-                             echo'<input type="radio" name="usertype" id="male" class="with-gap" value="STAFF" checked>
-                                    <label for="male">STAFF</label>';   
-                            }
-                            
-                            ?>
-                                    
-                                </div>
+					<div class="input-group">
+						<label for="merchant_id" class="col-sm-2 control-label">Product Name</label>
+						<div class="col-sm-4">
+							<div class="form-line">
+							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
+							</div>
+						</div>
+						<label for="merchant_id" class="col-sm-2 control-label">Product Description</label>
+						<div class="col-sm-4">
+							<div class="form-line">
+							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
+							</div>
+						</div>
                     </div>
-                    
 
-                    <button class="btn btn-lg bg-pink waves-effect" type="submit">Create User</button>
+					<div class="input-group">
+						<label for="merchant_id" class="col-sm-2 control-label">Division Name</label>
+						<div class="col-sm-4">
+							<div class="form-line">
+							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
+							</div>
+						</div>
+						<label for="merchant_id" class="col-sm-2 control-label">Product Category</label>
+						<div class="col-sm-4">
+							<div class="form-line">
+							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
+							</div>
+						</div>
+                    </div>
+
+					<div class="input-group">
+						<label for="merchant_id" class="col-sm-2 control-label">Classification</label>
+						<div class="col-sm-4">
+							<div class="form-line">
+							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
+							</div>
+						</div>
+						<label for="merchant_id" class="col-sm-2 control-label">Style/Model</label>
+						<div class="col-sm-4">
+							<div class="form-line">
+							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
+							</div>
+						</div>
+                    </div>
+
+					<div class="input-group">
+						<label for="merchant_id" class="col-sm-2 control-label">Color/Variant</label>
+						<div class="col-sm-4">
+							<div class="form-line">
+							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
+							</div>
+						</div>
+						<label for="merchant_id" class="col-sm-2 control-label">Size/Weight</label>
+						<div class="col-sm-4">
+							<div class="form-line">
+							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
+							</div>
+						</div>
+                    </div>
+
+                     
+                    <button class="btn btn-lg bg-pink waves-effect" type="submit">Create Product</button>
 
                   
                 </form>

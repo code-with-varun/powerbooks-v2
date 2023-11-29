@@ -87,6 +87,59 @@ class Dashboard extends CI_Controller
 		}
 	}
 
+
+	
+	public function options_master()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['user_type'] = $sessdata['pbk_user_type'];
+		
+		if($data['user_type']!="SUPER ADMIN")
+		{
+			redirect('dashboard', 'location');
+		}
+
+		$all_options_fetch = $this->Users_model->all_options_fetch();
+		$distinct_option_key = $this->Users_model->distinct_option_key();
+		$distinct_option_value = $this->Users_model->distinct_option_value();
+		$distinct_option_category = $this->Users_model->distinct_option_category();
+
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_options_master_view',['all_options_fetch' => $all_options_fetch,
+		'distinct_option_category' => $distinct_option_category,
+		'distinct_option_value' => $distinct_option_value,
+		'distinct_option_key' => $distinct_option_key
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_footer_view');
+	}
+		
+	public function add_new_options()
+	{
+
+
+		 $max_options_rid_fetch = $this->Users_model->max_options_rid_fetch();
+		foreach ($max_options_rid_fetch->result() as $row) {
+
+			$MRID = $row->MRID;
+		}
+		$data['rid'] = $MRID + 1;
+		$data['option_id']= md5($data['rid']);
+		$data['option_key'] = $this->input->post('option_key');
+		$data['option_value'] = $this->input->post('option_value');
+		$data['category'] = $this->input->post('option_category');
+		$data['merchant_id'] = 'Default';
+		
+
+		$new_option_insert = $this->Users_model->new_option_insert($data);
+
+		redirect('options-master', 'location');
+
+		
+	}
 	
 	public function billing()
 	{
@@ -399,6 +452,7 @@ $i=$i+1;
 		$options_business_category = $this->Users_model->options_business_category();
 		$options_business_model = $this->Users_model->options_business_model();
 		$options_invoice_print_type = $this->Users_model->options_invoice_print_type();
+		$options_group_billing = $this->Users_model->options_group_billing();
 		$options_membership = $this->Users_model->options_membership();
 		$options_membership_billed = $this->Users_model->options_membership_billed();
 
@@ -411,6 +465,7 @@ $i=$i+1;
 		'options_business_category'=>$options_business_category,
 		'options_business_model'=>$options_business_model,
 		'options_invoice_print_type'=>$options_invoice_print_type,
+		'options_group_billing'=>$options_group_billing,
 		'options_membership'=>$options_membership,
 		'options_membership_billed'=>$options_membership_billed,	
 		]);

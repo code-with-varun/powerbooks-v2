@@ -234,7 +234,55 @@ class Users_model extends CI_Model
 	}
 	
 
+
+	public function distinct_option_key()
+	{
+
+		return $this->db->select('DISTINCT (option_key)')
+			->from('options_master')
+			->get()
+			->result();
+	}
+
+	public function distinct_option_value()
+	{
+
+		return $this->db->select('DISTINCT (option_value)')
+			->from('options_master')
+			->get()
+			->result();
+	}
+
+	public function distinct_option_category()
+	{
+
+		return $this->db->select('DISTINCT (category)')
+			->from('options_master')
+			->get()
+			->result();
+	}
+
+	public function all_options_fetch()
+	{
+
+		return $this->db->select('*')
+			->from('options_master')
+			->get()
+			->result();
+	}
+
+	public function specific_options_fetch($data)
+	{
+
+		return $this->db->select('*')
+		->where('option_id',$data['option_id'])
+			->from('options_master')
+			->get()
+			->result();
+	}
+
 // options master
+
 
 	public function options_business_structure()
 	{
@@ -287,6 +335,18 @@ class Users_model extends CI_Model
 			->get()
 			->result();
 	}
+	
+	public function options_group_billing()
+	{
+
+		return $this->db->select('*')
+			->where('option_key', 'Group Billing')
+			// ->where('category', 'Education')
+			->from('options_master')
+			->get()
+			->result();
+	}
+
 	public function options_membership()
 	{
 
@@ -385,6 +445,16 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function max_options_rid_fetch()
+	{
+		$my_query = "SELECT MAX(rid) AS MRID FROM `options_master`";
+
+		return $this->db->query($my_query);
+	}
+
+
+	// counts
+
 	public function tickets_stage_count_fetch($data)
 	{
 		$my_query = "SELECT stage,count(*)AS COUNTSTAGE FROM  `opportunity_tickets` WHERE merchant_id='".$data['merchant_id']."' GROUP BY stage";
@@ -458,6 +528,12 @@ class Users_model extends CI_Model
 	{
 
 		return $this->db->insert('classification_details', $data);
+	}
+
+	public function new_option_insert($data)
+	{
+
+		return $this->db->insert('options_master', $data);
 	}
 
 

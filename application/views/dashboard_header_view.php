@@ -37,5 +37,7 @@ $base=base_url()."public/";
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="<?php echo $base;?>css/themes/all-themes.css" rel="stylesheet" />
 
+    <!-- JQuery DataTable Css -->
+    <link href="<?php echo $base;?>plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
 	
 </head>

@@ -294,7 +294,7 @@ $onboarding= $sessdata['pbk_onboarding'];
 												<select  name="invoice_print_type" id="invoice_print_type" class="form-control" required>
                                                         <option value="" selected disabled>Please Select</option>
                                                         <?php 
-                                                        foreach ($options_invoice_print_type as $row) 
+                                                        foreach ($options_group_billing as $row) 
                                                         {
 
                                                         $value=$row->option_value;

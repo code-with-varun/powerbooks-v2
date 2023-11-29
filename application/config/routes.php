@@ -80,7 +80,11 @@ $route['IWS-reporter'] = 'Dashboard/IWS_reporter';
 $route['BWS-reporter'] = 'Dashboard/BWS_reporter';
 $route['DWS-reporter'] = 'Dashboard/DWS_reporter';
 
-
 $route['messages'] = 'Home/messages';
 
 $route['activate/(:any)/(:any)'] = 'Home/account_activate/$1/$2';
+
+// super admin routes
+$route['options-master'] = 'Dashboard/options_master';
+$route['new-options'] = 'Dashboard/new_options';
+$route['add-new-options'] = 'Dashboard/add_new_options';
