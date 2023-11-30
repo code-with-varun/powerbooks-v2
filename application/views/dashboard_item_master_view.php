@@ -74,15 +74,20 @@ $onboarding= $sessdata['pbk_onboarding'];
 											}
 											
 								?>  									
-										<tr>
-										<form class="form-horizontal" action="add-division" method="POST">
-										<div class="form-group">
+										
+                                        
+                                    </tbody>
+                                </table>
+								<form id="sign-up" action="add-classification" method="POST">
+										<div class="form-group form-float">
 											
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="division_name" name="division_name" placeholder="Product Division Name" required>
+													<input type="text" class="form-control" id="division_name" name="division_name" required>
+														<label class="form-label">Product Division Name*</label>
 													</div>
                                                 </div>
+
 												<div class="col-sm-4">
                                                     <div >
 													<button type="submit" class="btn btn-success">ADD</button>
@@ -91,10 +96,6 @@ $onboarding= $sessdata['pbk_onboarding'];
 												
 										</div>
 										</form>
-										</tr>
-                                        
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
@@ -152,13 +153,18 @@ $onboarding= $sessdata['pbk_onboarding'];
 											}
 											
 								?>  									
-										<tr>
-										<form class="form-horizontal" action="add-category" method="POST">
-										<div class="form-group">
+										
+										
+                                        
+                                    </tbody>
+                                </table>
+								<form class="form-horizontal" action="add-category" method="POST">
+										<div class="form-group form-float">
 											
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="category_name" name="category_name" placeholder="Product Category Name" required>
+                                                        <input type="text" class="form-control" name="category_name" required>
+														<label class="form-label">Category Name*</label> 
 													</div>
                                                 </div>
 												<div class="col-sm-4">
@@ -175,7 +181,8 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                         echo '<option value="'.$division_code.'">'.$division_name.'</option>'; 
                                                         }
                                                         ?>
-                                                        </select>  
+                                                        </select> 
+														<label class="form-label">Division*</label> 
 													</div>
                                                 </div>
 												<div class="col-sm-4">
@@ -186,10 +193,6 @@ $onboarding= $sessdata['pbk_onboarding'];
 												
 										</div>
 										</form>
-										</tr>
-                                        
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
@@ -239,15 +242,22 @@ $onboarding= $sessdata['pbk_onboarding'];
 											}
 											
 								?>  									
-										<tr>
-										<form class="form-horizontal" action="add-classification" method="POST">
-										<div class="form-group">
+										
+										
+										
+                                        
+                                    </tbody>
+                                </table>
+								<form id="sign-up" action="add-classification" method="POST">
+										<div class="form-group form-float">
 											
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="classification_name" name="classification_name" placeholder="Classification Name" required>
+                                                        <input type="text" name="classification_name" class="form-control" required>
+														<label class="form-label">Classification*</label>
 													</div>
                                                 </div>
+
 												<div class="col-sm-4">
                                                     <div >
 													<button type="submit" class="btn btn-success">ADD</button>
@@ -256,10 +266,6 @@ $onboarding= $sessdata['pbk_onboarding'];
 												
 										</div>
 										</form>
-										</tr>
-                                        
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
@@ -355,96 +361,102 @@ $onboarding= $sessdata['pbk_onboarding'];
             <div class="body">
                 <form id="sign_up" action="new-staff" method="POST">
 				<h4>Create New Product</h4><hr>
-					<div class="input-group">
-						<label for="merchant_id" class="col-sm-2 control-label">Inventory Type</label>
-						<div class="col-sm-4">
-							<div class="form-line">
-							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Inventory Type simple variable group" >
-							</div>
-						</div>
-						<label for="merchant_id" class="col-sm-2 control-label">Item Type</label>
-						<div class="col-sm-4">
-							<div class="form-line">
-							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
-							</div>
-						</div>
-                    </div>
-                    <div class="input-group">
-						<label for="barcode" class="col-sm-2 control-label">Barcode</label>
-						<div class="col-sm-4">
-							<div class="form-line">
-								<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
-							</div>
-						</div>
-						<label for="merchant_id" class="col-sm-2 control-label"></label>
-						<div class="col-sm-4">
-							<div class="form-line">
-							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
-							</div>
-						</div>
-                    </div>
 
-					<div class="input-group">
-						<label for="merchant_id" class="col-sm-2 control-label">Product Name</label>
-						<div class="col-sm-4">
-							<div class="form-line">
-							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
-							</div>
-						</div>
-						<label for="merchant_id" class="col-sm-2 control-label">Product Description</label>
-						<div class="col-sm-4">
-							<div class="form-line">
-							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
-							</div>
-						</div>
-                    </div>
+					<div class="form-group form-float">
+								<div class="col-sm-4">
+                                    <div class="form-line">
+									<select  name="invoice_print_type" class="form-control" required>
+                                                        <option value="" selected disabled>Please Select</option>
+                                                        <?php 
+                                                        foreach ($options_inventory_item_type as $row) 
+                                                        {
 
-					<div class="input-group">
-						<label for="merchant_id" class="col-sm-2 control-label">Division Name</label>
-						<div class="col-sm-4">
-							<div class="form-line">
-							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
-							</div>
-						</div>
-						<label for="merchant_id" class="col-sm-2 control-label">Product Category</label>
-						<div class="col-sm-4">
-							<div class="form-line">
-							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
-							</div>
-						</div>
-                    </div>
+                                                        $value=$row->option_value;
+                                                        echo '<option value="'.$value.'">'.$value.'</option>'; 
+                                                        }
+                                                        ?>
+                                                        </select> 
 
-					<div class="input-group">
-						<label for="merchant_id" class="col-sm-2 control-label">Classification</label>
-						<div class="col-sm-4">
-							<div class="form-line">
-							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
-							</div>
-						</div>
-						<label for="merchant_id" class="col-sm-2 control-label">Style/Model</label>
-						<div class="col-sm-4">
-							<div class="form-line">
-							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
-							</div>
-						</div>
-                    </div>
+                                        <label class="form-label">Item Type*</label>
+										
+                                    </div>
+                                </div>
 
-					<div class="input-group">
-						<label for="merchant_id" class="col-sm-2 control-label">Color/Variant</label>
-						<div class="col-sm-4">
-							<div class="form-line">
-							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
-							</div>
-						</div>
-						<label for="merchant_id" class="col-sm-2 control-label">Size/Weight</label>
-						<div class="col-sm-4">
-							<div class="form-line">
-							<input type="text" class="form-control" id="barcode" name="barcode" placeholder="Barcode" >
-							</div>
-						</div>
-                    </div>
+								<div class="col-sm-4">
+                                    <div class="form-line">
+                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+                                        <label class="form-label">Barcode*</label>
+										
+                                    </div>
+                                </div>
+								<div class="col-sm-4">
+                                    <div class="form-line">
+                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+                                        <label class="form-label">Product Name*</label>
+										
+                                    </div>
+                                </div>
+					</div>
+					<div class="form-group form-float">
+								<div class="col-sm-12">
+                                    <div class="form-line">
+                                        <textarea class="form-control" name="product_description" maxlength="100" required></textarea>
+                                        <label class="form-label">Product Description (max 100char)*</label>
+										
+                                    </div>
+                                </div>
+					</div>
 
-                     
+					<div class="form-group form-float">
+								<div class="col-sm-4">
+                                    <div class="form-line">
+                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+                                        <label class="form-label">Division*</label>
+										
+                                    </div>
+                                </div>
+
+								<div class="col-sm-4">
+                                    <div class="form-line">
+                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+                                        <label class="form-label">Category*</label>
+										
+                                    </div>
+                                </div>
+								<div class="col-sm-4">
+                                    <div class="form-line">
+                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+                                        <label class="form-label">Classification*</label>
+										
+                                    </div>
+                                </div>
+					</div>
+
+					<div class="form-group form-float">
+								<div class="col-sm-4">
+                                    <div class="form-line">
+                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+                                        <label class="form-label">Style/Model*</label>
+										
+                                    </div>
+                                </div>
+
+								<div class="col-sm-4">
+                                    <div class="form-line">
+                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+                                        <label class="form-label">Color/Variant*</label>
+										
+                                    </div>
+                                </div>
+								<div class="col-sm-4">
+                                    <div class="form-line">
+                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+                                        <label class="form-label">Size/Weight*</label>
+										
+                                    </div>
+                                </div>
+					</div>
+ 
                     <button class="btn btn-lg bg-pink waves-effect" type="submit">Create Product</button>
 
                   

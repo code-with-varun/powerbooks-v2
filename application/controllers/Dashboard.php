@@ -114,7 +114,7 @@ class Dashboard extends CI_Controller
 		'distinct_option_key' => $distinct_option_key
 		]);
 		$this->load->view('dashboard_bottom_view');
-		$this->load->view('dashboard_footer_view');
+		$this->load->view('dashboard_table_footer_view');
 	}
 		
 	public function add_new_options()
@@ -196,7 +196,7 @@ class Dashboard extends CI_Controller
 		$category_fetch = $this->Users_model->category_fetch($data);
 		$classification_fetch = $this->Users_model->classification_fetch($data);
 		$product_fetch = $this->Users_model->product_fetch($data);
-		
+		$options_inventory_item_type = $this->Users_model->options_inventory_item_type();
 		
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
@@ -206,6 +206,7 @@ class Dashboard extends CI_Controller
 		'category_fetch'=>$category_fetch,
 		'classification_fetch'=>$classification_fetch,
 		'product_fetch'=>$product_fetch,
+		'options_inventory_item_type'=>$options_inventory_item_type,
 		
 		]);
 		$this->load->view('dashboard_bottom_view');
@@ -506,6 +507,7 @@ $i=$i+1;
 		
 		$data['invoice_print_type'] = $this->input->post('invoice_print_type');
 		$data['staging_invoice'] = $this->input->post('staging_invoice');
+		$data['billing_group'] = $this->input->post('billing_group');
 		$data['gst_tax_invoice'] = $this->input->post('gst_tax_invoice');
 		$data['auto_day_end'] = $this->input->post('auto_day_end');
 		$data['direct_billing'] = $this->input->post('direct_billing');
