@@ -1,0 +1,191 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+$base=base_url()."public/";
+$sessdata = $this->session->userdata('pbk_sess');
+$eid = $sessdata['pbk_eid'];
+$name = $sessdata['pbk_name'];
+$merchant_id= $sessdata['pbk_merchant_id'];
+$user_type= $sessdata['pbk_user_type'];
+$onboarding= $sessdata['pbk_onboarding'];
+
+
+
+?>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>
+					Goods Inward
+                </h2>
+            </div>
+            <!-- Exportable Table -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                EXPORTABLE TABLE
+                            </h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                    <thead>
+                                        <tr>
+											
+                                            <th>TZ Barcode</th>
+											<th>SKU</th>
+                                            <th>Cost Price</th>
+                                            <th>MRP</th>
+                                            <th>Retail Price</th>
+											<th>Qty</th>
+											<th>Tax Slab</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+										<tr>
+											
+											<th>TZ Barcode</th>
+											<th>SKU</th>
+                                            <th>Cost Price</th>
+                                            <th>MRP</th>
+                                            <th>Retail Price</th>
+											<th>Qty</th>
+											<th>Tax Slab</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody id="results" >
+										<?php
+				foreach ($temp_inward_master_fetch as $row)
+				{	
+					$TZ_barcode = $row->TZ_barcode;
+					$quantity = $row->quantity;
+					$sku = $row->sku;
+					$tax_slab = $row->tax_slab;
+					$retail_price = $row->retail_price;
+					$mrp = $row->mrp;
+					$cost_price = $row->cost_price;
+				
+					echo '
+					<tr>   
+
+					<td>'.$TZ_barcode.'</td>
+					<td>'.$sku.'</td>
+					<td>'.$cost_price.'</td>
+					<td>'.$mrp.'</td>
+					<td>'.$retail_price.'</td>
+					<td>'.$quantity.'</td>
+					<td>'.$tax_slab.'</td>
+					
+				</tr>';
+					 
+				}
+                     ?>                 
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+			<!-- product starts -->
+				
+                <div class="card">
+            <div class="body">
+                <form id="myForm" action="" method="POST">
+				<h4>Add Inventory</h4><hr>
+
+					<div class="form-group form-float">
+								<div class="col-sm-4">
+									<div class="form-line">
+                                        <input type="text" list="sku" id="TZ_barcode" name="TZ_barcode" class="form-control" required>
+                                        <label class="form-label">SKU / Barcode*</label>
+										<datalist id="sku">
+													<?php 
+														foreach ($product_fetch as $row) 
+														{
+
+														$TZ_barcode=$row->TZ_barcode;
+														$barcode=$row->barcode;
+														$sku=$row->sku;
+														echo '<option value="'.$TZ_barcode.'">'.$sku.' | '.$TZ_barcode.'</option>';
+														}
+													?>
+										</datalist>
+                                    </div>
+                                </div>
+
+								<div class="col-sm-2">
+                                    <div class="form-line">
+                                        <input type="text"  name="cost_price" id="cost_price" class="form-control" required>
+                                        <label class="form-label">Cost Price*</label>
+										
+                                    </div>
+                                </div>
+								<div class="col-sm-2">
+                                    <div class="form-line">
+                                        <input type="text"  name="mrp" id="mrp" class="form-control" required>
+                                        <label class="form-label">MRP*</label>
+										
+                                    </div>
+                                </div>
+								<div class="col-sm-2">
+                                    <div class="form-line">
+                                        <input type="text"  name="retail_price" id="retail_price" class="form-control" required>
+                                        <label class="form-label">Retail Price*</label>
+										
+                                    </div>
+                                </div>
+								<div class="col-sm-2">
+                                    <div class="form-line">
+                                        <input type="text"  name="quantity" id="quantity" class="form-control" required>
+										<label class="form-label">Quantity*</label>
+										
+                                    </div>
+                                </div>
+					</div>
+
+                    <button class="btn btn-lg bg-pink waves-effect" onclick="SubmitFormData();" type="button">Add Item</button>
+					
+
+                  
+                </form>
+            </div>
+<script>
+
+function SubmitFormData() {
+var TZ_barcode = $("#TZ_barcode").val();
+var cost_price = $("#cost_price").val();
+var mrp = $("#mrp").val();
+var retail_price = $("#retail_price").val();
+var quantity = $("#quantity").val();
+
+
+$.post("<?php echo base_url()."temp-goods-inward";?>", { TZ_barcode: TZ_barcode, cost_price: cost_price, mrp: mrp, retail_price: retail_price, quantity: quantity },
+function(data) {
+ $('#results').html(data);
+ $('#myForm')[0].reset();
+});
+}
+</script>
+
+
+				<!-- product ends  -->
+
+            <!-- #END# Exportable Table -->
+        </div>
+    </section>

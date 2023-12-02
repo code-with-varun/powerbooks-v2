@@ -116,12 +116,70 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_table_footer_view');
 	}
+
+	public function goods_inward()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['user_type'] = $sessdata['pbk_user_type'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$product_fetch = $this->Users_model->product_fetch($data);
+		$temp_inward_master_fetch = $this->Users_model->temp_inward_master_fetch($data);
+
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_goods_inward_view',['temp_inward_master_fetch' => $temp_inward_master_fetch,
+		'product_fetch' => $product_fetch,
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+	}
+
+	public function new_product()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		$min_TZ_barcode_fetch = $this->Users_model->min_TZ_barcode_fetch();
+		foreach ($min_TZ_barcode_fetch as $row) {
+
+			$TZ_barcode = $row->min_TZ_barcode;
+		}
+		$data['TZ_barcode'] = $TZ_barcode + 1;
+		$data['item_type'] = $this->input->post('inventory_item_type');
+		$data['barcode'] = $this->input->post('barcode');
+		$data['item_name'] = $this->input->post('item_name');
+		$data['item_description'] = $this->input->post('item_description');
+		$data['manage_stocks'] = $this->input->post('manage_stocks');
+		$data['taxable'] = $this->input->post('taxable');
+		$cat_div = explode('|-|',$this->input->post('category'));
+		$data['category']=$cat_div[0];
+		$data['division']=$cat_div[1];
+		$data['classification'] = $this->input->post('classification');
+		$data['hsn_sac_code'] = $this->input->post('hsn_sac_code');
+		$data['pack_code'] = $this->input->post('pack_code');
+		$data['style_model_no'] = $this->input->post('style_model_no');
+		$data['color_variant'] = $this->input->post('color_variant');
+		$data['size_weight'] = $this->input->post('size_weight');
+		$data['product_status'] ='INACTIVE';
+		$data['sku'] = $data['style_model_no'].'-'.$data['color_variant'].'-'.$data['size_weight'];
+		
+
+		$new_product_insert = $this->Users_model->new_product_insert($data);
+
+		redirect('item-master', 'location');
+
+
+	}
 		
 	public function add_new_options()
 	{
 
 
-		 $max_options_rid_fetch = $this->Users_model->max_options_rid_fetch();
+		$max_options_rid_fetch = $this->Users_model->max_options_rid_fetch();
 		foreach ($max_options_rid_fetch->result() as $row) {
 
 			$MRID = $row->MRID;
@@ -363,26 +421,23 @@ class Dashboard extends CI_Controller
 		$item_wise_check = $this->Users_model->item_wise_check($data);
 		if ($item_wise_check == 1) 
 		{
-
-				echo ' <table class="table table-hover dashboard-task-infos">
-				<thead>
-					<tr>
-						<th>SI NO</th>
-						<th>DATE</th>
-						<th>BILL NO</th>
-						<th>BARCODE</th>
-						<th>SKU</th>
-						<th>PRODUCT</th>
-						<th>ITEM DESCRIPTION</th>
-						<th>MRP</th>
-						<th>QTY</th>
-						<th>AMOUNT</th>
-					  
-					</tr>
-				</thead>
-				<tbody>';
-
-
+			echo ' <table class="table table-hover dashboard-task-infos">
+			<thead>
+				<tr>
+					<th>SI NO</th>
+					<th>DATE</th>
+					<th>BILL NO</th>
+					<th>BARCODE</th>
+					<th>SKU</th>
+					<th>PRODUCT</th>
+					<th>ITEM DESCRIPTION</th>
+					<th>MRP</th>
+					<th>QTY</th>
+					<th>AMOUNT</th>
+				  
+				</tr>
+			</thead>
+			<tbody>';
 
 				$item_wise_sales = $this->Users_model->item_wise_sales($data);
 				//var_dump($item_wise_sales);
@@ -431,6 +486,65 @@ $i=$i+1;
 			}
 		} else {
 			echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
+		}
+		
+		
+	 
+	}
+
+	public function temp_goods_inward()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['TZ_barcode']))
+		{
+		 	$data['TZ_barcode'] = $this->input->post('TZ_barcode');
+			$specific_item_fetch = $this->Users_model->specific_item_fetch($data);
+			foreach ($specific_item_fetch as $row)
+			{
+			$sku=$row->sku;
+			}
+			$data['sku']=$sku;
+			$data['cost_price'] = $this->input->post('cost_price');
+			$data['mrp'] = $this->input->post('mrp');
+			$data['retail_price'] = $this->input->post('retail_price');
+			$data['quantity'] = $this->input->post('quantity');
+
+			$new_temp_goods_insert = $this->Users_model->new_temp_goods_insert($data);
+
+			$temp_inward_master_fetch = $this->Users_model->temp_inward_master_fetch($data);
+				//var_dump($item_wise_sales);
+				 //echo $this->db->last_query();
+				foreach ($temp_inward_master_fetch as $row)
+				{	
+					$TZ_barcode = $row->TZ_barcode;
+					$quantity = $row->quantity;
+					$sku = $row->sku;
+					$tax_slab = $row->tax_slab;
+					$retail_price = $row->retail_price;
+					$mrp = $row->mrp;
+					$cost_price = $row->cost_price;
+				
+					echo '
+					<tr>   
+
+					<td>'.$TZ_barcode.'</td>
+					<td>'.$sku.'</td>
+					<td>'.$cost_price.'</td>
+					<td>'.$mrp.'</td>
+					<td>'.$retail_price.'</td>
+					<td>'.$quantity.'</td>
+					<td>'.$tax_slab.'</td>
+					
+				</tr>';
+					 
+				}
+		}
+		else
+		{
+				echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
 		}
 		
 		
@@ -512,6 +626,8 @@ $i=$i+1;
 		$data['auto_day_end'] = $this->input->post('auto_day_end');
 		$data['direct_billing'] = $this->input->post('direct_billing');
 		$data['pos_start_date'] = $this->input->post('pos_start_date');
+		$data['current_pos_date'] = $this->input->post('pos_start_date');
+		$data['manage_stocks'] = $this->input->post('manage_stocks');
 
 		$new_onboard_config_insert = $this->Users_model->new_onboard_config_insert($data);
 		$onboarding_update = $this->Users_model->onboarding_update($mdata);

@@ -65,9 +65,11 @@ $route['billing'] = 'Dashboard/billing';
 $route['onboarding'] = 'Dashboard/onboarding';
 $route['staffing'] = 'Dashboard/staffing';
 $route['item-master'] = 'Dashboard/item_master';
+$route['goods-inward'] = 'Dashboard/goods_inward';
 $route['add-division'] = 'Dashboard/new_division';
 $route['add-category'] = 'Dashboard/new_category';
 $route['add-classification'] = 'Dashboard/new_classification';
+$route['new-product'] = 'Dashboard/new_product';
 $route['new-staff'] = 'Dashboard/new_staff';
 $route['settings'] = 'Dashboard/onboarding';
 $route['merchant-onboard'] = 'Dashboard/merchant_onboard';
@@ -79,6 +81,8 @@ $route['daywise-sales'] = 'Dashboard/day_wise_sales';
 $route['IWS-reporter'] = 'Dashboard/IWS_reporter';
 $route['BWS-reporter'] = 'Dashboard/BWS_reporter';
 $route['DWS-reporter'] = 'Dashboard/DWS_reporter';
+
+$route['temp-goods-inward'] = 'Dashboard/temp_goods_inward';
 
 $route['messages'] = 'Home/messages';
 

@@ -203,6 +203,17 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function specific_item_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('TZ_barcode', $data['TZ_barcode'])
+			->where('merchant_id', $data['merchant_id'])
+			->from('item_master')
+			->get()
+			->result();
+	}
+
 	public function category_fetch($data)
 	{
 
@@ -229,6 +240,16 @@ class Users_model extends CI_Model
 		return $this->db->select('*')
 			->where('merchant_id', $data['merchant_id'])
 			->from('item_master')
+			->get()
+			->result();
+	}
+
+	public function temp_inward_master_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->from('temp_inward_master')
 			->get()
 			->result();
 	}
@@ -381,6 +402,17 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function options_inventory_item_type()
+	{
+
+		return $this->db->select('DISTINCT(option_value)')
+			->where('option_key', 'Inventory Item Type')
+			->from('options_master')
+			->order_by('rid')
+			->get()
+			->result();
+	}
+
 	
 
 // ALL UPDATE QUERIES
@@ -420,6 +452,13 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function min_TZ_barcode_fetch()
+	{
+		return $this->db->select('MIN(TZ_barcode) AS min_TZ_barcode')
+			->from('item_master')
+			->get()
+			->result();
+	}
 	
 	public function max_division_id_fetch()
 	{
@@ -536,6 +575,15 @@ class Users_model extends CI_Model
 		return $this->db->insert('options_master', $data);
 	}
 
+	public function new_product_insert($data)
+	{
 
+		return $this->db->insert('item_master', $data);
+	}
+	public function new_temp_goods_insert($data)
+	{
+
+		return $this->db->insert('temp_inward_master', $data);
+	}
 	// modal ends here
 }

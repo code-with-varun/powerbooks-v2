@@ -294,13 +294,12 @@ $onboarding= $sessdata['pbk_onboarding'];
                                     <thead>
                                         <tr>
                                             <th>TZ Barcode</th>
-											<th>Product Name</th>
+											<th>Item Name</th>
                                             <th>Item Type</th>
                                             <th>Division</th>
                                             <th>Category</th>
                                             <th>Classification</th>
                                             <th>SKU</th>
-											<th>Retail Price</th>
 											<th>Product Status</th>
                                             <th>Actions</th>
                                         </tr>
@@ -311,13 +310,13 @@ $onboarding= $sessdata['pbk_onboarding'];
 	foreach ($product_fetch as $row)
 	{
         		 $TZ_barcode=$row->TZ_barcode;
-        		 $product_name=$row->product_name;
+        		 $item_name=$row->item_name;
         		 $item_type=$row->item_type;
         		 $division=$row->division;
 				 $category=$row->category;
 				 $classification=$row->classification;
 				 $sku=$row->sku;
-				 $current_retail_price=$row->current_retail_price;
+
 
         		 $status=$row->product_status;
         		 if($status=='INACTIVE'){$bg='red';}
@@ -328,14 +327,13 @@ $onboarding= $sessdata['pbk_onboarding'];
         		 
         		 echo'<tr>   
                                             <td>'.$TZ_barcode.'</td>
-                                            <td>'.$product_name.'</td>
+                                            <td>'.$item_name.'</td>
                                             <td>'.$item_type.'</td>
                                              <td>'.$division.'</td>
 											 <td>'.$category.'</td>
 											 <td>'.$classification.'</td>
 											 <td>'.$sku.'</td>
-											 <td>'.$current_retail_price.'</td>
-                                            <td><span class="label bg-'.$bg.'">'.$status.'</span></td>
+											 <td><span class="label bg-'.$bg.'">'.$status.'</span></td>
 											<td >
 												<a href="delete-product">
 												<i class="material-icons">delete</i>
@@ -359,13 +357,13 @@ $onboarding= $sessdata['pbk_onboarding'];
 				
                 <div class="card">
             <div class="body">
-                <form id="sign_up" action="new-staff" method="POST">
+                <form id="sign_up" action="new-product" method="POST">
 				<h4>Create New Product</h4><hr>
 
 					<div class="form-group form-float">
 								<div class="col-sm-4">
                                     <div class="form-line">
-									<select  name="invoice_print_type" class="form-control" required>
+									<select  name="inventory_item_type" class="form-control" required>
                                                         <option value="" selected disabled>Please Select</option>
                                                         <?php 
                                                         foreach ($options_inventory_item_type as $row) 
@@ -384,15 +382,15 @@ $onboarding= $sessdata['pbk_onboarding'];
 
 								<div class="col-sm-4">
                                     <div class="form-line">
-                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
-                                        <label class="form-label">Barcode*</label>
+                                        <input type="text" name="barcode" class="form-control">
+                                        <label class="form-label">Barcode</label>
 										
                                     </div>
                                 </div>
 								<div class="col-sm-4">
                                     <div class="form-line">
-                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
-                                        <label class="form-label">Product Name*</label>
+                                        <input type="text" name="item_name" class="form-control" required>
+                                        <label class="form-label">Item Name*</label>
 										
                                     </div>
                                 </div>
@@ -400,8 +398,8 @@ $onboarding= $sessdata['pbk_onboarding'];
 					<div class="form-group form-float">
 								<div class="col-sm-12">
                                     <div class="form-line">
-                                        <textarea class="form-control" name="product_description" maxlength="100" required></textarea>
-                                        <label class="form-label">Product Description (max 100char)*</label>
+                                        <textarea class="form-control" name="item_description" maxlength="100" required></textarea>
+                                        <label class="form-label">Item Description (max 100char)*</label>
 										
                                     </div>
                                 </div>
@@ -409,33 +407,99 @@ $onboarding= $sessdata['pbk_onboarding'];
 
 					<div class="form-group form-float">
 								<div class="col-sm-4">
-                                    <div class="form-line">
-                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
-                                        <label class="form-label">Division*</label>
-										
+									<div class="switch">
+                                        
+                                        <label class="form-label">Manage Stocks*</label>
+										<label>
+											<input type="checkbox"  id="manage_stocks"  name="manage_stocks" value="YES">
+											<span class="lever"></span>
+										</label>
+													
+                                                
+                                    </div>
+                                </div>
+								<div class="col-sm-4">
+									<div class="switch">
+                                        
+                                        <label class="form-label">Taxable Product*</label>
+										<label>
+											<input type="checkbox"  id="taxable"  name="taxable" value="YES">
+											<span class="lever"></span>
+										</label>
+													
+                                                
                                     </div>
                                 </div>
 
 								<div class="col-sm-4">
                                     <div class="form-line">
-                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
-                                        <label class="form-label">Category*</label>
+									<select  name="category" class="form-control" required>
+                                                        <option value="" selected disabled>Please Select</option>
+                                                        <?php 
+                                                        foreach ($category_fetch as $row) 
+                                                        {
+
+															$category_name=$row->category_name;
+															$data['division_code']=$row->division_code;
+																$specific_division_fetch = $this->Users_model->specific_division_fetch($data);
+																foreach ($specific_division_fetch as $row)
+																{
+																$division_name=$row->division_name;
+																}
+
+                                                        echo '<option value="'.$category_name.'|-|'.$division_name.'">'.$category_name.'</option>'; 
+                                                        }
+                                                        ?>
+                                                        </select> 
+														<label class="form-label">Category*</label> 
 										
                                     </div>
                                 </div>
+								
+					</div>
+
+					<div class="form-group form-float">
 								<div class="col-sm-4">
                                     <div class="form-line">
-                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+									<select  name="classification" class="form-control" required>
+                                                        <option value="" selected disabled>Please Select</option>
+                                                        <?php 
+                                                        foreach ($classification_fetch as $row) 
+                                                        {
+
+															$classification_name=$row->classification_name;
+															
+
+                                                        echo '<option value="'.$classification_name.'">'.$classification_name.'</option>'; 
+                                                        }
+                                                        ?>
+                                                        </select> 
                                         <label class="form-label">Classification*</label>
 										
                                     </div>
                                 </div>
+								<div class="col-sm-4">
+                                    <div class="form-line">
+                                        <input type="text"  name="hsn_sac_code" class="form-control">
+                                        <label class="form-label">HSN/SAC Code</label>
+										
+                                    </div>
+                                </div>
+
+								<div class="col-sm-4">
+                                    <div class="form-line">
+                                        <input type="text"  name="pack_code" class="form-control">
+                                        <label class="form-label">Pack Code*</label>
+										
+                                    </div>
+                                </div>
+								
 					</div>
 
 					<div class="form-group form-float">
 								<div class="col-sm-4">
                                     <div class="form-line">
-                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+                                        <input type="text"  name="style_model_no" class="form-control" required>
                                         <label class="form-label">Style/Model*</label>
 										
                                     </div>
@@ -443,21 +507,22 @@ $onboarding= $sessdata['pbk_onboarding'];
 
 								<div class="col-sm-4">
                                     <div class="form-line">
-                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+                                        <input type="text"  name="color_variant" class="form-control" required>
                                         <label class="form-label">Color/Variant*</label>
 										
                                     </div>
                                 </div>
 								<div class="col-sm-4">
                                     <div class="form-line">
-                                        <input type="text" list="option_key" name="option_key" class="form-control" required>
+                                        <input type="text"  name="size_weight" class="form-control" required>
                                         <label class="form-label">Size/Weight*</label>
 										
                                     </div>
                                 </div>
 					</div>
- 
-                    <button class="btn btn-lg bg-pink waves-effect" type="submit">Create Product</button>
+
+                    <button class="btn btn-lg bg-pink waves-effect" type="submit">Add Item</button>
+					
 
                   
                 </form>

@@ -321,10 +321,10 @@ $onboarding= $sessdata['pbk_onboarding'];
 													</div>
                                                 </div>
 
-												<label for="inventory" class="col-sm-2 control-label">Inventory</label>
+												<label for="inventory" class="col-sm-2 control-label">Manage Stocks</label>
                                                 <div class="col-sm-4">
 												<div class="switch">
-												<label><input type="checkbox"  id="inventory" name="inventory" value="YES"><span class="lever"></span></label>
+												<label><input type="checkbox"  id="manage_stocks" name="manage_stocks" value="YES"><span class="lever"></span></label>
 													</div>
                                                 </div>
 												
