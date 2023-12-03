@@ -253,6 +253,17 @@ class Users_model extends CI_Model
 			->get()
 			->result();
 	}
+
+	public function vendor_supplier_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->from('vendor_supplier_master')
+			->get()
+			->result();
+	}
+	
 	
 
 
@@ -362,6 +373,17 @@ class Users_model extends CI_Model
 
 		return $this->db->select('*')
 			->where('option_key', 'Group Billing')
+			// ->where('category', 'Education')
+			->from('options_master')
+			->get()
+			->result();
+	}
+
+	public function options_vendor_type()
+	{
+
+		return $this->db->select('*')
+			->where('option_key', 'Vendor Type')
 			// ->where('category', 'Education')
 			->from('options_master')
 			->get()
@@ -491,6 +513,15 @@ class Users_model extends CI_Model
 		return $this->db->query($my_query);
 	}
 
+	public function max_vendor_rid_fetch()
+	{
+		return $this->db->select('MAX(vendor_id) AS MRID')
+			->from('vendor_supplier_master')
+			->get()
+			->result();
+	}
+
+	
 
 	// counts
 
@@ -585,5 +616,12 @@ class Users_model extends CI_Model
 
 		return $this->db->insert('temp_inward_master', $data);
 	}
+
+	public function new_vendor_insert($data)
+	{
+
+		return $this->db->insert('vendor_supplier_master', $data);
+	}
+	
 	// modal ends here
 }

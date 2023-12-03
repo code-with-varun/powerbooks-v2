@@ -137,6 +137,28 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_table_footer_view');
 	}
 
+	public function vendor_supplier_master()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['user_type'] = $sessdata['pbk_user_type'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$vendor_supplier_fetch = $this->Users_model->vendor_supplier_fetch($data);
+		$options_vendor_type = $this->Users_model->options_vendor_type();
+		
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_vendor_supplier_view',['vendor_supplier_fetch' => $vendor_supplier_fetch,
+		'options_vendor_type' => $options_vendor_type,
+		
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+	}
+
 	public function new_product()
 	{
 
@@ -551,6 +573,64 @@ $i=$i+1;
 	 
 	}
 
+	public function add_new_vendor()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['vendor_type']))
+		{
+		 	$data['vendor_type'] = $this->input->post('vendor_type');
+			$data['vendor_name'] = $this->input->post('vendor_name');
+			$data['vendor_descr'] = $this->input->post('vendor_descr');
+			$data['vendor_email'] = $this->input->post('vendor_email');
+			$data['vendor_contact'] = $this->input->post('vendor_contact');
+
+			$max_vendor_rid_fetch = $this->Users_model->max_vendor_rid_fetch();
+			foreach ($max_vendor_rid_fetch as $row) {
+	
+				$MRID = $row->MRID;
+			}
+			$data['vendor_id'] = $MRID + 1;
+			$new_vendor_insert = $this->Users_model->new_vendor_insert($data);
+
+			$vendor_supplier_fetch = $this->Users_model->vendor_supplier_fetch($data);
+				//var_dump($item_wise_sales);
+				 //echo $this->db->last_query();
+				foreach ($vendor_supplier_fetch as $row)
+				{	
+					$vendor_id = $row->vendor_id;
+					$vendor_type = $row->vendor_type;
+					$vendor_name = $row->vendor_name;
+					$vendor_descr = $row->vendor_descr;
+					$vendor_email = $row->vendor_email;
+					$vendor_contact = $row->vendor_contact;
+					
+				
+					echo '
+					<tr>   
+
+					<td>'.$vendor_id.'</td>
+					<td>'.$vendor_type.'</td>
+					<td>'.$vendor_name.'</td>
+					<td>'.$vendor_descr.'</td>
+					<td>'.$vendor_email.'</td>
+					<td>'.$vendor_contact.'</td>
+					
+					
+				</tr>';
+					 
+				}
+		}
+		else
+		{
+				echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
+		}
+		
+		
+	 
+	}
 
 
 	

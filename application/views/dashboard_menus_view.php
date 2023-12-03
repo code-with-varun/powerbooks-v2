@@ -80,6 +80,11 @@ if($onboarding=='YES')
 				</a>
 				<ul class="ml-menu">
 					<li>
+						<a href="vendor-supplier">
+							<span>Vendors/Suppliers</span>
+						</a>
+					</li>
+					<li>
 						<a href="item-master">
 							<span>Item Master</span>
 						</a>

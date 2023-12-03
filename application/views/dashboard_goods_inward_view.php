@@ -97,6 +97,45 @@ $onboarding= $sessdata['pbk_onboarding'];
                                     </tbody>
                                 </table>
                             </div>
+							<!-- ********** -->
+				<form id="myForm" action="" method="POST">
+				<h4>Supplier Details</h4><hr>
+
+					<div class="form-group form-float">
+								<div class="col-sm-4">
+									<div class="form-line">
+                                        <input type="text" list="vendor_id" id="vendor_id" name="TZ_barcode" class="form-control" required>
+                                        <label class="form-label">Vendor ID*</label>
+										<datalist id="sku">
+													<?php 
+														foreach ($product_fetch as $row) 
+														{
+
+														$TZ_barcode=$row->TZ_barcode;
+														$barcode=$row->barcode;
+														$sku=$row->sku;
+														echo '<option value="'.$TZ_barcode.'">'.$sku.' | '.$TZ_barcode.'</option>';
+														}
+													?>
+										</datalist>
+                                    </div>
+                                </div>
+
+								<div class="col-sm-2">
+                                    <div class="form-line">
+                                        <input type="text"  name="entry_no" id="entry_no" class="form-control" required>
+										<label class="form-label">Purchase Entry No*</label>
+										
+                                    </div>
+                                </div>
+					</div>
+
+                    <button class="btn btn-lg bg-blue waves-effect" type="submit">Start Inventory</button>
+					
+
+                  
+                </form>
+							<!-- ********** -->
                         </div>
                     </div>
                 </div>
@@ -107,7 +146,7 @@ $onboarding= $sessdata['pbk_onboarding'];
                 <div class="card">
             <div class="body">
                 <form id="myForm" action="" method="POST">
-				<h4>Add Inventory</h4><hr>
+				<h4>Add Item</h4><hr>
 
 					<div class="form-group form-float">
 								<div class="col-sm-4">

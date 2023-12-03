@@ -78,7 +78,7 @@ $onboarding= $sessdata['pbk_onboarding'];
                                         
                                     </tbody>
                                 </table>
-								<form id="sign-up" action="add-classification" method="POST">
+								<form id="sign-up" action="add-division" method="POST">
 										<div class="form-group form-float">
 											
                                                 <div class="col-sm-4">
