@@ -8,14 +8,80 @@ $merchant_id= $sessdata['pbk_merchant_id'];
 $user_type= $sessdata['pbk_user_type'];
 $onboarding= $sessdata['pbk_onboarding'];
 
+$company_name='';
+$brand_name='';
+$business_structure='';
+$industry='';
+$business_model='';
+$business_category='';
+$door_no='';
+$street='';
+$landmark='';
+$area='';
+$city='';
+$state='';
+$pincode='';
+$business_phone='';
+$business_email='';
+$company_web='';
+$pan='';
+$gstin='';
+$auto_day_end='';
+$staging_invoice='';
+$billing_group='';
+$gst_tax_invoice='';
+$direct_billing='';
+$manage_stocks='';
+$pos_start_date='';
+$current_pos_date='';
+$pos_status='';
+$invoice_print_type='';
+$membership='';
+$membership_billed='';
 
+foreach ($config_master_fetch as $row)
+{
+	$company_name=$row->company_name;
+	$brand_name=$row->brand_name;
+	$business_structure=$row->business_structure;
+	$industry=$row->industry;
+	$business_model=$row->business_model;
+	$business_category=$row->business_category;
+	$door_no=$row->door_no;
+	$street=$row->street;
+	$landmark=$row->landmark;
+	$area=$row->area;
+	$city=$row->city;
+	$state=$row->state;
+	$pincode=$row->pincode;
+	$business_phone=$row->business_phone;
+	$business_email=$row->business_email;
+	$company_web=$row->company_web;
+	$pan=$row->pan;
+	$gstin=$row->gstin;
+	$auto_day_end=$row->auto_day_end;
+	$staging_invoice=$row->staging_invoice;
+	$billing_group=$row->billing_group;
+	$gst_tax_invoice=$row->gst_tax_invoice;
+	$direct_billing=$row->direct_billing;
+	$manage_stocks=$row->manage_stocks;
+	$pos_start_date=$row->pos_start_date;
+	$current_pos_date=$row->current_pos_date;
+	$pos_status=$row->pos_status;
+	$invoice_print_type=$row->invoice_print_type;
+	$membership=$row->membership;
+	$membership_billed=$row->membership_billed;
+			
+
+}
 
 ?>
  <section class="content">
         <div class="container-fluid">
 
 			<div class="block-header">
-                <h2>Onboarding Form</h2>
+			<?php if(uri_string()=="onboarding"){echo '<h2>Onboarding Form</h2>';}else{echo '<h2>Settings Form</h2>';}?>
+                
             </div>
 
             <div class="row clearfix">
@@ -62,13 +128,13 @@ $onboarding= $sessdata['pbk_onboarding'];
 											<label for="company_name" class="col-sm-2 control-label">Company Name</label>
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Company Name" required>
+                                                        <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Company Name" value="<?php echo$company_name;?>" required>
                                                     </div>
                                                 </div>
 												<label for="brand_name" class="col-sm-2 control-label">Brand Name</label>
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="brand_name" name="brand_name" placeholder="Brand Name" >
+                                                        <input type="text" class="form-control" id="brand_name" name="brand_name" value="<?php echo$brand_name;?>" placeholder="Brand Name" >
                                                     </div>
                                                 </div>
 											</div>
@@ -83,7 +149,8 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                         {
 
                                                         $value=$row->option_value;
-                                                        echo '<option value="'.$value.'">'.$value.'</option>'; 
+														if($value==$business_structure){$sel="selected";}else{$sel='';}
+                                                        echo '<option value="'.$value.'" '.$sel.'>'.$value.'</option>'; 
                                                         }
                                                         ?>
                                                         </select>   
@@ -92,7 +159,7 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                 <label for="industry" class="col-sm-2 control-label">Industry</label>
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-													<input type="text"  name="industry" list="industry" placeholder="Industry" class="form-control" required>
+													<input type="text"  name="industry" list="industry" value="<?php echo $industry;?>" placeholder="Industry" class="form-control" required>
                                                        
 													<datalist id="industry">
 													<option value="" selected disabled>Please Select</option>
@@ -101,7 +168,8 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                         {
 
                                                         $value=$row->option_value;
-                                                        echo '<option value="'.$value.'">'.$value.'</option>'; 
+														echo '<option value="'.$value.'">'.$value.'</option>'; 
+                                                        
                                                         }
                                                         ?>
                                                         </datalist>   
@@ -121,7 +189,9 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                         {
 
                                                         $value=$row->option_value;
-                                                        echo '<option value="'.$value.'">'.$value.'</option>'; 
+                                                        if($value==$business_model){$sel="selected";}else{$sel='';}
+                                                        echo '<option value="'.$value.'" '.$sel.'>'.$value.'</option>'; 
+                                                        
                                                         }
                                                         ?>
                                                         </select>   
@@ -137,7 +207,9 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                         {
 
                                                         $value=$row->option_value;
-                                                        echo '<option value="'.$value.'">'.$value.'</option>'; 
+                                                        if($value==$business_category){$sel="selected";}else{$sel='';}
+                                                        echo '<option value="'.$value.'" '.$sel.'>'.$value.'</option>'; 
+                                                        
                                                         }
                                                         ?>
                                                         </select>   
@@ -152,19 +224,19 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                 <label for="door_no" class="col-sm-2 control-label">Door No</label>
                                                 <div class="col-sm-3">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="door_no" name="door_no" placeholder="Door No" required>
+                                                        <input type="text" class="form-control" id="door_no" name="door_no" value="<?php echo$door_no;?>" placeholder="Door No" required>
                                                     </div>
                                                 </div>
 												<label for="street" class="col-sm-1 control-label">Street</label>
                                                 <div class="col-sm-2">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="street" name="street" placeholder="Street" required>
+                                                        <input type="text" class="form-control" id="street" name="street" value="<?php echo$street;?>" placeholder="Street" required>
                                                     </div>
                                                 </div>
 												<label for="landmark" class="col-sm-1 control-label">Landmark</label>
 												<div class="col-sm-3">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="landmark" name="landmark" placeholder="Landmark" required>
+                                                        <input type="text" class="form-control" id="landmark" name="landmark" value="<?php echo$landmark;?>" placeholder="Landmark" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -174,19 +246,19 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                 <label for="area" class="col-sm-2 control-label">Area</label>
                                                 <div class="col-sm-3">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="area" name="area" placeholder="Area" required>
+                                                        <input type="text" class="form-control" id="area" name="area" value="<?php echo$area;?>" placeholder="Area" required>
                                                     </div>
                                                 </div>
 												<label for="city" class="col-sm-1 control-label">City</label>
                                                 <div class="col-sm-2">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="city" name="city" placeholder="City" required>
+                                                        <input type="text" class="form-control" id="city" name="city" value="<?php echo$city;?>" placeholder="City" required>
                                                     </div>
                                                 </div>
 												<label for="state" class="col-sm-1 control-label">State</label>
 												<div class="col-sm-3">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="state" name="state" placeholder="State" required>
+                                                        <input type="text" class="form-control" id="state" name="state" value="<?php echo$state;?>" placeholder="State" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -194,19 +266,19 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                 <label for="pincode" class="col-sm-2 control-label">Pincode</label>
                                                 <div class="col-sm-3">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="pincode" minlength="6" maxlength="6" name="pincode" placeholder="Pincode" required>
+                                                        <input type="text" class="form-control" id="pincode" minlength="6" maxlength="6" name="pincode" value="<?php echo$pincode;?>" placeholder="Pincode" required>
                                                     </div>
                                                 </div>
 												<label for="business_phone" class="col-sm-1 control-label">Phone</label>
                                                 <div class="col-sm-2">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="business_phone" maxlength="10" name="business_phone" placeholder="Business Phone" >
+                                                        <input type="text" class="form-control" id="business_phone" maxlength="10" name="business_phone" value="<?php echo$business_phone;?>" placeholder="Business Phone" >
                                                     </div>
                                                 </div>
 												<label for="business_email" class="col-sm-1 control-label">Email</label>
 												<div class="col-sm-3">
                                                     <div class="form-line">
-                                                        <input type="email" class="form-control" id="business_email"  name="business_email" placeholder="Business Email">
+                                                        <input type="email" class="form-control" id="business_email"  name="business_email" value="<?php echo$business_email;?>" placeholder="Business Email">
                                                     </div>
                                                 </div>
                                             </div>
@@ -223,7 +295,9 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                         {
 
                                                         $value=$row->option_value;
-                                                        echo '<option value="'.$value.'">'.$value.'</option>'; 
+                                                        if($value==$membership){$sel="selected";}else{$sel='';}
+                                                        echo '<option value="'.$value.'" '.$sel.'>'.$value.'</option>'; 
+                                                        
                                                         }
                                                         ?>
                                                         </select>   
@@ -239,7 +313,9 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                         {
 
                                                         $value=$row->option_value;
-                                                        echo '<option value="'.$value.'">'.$value.'</option>'; 
+                                                        if($value==$membership_billed){$sel="selected";}else{$sel='';}
+                                                        echo '<option value="'.$value.'" '.$sel.'>'.$value.'</option>'; 
+                                                        
                                                         }
                                                         ?>
                                                         </select>   
@@ -260,7 +336,9 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                         {
 
                                                         $value=$row->option_value;
-                                                        echo '<option value="'.$value.'">'.$value.'</option>'; 
+                                                        if($value==$invoice_print_type){$sel="selected";}else{$sel='';}
+                                                        echo '<option value="'.$value.'" '.$sel.'>'.$value.'</option>'; 
+                                                        
                                                         }
                                                         ?>
                                                         </select>  
@@ -283,22 +361,25 @@ $onboarding= $sessdata['pbk_onboarding'];
 												<label for="direct_billing" class="col-sm-2 control-label">Direct Billing</label>
                                                 <div class="col-sm-4">
 												<div class="switch">
-														<label><input type="checkbox" checked onchange="direct_stage()" id="direct_billing" name="direct_billing" value="YES"><span class="lever"></span></label>
+														<label><input type="checkbox" checked onchange="direct_stage()" id="direct_billing"  name="direct_billing" value="YES"><span class="lever"></span></label>
 													</div>
                                                 </div>
 											</div>
+											
 											<div class="form-group">
 											<label for="billing_group" class="col-sm-2 control-label">Billing Group</label>
                                                 <div class="col-sm-4">
 												<div class="form-line">
-												<select  name="invoice_print_type" id="invoice_print_type" class="form-control" required>
+												<select  name="billing_group" id="billing_group" class="form-control" required>
                                                         <option value="" selected disabled>Please Select</option>
                                                         <?php 
                                                         foreach ($options_group_billing as $row) 
                                                         {
 
                                                         $value=$row->option_value;
-                                                        echo '<option value="'.$value.'">'.$value.'</option>'; 
+                                                        if($value==$billing_group){$sel="selected";}else{$sel='';}
+                                                        echo '<option value="'.$value.'" '.$sel.'>'.$value.'</option>'; 
+                                                        
                                                         }
                                                         ?>
                                                         </select> 
@@ -335,13 +416,13 @@ $onboarding= $sessdata['pbk_onboarding'];
                                                 <label for="pan" class="col-sm-2 control-label">PAN</label>
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-													<input type="text" class="form-control" id="pan" name="pan" placeholder="PAN NO" required>
+													<input type="text" class="form-control" id="pan" name="pan" value="<?php echo$pan;?>" placeholder="PAN NO" required>
                                                     </div>
                                                 </div>
 												<label for="gstin" class="col-sm-2 control-label">GSTIN</label>
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-													<input type="text" class="form-control" id="gstin" name="gstin" placeholder="GSTIN">
+													<input type="text" class="form-control" id="gstin" name="gstin" value="<?php echo$gstin;?>" placeholder="GSTIN">
 													</div>
                                                 </div>
 												

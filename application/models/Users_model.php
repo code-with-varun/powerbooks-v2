@@ -455,6 +455,30 @@ class Users_model extends CI_Model
 			->update('user_details');
 	}
 
+	public function onboard_config_update($data)
+	{
+		return $this->db->set('company_name', $data['company_name'])
+			->set('brand_name', $data['brand_name'])
+			->set('business_structure', $data['business_structure'])
+			->set('industry', $data['industry'])
+			->set('business_model', $data['business_model'])
+			->set('company_name', $data['business_category'])
+			->set('company_name', $data['door'])
+			->set('company_name', $data['street'])
+			->set('company_name', $data['landmark'])
+			->set('company_name', $data['area'])
+			->set('company_name', $data['city'])
+			->set('company_name', $data['state'])
+			->set('company_name', $data['pincode'])
+			->set('company_name', $data['business_phone'])
+			->set('company_name', $data['business_email'])
+			->set('company_name', $data['company_web'])
+			->set('company_name', $data['pan'])
+			->set('company_name', $data['gstin'])
+			->where('merchant_id', $data['auto_day_end'])
+			->update('config_master');
+	}
+
 // ALL MAX ID FETCH
 
 

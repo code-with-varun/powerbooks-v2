@@ -125,6 +125,7 @@ class Dashboard extends CI_Controller
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
 
 		$product_fetch = $this->Users_model->product_fetch($data);
+		$vendor_supplier_fetch = $this->Users_model->vendor_supplier_fetch($data);
 		$temp_inward_master_fetch = $this->Users_model->temp_inward_master_fetch($data);
 
 		$this->load->view('dashboard_header_view');
@@ -132,6 +133,7 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_goods_inward_view',['temp_inward_master_fetch' => $temp_inward_master_fetch,
 		'product_fetch' => $product_fetch,
+		'vendor_supplier_fetch' => $vendor_supplier_fetch,
 		]);
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_table_footer_view');
@@ -272,6 +274,7 @@ class Dashboard extends CI_Controller
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
 
 		$staff_manager_fetch = $this->Users_model->staff_manager_fetch($data);
+		$config_master_fetch = $this->Users_model->config_master_fetch($data);
 		$division_fetch = $this->Users_model->division_fetch($data);
 		$category_fetch = $this->Users_model->category_fetch($data);
 		$classification_fetch = $this->Users_model->classification_fetch($data);
@@ -283,7 +286,8 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_menus_view');
 		$this->load->view('dashboard_item_master_view',[
 		'division_fetch'=>$division_fetch,
-		'category_fetch'=>$category_fetch,
+		'config_master_fetch'=>$config_master_fetch,
+		'division_fetch'=>$division_fetch,
 		'classification_fetch'=>$classification_fetch,
 		'product_fetch'=>$product_fetch,
 		'options_inventory_item_type'=>$options_inventory_item_type,
@@ -404,6 +408,7 @@ class Dashboard extends CI_Controller
 						$rid= $row->min_staff;					//merchant id
 						$mdata['staff_id']=$rid-1;
 					}	
+					if($mdata['staff_id']==-1){$mdata['staff_id']==654321;}
 					$mdata['otp']=md5(rand(1000,9999));	
 					$mdata['otp_expiry']=date('Y-m-d H:i:s',strtotime('+15 minutes',strtotime(date('Y-m-d H:i:s'))));	
 					
@@ -641,7 +646,7 @@ $i=$i+1;
 		$data['eid'] = $sessdata['pbk_eid'];
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
 
-
+		$config_master_fetch = $this->Users_model->config_master_fetch($data);
 		$options_business_structure = $this->Users_model->options_business_structure();
 		$options_industry = $this->Users_model->options_industry();
 		$options_business_category = $this->Users_model->options_business_category();
@@ -656,6 +661,7 @@ $i=$i+1;
 		$this->load->view('dashboard_menus_view');
 		$this->load->view('dashboard_onboarding_view',[
 		'options_business_structure'=>$options_business_structure,
+		'config_master_fetch'=>$config_master_fetch,
 		'options_industry'=>$options_industry,
 		'options_business_category'=>$options_business_category,
 		'options_business_model'=>$options_business_model,
@@ -703,13 +709,16 @@ $i=$i+1;
 		$data['staging_invoice'] = $this->input->post('staging_invoice');
 		$data['billing_group'] = $this->input->post('billing_group');
 		$data['gst_tax_invoice'] = $this->input->post('gst_tax_invoice');
+		if($data['gst_tax_invoice']==''){$data['gst_tax_invoice']='NO';}
 		$data['auto_day_end'] = $this->input->post('auto_day_end');
 		$data['direct_billing'] = $this->input->post('direct_billing');
 		$data['pos_start_date'] = $this->input->post('pos_start_date');
 		$data['current_pos_date'] = $this->input->post('pos_start_date');
 		$data['manage_stocks'] = $this->input->post('manage_stocks');
+		if($data['manage_stocks']==''){$data['manage_stocks']='NO';}
 
 		$new_onboard_config_insert = $this->Users_model->new_onboard_config_insert($data);
+		// $onboard_config_update = $this->Users_model->onboard_config_update($data);
 		$onboarding_update = $this->Users_model->onboarding_update($mdata);
 
 		redirect('dashboard', 'location');
@@ -717,26 +726,6 @@ $i=$i+1;
 		
 	}
 
-	public function settings()
-	{
-
-		$sessdata = $this->session->userdata('pbk_sess');
-		$data['eid'] = $sessdata['pbk_eid'];
-		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
-
-		$config_master_fetch = $this->Users_model->config_master_fetch($data);
-
-		$this->load->view('dashboard_header_view');
-		$this->load->view('dashboard_top_view');
-		$this->load->view('dashboard_menus_view');
-		$this->load->view('dashboard_settings_view',[
-		'config_master_fetch'=>$config_master_fetch,
-		
-		]);
-		$this->load->view('dashboard_bottom_view');
-		$this->load->view('dashboard_footer_view');
-	}
-	
 
 
 	// Dashboard controller class ends

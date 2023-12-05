@@ -104,20 +104,20 @@ $onboarding= $sessdata['pbk_onboarding'];
 					<div class="form-group form-float">
 								<div class="col-sm-4">
 									<div class="form-line">
-                                        <input type="text" list="vendor_id" id="vendor_id" name="TZ_barcode" class="form-control" required>
-                                        <label class="form-label">Vendor ID*</label>
-										<datalist id="sku">
+                                        <select id="vendor_id" name="vendor_id" class="form-control" required>
+                                        <option value="" selected disabled>Please Select</option>
+										
 													<?php 
-														foreach ($product_fetch as $row) 
+														foreach ($vendor_supplier_fetch as $row) 
 														{
 
-														$TZ_barcode=$row->TZ_barcode;
-														$barcode=$row->barcode;
-														$sku=$row->sku;
-														echo '<option value="'.$TZ_barcode.'">'.$sku.' | '.$TZ_barcode.'</option>';
+														$vendor_id=$row->vendor_id;
+														$vendor_name=$row->vendor_name;
+														echo '<option value="'.$vendor_name.' | '.$vendor_id.'">'.$vendor_name.' | '.$vendor_id.'</option>';
 														}
 													?>
-										</datalist>
+										</select>
+										<label class="form-label">Vendor ID*</label>
                                     </div>
                                 </div>
 

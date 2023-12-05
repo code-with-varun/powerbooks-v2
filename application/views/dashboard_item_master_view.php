@@ -5,7 +5,13 @@ $sessdata = $this->session->userdata('pbk_sess');
 $user_type= $sessdata['pbk_user_type'];
 $onboarding= $sessdata['pbk_onboarding'];
 
+foreach ($config_master_fetch as $row)
+{
+	$gst_tax_invoice=$row->gst_tax_invoice;
+	$manage_stocks=$row->manage_stocks;
+			
 
+}
 
 ?>
 

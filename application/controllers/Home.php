@@ -86,8 +86,11 @@ class Home extends CI_Controller {
 					foreach ($min_merchant_id_fetch as $row) 
 					{
 						$rid= $row->min_merchant;					//merchant id
+						
 						$mdata['merchant_id']=$rid-1;
-					}	
+					}
+					if($mdata['merchant_id']==-1){$mdata['merchant_id']==765431;}
+						
 					$mdata['otp']=md5(rand(1000,9999));	
 					$mdata['otp_expiry']=date('Y-m-d H:i:s',strtotime('+15 minutes',strtotime(date('Y-m-d H:i:s'))));	
 					$mdata['user_type']='ADMIN';			
