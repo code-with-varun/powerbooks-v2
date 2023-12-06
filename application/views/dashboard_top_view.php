@@ -19,13 +19,17 @@ if($onboarding=='YES')
 	{
 	$brand_name = $row->brand_name;
 	$company_name = $row->company_name;
+	$current_pos_date = $row->current_pos_date;
+	$pos_status = $row->pos_status;
 	}
 
 }
 
 else{
 	$brand_name = "Brand Name";
-	$company_name = "Company Name";;
+	$company_name = "Company Name";
+	$current_pos_date = "";
+	$pos_status="";
 }
 
 ?>
@@ -66,7 +70,7 @@ else{
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Call Search -->
-                    <li><a href="#" class="js-search" > Billing open for date</a></li>
+                    <li><a href="#" class="js-search" > <?php echo 'Billing '.$pos_status.' for date ( '.date('d-M-Y',strtotime($current_pos_date)).' )';?></a></li>
                     <!-- #END# Call Search -->
                     <!-- Notifications -->
                    

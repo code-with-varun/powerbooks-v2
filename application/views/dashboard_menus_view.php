@@ -229,7 +229,7 @@ echo '<li>
 			&copy; <?php echo date('Y');?> <a href="#">POWERBOOKS</a>.
 		</div>
 		<div class="version">
-			<b>Version: </b> 2.0.
+			<b>Version: </b> 2.0. <a href="https://helpdesk.thamizhanda.in/">(Helpdesk)</a>
 		</div>
 		
 	</div>

@@ -66,6 +66,7 @@ $route['onboarding'] = 'Dashboard/onboarding';
 $route['staffing'] = 'Dashboard/staffing';
 $route['item-master'] = 'Dashboard/item_master';
 $route['goods-inward'] = 'Dashboard/goods_inward';
+$route['inward-items'] = 'Dashboard/inward_items';
 $route['vendor-supplier'] = 'Dashboard/vendor_supplier_master';
 $route['add-division'] = 'Dashboard/new_division';
 $route['add-category'] = 'Dashboard/new_category';
@@ -84,6 +85,7 @@ $route['BWS-reporter'] = 'Dashboard/BWS_reporter';
 $route['DWS-reporter'] = 'Dashboard/DWS_reporter';
 
 $route['temp-goods-inward'] = 'Dashboard/temp_goods_inward';
+$route['temp-qty-tax'] = 'Dashboard/temp_qty_tax';
 $route['add-vendor'] = 'Dashboard/add_new_vendor';
 
 

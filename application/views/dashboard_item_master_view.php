@@ -417,7 +417,7 @@ foreach ($config_master_fetch as $row)
                                         
                                         <label class="form-label">Manage Stocks*</label>
 										<label>
-											<input type="checkbox"  id="manage_stocks"  name="manage_stocks" value="YES">
+											<input type="checkbox" id="manage_stocks"  name="manage_stocks" value="YES" <?php if($manage_stocks!='YES'){echo "disabled";}?>>
 											<span class="lever"></span>
 										</label>
 													
@@ -429,7 +429,7 @@ foreach ($config_master_fetch as $row)
                                         
                                         <label class="form-label">Taxable Product*</label>
 										<label>
-											<input type="checkbox"  id="taxable"  name="taxable" value="YES">
+											<input type="checkbox"  id="taxable"  name="taxable" value="YES" <?php if($gst_tax_invoice!='YES'){echo "disabled";}?>>
 											<span class="lever"></span>
 										</label>
 													

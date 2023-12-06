@@ -39,6 +39,14 @@ $invoice_print_type='';
 $membership='';
 $membership_billed='';
 
+$admin_mobile='';
+
+
+foreach ($specific_user_fetch_login as $row)
+{
+	$admin_mobile=$row->admin_mobile;
+
+}
 foreach ($config_master_fetch as $row)
 {
 	$company_name=$row->company_name;
@@ -120,7 +128,7 @@ foreach ($config_master_fetch as $row)
 												<label for="admin_mobile" class="col-sm-2 control-label">Admin Mobile</label>
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control" id="admin_mobile" maxlength="10" name="admin_mobile" placeholder="Admin Mobile" autofocus required>
+                                                        <input type="text" class="form-control" id="admin_mobile" maxlength="10" name="admin_mobile" value="<?php echo $admin_mobile;?>" placeholder="Admin Mobile" autofocus required>
                                                     </div>
                                                 </div>
 											</div>
@@ -288,7 +296,7 @@ foreach ($config_master_fetch as $row)
                                                 <label for="membership" class="col-sm-2 control-label">Membership</label>
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-													<select  name="membership" id="membership" class="form-control" required>
+													<select  name="membership" id="membership" class="form-control" <?php if($onboarding=='YES'){echo "disabled";}else{echo 'required';}?>>
                                                         <option value="" selected disabled>Please Select</option>
                                                         <?php 
                                                         foreach ($options_membership as $row) 
@@ -306,7 +314,7 @@ foreach ($config_master_fetch as $row)
 												<label for="membership_billed" class="col-sm-2 control-label">Membership Billed</label>
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-													<select  name="membership_billed" id="membership_billed" class="form-control" required>
+													<select  name="membership_billed" id="membership_billed" class="form-control" <?php if($onboarding=='YES'){echo "disabled";}else{echo 'required';}?> >
                                                         <option value="" selected disabled>Please Select</option>
                                                         <?php 
                                                         foreach ($options_membership_billed as $row) 
@@ -347,7 +355,7 @@ foreach ($config_master_fetch as $row)
 												<label for="auto_day_end" class="col-sm-2 control-label">Auto Day End</label>
                                                 <div class="col-sm-4">
 													<div class="switch">
-														<label><input type="checkbox" name="auto_day_end" value="YES"><span class="lever"></span></label>
+														<label><input type="checkbox" <?php if($auto_day_end=="YES"){echo "checked";} ?> name="auto_day_end" value="YES"><span class="lever"></span></label>
 													</div>
                                                 </div>
 											</div>
@@ -355,13 +363,13 @@ foreach ($config_master_fetch as $row)
 												<label for="pos_start_date" class="col-sm-2 control-label">POS Start Date</label>
 												<div class="col-sm-4">
 													<div class="form-line">
-														<input type="date" class="form-control" value="<?php echo date('Y-m-d')?>" name="pos_start_date" max="<?php echo date('Y-m-d')?>" >
+														<input type="date" class="form-control" value="<?php if($pos_start_date==''){echo date('Y-m-d');}else{echo $pos_start_date;}?>" name="pos_start_date" max="<?php echo date('Y-m-d');?>" <?php if($onboarding=='YES'){echo "disabled";}?>  >
 													</div>
                                                 </div>
 												<label for="direct_billing" class="col-sm-2 control-label">Direct Billing</label>
                                                 <div class="col-sm-4">
 												<div class="switch">
-														<label><input type="checkbox" checked onchange="direct_stage()" id="direct_billing"  name="direct_billing" value="YES"><span class="lever"></span></label>
+														<label><input type="checkbox" <?php if($direct_billing=="YES"){echo "checked";} ?> onchange="direct_stage()" id="direct_billing"  name="direct_billing" value="YES"><span class="lever"></span></label>
 													</div>
                                                 </div>
 											</div>
@@ -388,7 +396,7 @@ foreach ($config_master_fetch as $row)
 												<label for="staging_invoice" class="col-sm-2 control-label">Staging Invoice</label>
                                                 <div class="col-sm-4">
 												<div class="switch">
-												<label><input type="checkbox" onchange="stage_direct()" id="staging_invoice" name="staging_invoice" value="YES"><span class="lever"></span></label>
+												<label><input type="checkbox" <?php if($staging_invoice=="YES"){echo "checked";} ?> onchange="stage_direct()" id="staging_invoice" name="staging_invoice" value="YES"><span class="lever"></span></label>
 													</div>
                                                 </div>
 												
@@ -398,14 +406,14 @@ foreach ($config_master_fetch as $row)
 											<label for="gst_tax_invoice" class="col-sm-2 control-label">GST/TAX Invoice</label>
                                                 <div class="col-sm-4">
 												<div class="switch">
-														<label><input type="checkbox" onchange="check_gstin()" id="gst_tax_invoice" name="gst_tax_invoice" value="YES"><span class="lever"></span></label>
+														<label><input type="checkbox" <?php if($gst_tax_invoice=="YES"){echo "checked";} ?> onchange="check_gstin()" id="gst_tax_invoice" name="gst_tax_invoice" value="YES"><span class="lever"></span></label>
 													</div>
                                                 </div>
 
 												<label for="inventory" class="col-sm-2 control-label">Manage Stocks</label>
                                                 <div class="col-sm-4">
 												<div class="switch">
-												<label><input type="checkbox"  id="manage_stocks" name="manage_stocks" value="YES"><span class="lever"></span></label>
+												<label><input type="checkbox" <?php if($manage_stocks=="YES"){echo "checked";} ?>  id="manage_stocks" name="manage_stocks" value="YES"><span class="lever"></span></label>
 													</div>
                                                 </div>
 												
@@ -416,13 +424,13 @@ foreach ($config_master_fetch as $row)
                                                 <label for="pan" class="col-sm-2 control-label">PAN</label>
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-													<input type="text" class="form-control" id="pan" name="pan" value="<?php echo$pan;?>" placeholder="PAN NO" required>
+													<input type="text" class="form-control" id="pan" maxlength="10" minlength="10" name="pan" value="<?php echo$pan;?>" placeholder="PAN NO" required>
                                                     </div>
                                                 </div>
 												<label for="gstin" class="col-sm-2 control-label">GSTIN</label>
                                                 <div class="col-sm-4">
                                                     <div class="form-line">
-													<input type="text" class="form-control" id="gstin" name="gstin" value="<?php echo$gstin;?>" placeholder="GSTIN">
+													<input type="text" class="form-control" id="gstin" maxlength="15" minlength="15" name="gstin" value="<?php echo$gstin;?>" placeholder="GSTIN">
 													</div>
                                                 </div>
 												

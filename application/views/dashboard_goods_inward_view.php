@@ -98,7 +98,7 @@ $onboarding= $sessdata['pbk_onboarding'];
                                 </table>
                             </div>
 							<!-- ********** -->
-				<form id="myForm" action="" method="POST">
+				<form id="myForm" action="inward-items" method="POST">
 				<h4>Supplier Details</h4><hr>
 
 					<div class="form-group form-float">
@@ -123,8 +123,8 @@ $onboarding= $sessdata['pbk_onboarding'];
 
 								<div class="col-sm-2">
                                     <div class="form-line">
-                                        <input type="text"  name="entry_no" id="entry_no" class="form-control" required>
-										<label class="form-label">Purchase Entry No*</label>
+                                        <input type="text"  name="invoice_no" id="invoice_no" class="form-control" required>
+										<label class="form-label">Invoice No*</label>
 										
                                     </div>
                                 </div>
@@ -149,9 +149,9 @@ $onboarding= $sessdata['pbk_onboarding'];
 				<h4>Add Item</h4><hr>
 
 					<div class="form-group form-float">
-								<div class="col-sm-4">
+								<div class="col-sm-3">
 									<div class="form-line">
-                                        <input type="text" list="sku" id="TZ_barcode" name="TZ_barcode" class="form-control" required>
+                                        <input type="text" list="sku" id="TZ_barcode" onchange="Change_barcode();" name="TZ_barcode" class="form-control" required>
                                         <label class="form-label">SKU / Barcode*</label>
 										<datalist id="sku">
 													<?php 
@@ -168,34 +168,31 @@ $onboarding= $sessdata['pbk_onboarding'];
                                     </div>
                                 </div>
 
-								<div class="col-sm-2">
+								<div class="col-sm-3">
                                     <div class="form-line">
                                         <input type="text"  name="cost_price" id="cost_price" class="form-control" required>
                                         <label class="form-label">Cost Price*</label>
 										
                                     </div>
                                 </div>
-								<div class="col-sm-2">
+								<div class="col-sm-3">
                                     <div class="form-line">
                                         <input type="text"  name="mrp" id="mrp" class="form-control" required>
                                         <label class="form-label">MRP*</label>
 										
                                     </div>
                                 </div>
-								<div class="col-sm-2">
+								<div class="col-sm-3">
                                     <div class="form-line">
                                         <input type="text"  name="retail_price" id="retail_price" class="form-control" required>
                                         <label class="form-label">Retail Price*</label>
 										
                                     </div>
                                 </div>
-								<div class="col-sm-2">
-                                    <div class="form-line">
-                                        <input type="text"  name="quantity" id="quantity" class="form-control" required>
-										<label class="form-label">Quantity*</label>
-										
-                                    </div>
-                                </div>
+
+					</div>
+					<div class="form-group form-float" id="qty_tax_results">
+								
 					</div>
 
                     <button class="btn btn-lg bg-pink waves-effect" onclick="SubmitFormData();" type="button">Add Item</button>
@@ -206,15 +203,26 @@ $onboarding= $sessdata['pbk_onboarding'];
             </div>
 <script>
 
+function Change_barcode() {
+var TZ_barcode = $("#TZ_barcode").val();
+
+$.post("<?php echo base_url()."temp-qty-tax";?>", { TZ_barcode: TZ_barcode  },
+function(data) {
+ $('#qty_tax_results').html(data);
+});
+}
+
 function SubmitFormData() {
 var TZ_barcode = $("#TZ_barcode").val();
 var cost_price = $("#cost_price").val();
 var mrp = $("#mrp").val();
 var retail_price = $("#retail_price").val();
 var quantity = $("#quantity").val();
+var tax_slab = $("#tax_slab").val();
 
 
-$.post("<?php echo base_url()."temp-goods-inward";?>", { TZ_barcode: TZ_barcode, cost_price: cost_price, mrp: mrp, retail_price: retail_price, quantity: quantity },
+
+$.post("<?php echo base_url()."temp-goods-inward";?>", { TZ_barcode: TZ_barcode, cost_price: cost_price, mrp: mrp, retail_price: retail_price, quantity: quantity, tax_slab: tax_slab },
 function(data) {
  $('#results').html(data);
  $('#myForm')[0].reset();

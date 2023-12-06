@@ -47,6 +47,21 @@ class Users_model extends CI_Model
 		}
 	}
 
+	
+	public function check_merchant_config($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->get('config_master')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function check_merchant_otp($data)
 	{
 		
@@ -424,6 +439,17 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function options_tax_slab()
+	{
+
+		return $this->db->select('*')
+			->where('option_key', 'Tax Slab')
+			->from('options_master')
+			->order_by('rid')
+			->get()
+			->result();
+	}
+
 	public function options_inventory_item_type()
 	{
 
@@ -462,20 +488,29 @@ class Users_model extends CI_Model
 			->set('business_structure', $data['business_structure'])
 			->set('industry', $data['industry'])
 			->set('business_model', $data['business_model'])
-			->set('company_name', $data['business_category'])
-			->set('company_name', $data['door'])
-			->set('company_name', $data['street'])
-			->set('company_name', $data['landmark'])
-			->set('company_name', $data['area'])
-			->set('company_name', $data['city'])
-			->set('company_name', $data['state'])
-			->set('company_name', $data['pincode'])
-			->set('company_name', $data['business_phone'])
-			->set('company_name', $data['business_email'])
-			->set('company_name', $data['company_web'])
-			->set('company_name', $data['pan'])
-			->set('company_name', $data['gstin'])
-			->where('merchant_id', $data['auto_day_end'])
+			->set('business_category', $data['business_category'])
+			->set('door_no', $data['door_no'])
+			->set('street', $data['street'])
+			->set('landmark', $data['landmark'])
+			->set('area', $data['area'])
+			->set('city', $data['city'])
+			->set('state', $data['state'])
+			->set('pincode', $data['pincode'])
+			->set('business_phone', $data['business_phone'])
+			->set('business_email', $data['business_email'])
+			->set('company_web', $data['company_web'])
+			->set('pan', $data['pan'])
+			->set('gstin', $data['gstin'])
+			->set('auto_day_end', $data['auto_day_end'])
+			->set('staging_invoice', $data['staging_invoice'])
+			->set('billing_group', $data['billing_group'])
+			->set('gst_tax_invoice', $data['gst_tax_invoice'])
+			->set('direct_billing', $data['direct_billing'])
+			->set('gstin', $data['gstin'])
+			->set('pos_status', $data['pos_status'])
+			->set('invoice_print_type', $data['invoice_print_type'])
+			->set('manage_stocks', $data['manage_stocks'])
+			->where('merchant_id', $data['merchant_id'])
 			->update('config_master');
 	}
 

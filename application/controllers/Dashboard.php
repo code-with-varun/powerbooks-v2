@@ -172,7 +172,8 @@ class Dashboard extends CI_Controller
 
 			$TZ_barcode = $row->min_TZ_barcode;
 		}
-		$data['TZ_barcode'] = $TZ_barcode + 1;
+		$data['TZ_barcode'] = $TZ_barcode - 1;
+		if($data['TZ_barcode']==- 1){$data['TZ_barcode']=987654;}
 		$data['item_type'] = $this->input->post('inventory_item_type');
 		$data['barcode'] = $this->input->post('barcode');
 		$data['item_name'] = $this->input->post('item_name');
@@ -288,6 +289,7 @@ class Dashboard extends CI_Controller
 		'division_fetch'=>$division_fetch,
 		'config_master_fetch'=>$config_master_fetch,
 		'division_fetch'=>$division_fetch,
+		'category_fetch'=>$category_fetch,
 		'classification_fetch'=>$classification_fetch,
 		'product_fetch'=>$product_fetch,
 		'options_inventory_item_type'=>$options_inventory_item_type,
@@ -538,7 +540,8 @@ $i=$i+1;
 			$data['mrp'] = $this->input->post('mrp');
 			$data['retail_price'] = $this->input->post('retail_price');
 			$data['quantity'] = $this->input->post('quantity');
-
+			$data['tax_slab'] = $this->input->post('tax_slab');
+			
 			$new_temp_goods_insert = $this->Users_model->new_temp_goods_insert($data);
 
 			$temp_inward_master_fetch = $this->Users_model->temp_inward_master_fetch($data);
@@ -568,6 +571,70 @@ $i=$i+1;
 				</tr>';
 					 
 				}
+		}
+		else
+		{
+				echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
+		}
+		
+		
+	 
+	}
+
+	public function temp_qty_tax()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['TZ_barcode']))
+		{
+		 	$data['TZ_barcode'] = $this->input->post('TZ_barcode');
+			 $manage_stocks='';
+			 $taxable='';
+			$specific_item_fetch = $this->Users_model->specific_item_fetch($data);
+			foreach ($specific_item_fetch as $row)
+			{
+			$manage_stocks=$row->manage_stocks;
+			$taxable=$row->taxable;
+			}
+			if($manage_stocks=="YES")
+			{
+				echo'<label for="quantity" class="col-sm-2 control-label">Quantity</label>
+				<div class="col-sm-4">
+						<div class="form-line">
+							<input type="text"  name="quantity" id="quantity" placeholder="Quantity" class="form-control" required>
+							
+					
+						</div>
+					</div>';
+
+			}				
+			if($taxable=="YES")
+			{
+				echo'<label for="tax_slab" class="col-sm-2 control-label">Tax Slab</label>
+						<div class="col-sm-4">
+						<div class="form-line">
+						<select id="tax_slab" name="tax_slab" class="form-control" required>
+						<option value="" selected disabled>Please Select</option>';
+						
+						$options_tax_slab = $this->Users_model->options_tax_slab();
+						foreach ($options_tax_slab as $row) 
+						{
+
+						$value=$row->option_value;
+						echo '<option value="'.$value.'">'.$value.'</option>'; 
+						
+						}
+								
+						echo'</select>
+							
+							
+						</div>
+					</div>';
+			}
+
+			
 		}
 		else
 		{
@@ -637,6 +704,27 @@ $i=$i+1;
 	 
 	}
 
+	public function inward_items()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		// Temp to stock purchased move and temp delete
+		// Adding entry in goods register
+		// Add price in multiple price
+		$temp_inward_master_fetch = $this->Users_model->temp_inward_master_fetch($data);
+
+		echo $data['vendor_id'] = $this->input->post('vendor_id');
+		echo $data['invoice_no'] = $this->input->post('invoice_no');
+		$data['invoice_date'] = $this->input->post('invoice_date');
+		$data['total_qty'] = $this->input->post('total_qty');
+		$data['gross_amount'] = $this->input->post('gross_amount');
+		$data['tax_amount'] = $this->input->post('tax_amount');
+		$data['net_amount'] = $this->input->post('net_amount');
+		
+
+	}
 
 	
 	public function onboarding()
@@ -647,6 +735,7 @@ $i=$i+1;
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
 
 		$config_master_fetch = $this->Users_model->config_master_fetch($data);
+		$specific_user_fetch_login = $this->Users_model->specific_user_fetch_login($data);
 		$options_business_structure = $this->Users_model->options_business_structure();
 		$options_industry = $this->Users_model->options_industry();
 		$options_business_category = $this->Users_model->options_business_category();
@@ -662,6 +751,7 @@ $i=$i+1;
 		$this->load->view('dashboard_onboarding_view',[
 		'options_business_structure'=>$options_business_structure,
 		'config_master_fetch'=>$config_master_fetch,
+		'specific_user_fetch_login'=>$specific_user_fetch_login,
 		'options_industry'=>$options_industry,
 		'options_business_category'=>$options_business_category,
 		'options_business_model'=>$options_business_model,
@@ -717,9 +807,18 @@ $i=$i+1;
 		$data['manage_stocks'] = $this->input->post('manage_stocks');
 		if($data['manage_stocks']==''){$data['manage_stocks']='NO';}
 
-		$new_onboard_config_insert = $this->Users_model->new_onboard_config_insert($data);
-		// $onboard_config_update = $this->Users_model->onboard_config_update($data);
-		$onboarding_update = $this->Users_model->onboarding_update($mdata);
+		$check_merchant_config = $this->Users_model->check_merchant_config($data);
+		if ($check_merchant_config == 1)
+		{
+			$onboard_config_update = $this->Users_model->onboard_config_update($data);
+			$onboarding_update = $this->Users_model->onboarding_update($mdata);
+		}
+		else
+		{
+			$new_onboard_config_insert = $this->Users_model->new_onboard_config_insert($data);
+			$onboarding_update = $this->Users_model->onboarding_update($mdata);
+		}
+		
 
 		redirect('dashboard', 'location');
 
