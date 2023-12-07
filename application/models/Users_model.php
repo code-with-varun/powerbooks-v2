@@ -208,6 +208,16 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function goods_purchased_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->where('entry_no', $data['entry_no'])
+			->from('goods_purchased')
+			->get()
+			->result();
+	}
 	
 	public function division_fetch($data)
 	{
@@ -518,7 +528,6 @@ class Users_model extends CI_Model
 			->set('gst_tax_invoice', $data['gst_tax_invoice'])
 			->set('direct_billing', $data['direct_billing'])
 			->set('gstin', $data['gstin'])
-			->set('pos_status', $data['pos_status'])
 			->set('invoice_print_type', $data['invoice_print_type'])
 			->set('manage_stocks', $data['manage_stocks'])
 			->where('merchant_id', $data['merchant_id'])

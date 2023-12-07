@@ -288,6 +288,29 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_table_footer_view');
 	}
 
+	public function goods_purchased()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$data['entry_no'] = $this->input->post('entry_no');
+
+		$goods_purchased_fetch = $this->Users_model->goods_purchased_fetch($data);
+		
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_goods_purchased_view',[
+		'goods_purchased_fetch'=>$goods_purchased_fetch,
+		
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+	}
+
 	public function item_master()
 	{
 
@@ -738,11 +761,8 @@ $i=$i+1;
 
 		echo $data['vendor_id'] = $this->input->post('vendor_id');
 		echo $data['invoice_no'] = $this->input->post('invoice_no');
-		$data['invoice_date'] = $this->input->post('invoice_date');
-		$data['total_qty'] = $this->input->post('total_qty');
-		$data['gross_amount'] = $this->input->post('gross_amount');
-		$data['tax_amount'] = $this->input->post('tax_amount');
-		$data['net_amount'] = $this->input->post('net_amount');
+		echo $data['invoice_date'] = $this->input->post('invoice_date');
+		
 		
 
 	}

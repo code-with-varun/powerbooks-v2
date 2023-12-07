@@ -70,7 +70,7 @@ else{
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Call Search -->
-                    <li><a href="#" class="js-search" > <?php echo 'Billing '.$pos_status.' for date ( '.date('d-M-Y',strtotime($current_pos_date)).' )';?></a></li>
+                    <li><a href="#" class="js-search" > <?php echo 'Billing '.$pos_status.' for date ( '.date('d-M-Y - l',strtotime($current_pos_date)).' )';?></a></li>
                     <!-- #END# Call Search -->
                     <!-- Notifications -->
                    

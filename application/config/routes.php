@@ -68,6 +68,7 @@ $route['item-master'] = 'Dashboard/item_master';
 $route['goods-inward'] = 'Dashboard/goods_inward';
 $route['inward-items'] = 'Dashboard/inward_items';
 $route['goods-register'] = 'Dashboard/goods_register';
+$route['goods-purchased'] = 'Dashboard/goods_purchased';
 
 $route['vendor-supplier'] = 'Dashboard/vendor_supplier_master';
 $route['add-division'] = 'Dashboard/new_division';

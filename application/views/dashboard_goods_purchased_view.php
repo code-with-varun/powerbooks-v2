@@ -16,7 +16,7 @@ $onboarding= $sessdata['pbk_onboarding'];
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-					Goods Register
+					Goods Purchased
                 </h2>
             </div>
             <!-- Exportable Table -->
@@ -46,58 +46,66 @@ $onboarding= $sessdata['pbk_onboarding'];
                                     <thead>
                                         <tr>
 											
-                                            <th>Entry No</th>
-                                            <th>Vendor</th>
-                                            <th>Invoice No</th>
-                                            <th>Invoice Date</th>
-											<th>Entry Date</th>
+											<th>Entry No</th>
+											<th>TZ Barcode</th>
+                                            <th>SKU</th>
+                                            <th>Cost Price</th>
+                                            <th>MRP</th>
+											<th>Retail Price</th>
 											<th>Qty</th>
 											<th>Gross Amount</th>
+											<th>Tax Slab</th>
 											<th>Tax Amount</th>
 											<th>Net Amount</th>
-											<th>Action</th>
+											<th>Entry Date</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
 										<tr>
-											
 											<th>Entry No</th>
-                                            <th>Vendor</th>
-                                            <th>Invoice No</th>
-                                            <th>Invoice Date</th>
-											<th>Entry Date</th>
+											<th>TZ Barcode</th>
+                                            <th>SKU</th>
+                                            <th>Cost Price</th>
+                                            <th>MRP</th>
+											<th>Retail Price</th>
 											<th>Qty</th>
 											<th>Gross Amount</th>
+											<th>Tax Slab</th>
 											<th>Tax Amount</th>
 											<th>Net Amount</th>
-											<th>Action</th>
+											<th>Entry Date</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-										<?php foreach ($goods_register_fetch as $row) 
+										<?php foreach ($goods_purchased_fetch as $row) 
 										{
 									
+										$TZ_barcode=$row->TZ_barcode;
 										$entry_no=$row->entry_no;
-										$vendor_id=$row->vendor_id;
-										$invoice_no=$row->invoice_no;
-										$invoice_date=$row->invoice_date;
+										$sku=$row->sku;
+										$cost_price=$row->cost_price;
+										$mrp=$row->mrp;
+										$retail_price=$row->retail_price;
 										$entry_pos_date=$row->entry_pos_date;
 										$qty=$row->qty;
 										$gross_amount=$row->gross_amount;
 										$tax_amount=$row->tax_amount;
+										$tax_slab=$row->tax_slab;
 										$net_amount=$row->net_amount;
 										echo' <tr>
 										
 										<td>'.$entry_no.'</td>
-										<td>'.$vendor_id.'</td>
-										<td>'.$invoice_no.'</td>
-										<td>'.$invoice_date.'</td>
-										<td>'.$entry_pos_date.'</td>
+										<td>'.$TZ_barcode.'</td>
+										<td>'.$sku.'</td>
+										<td>'.$cost_price.'</td>
+										<td>'.$mrp.'</td>
+										<td>'.$retail_price.'</td>
 										<td>'.$qty.'</td>
 										<td>'.$gross_amount.'</td>
+										<td>'.$tax_slab.'</td>
 										<td>'.$tax_amount.'</td>
 										<td>'.$net_amount.'</td>
-										<td> <form action="goods-purchased" method="POST"><input type="hidden" name="entry_no" value="'.$entry_no.'"><button class="btn btn-lg bg-blue waves-effect">View</button></form> </td>
+										<td>'.$entry_pos_date.'</td>
 										</tr>';
 										}
 
