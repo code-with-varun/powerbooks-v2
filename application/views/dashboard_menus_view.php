@@ -144,8 +144,8 @@ if($onboarding=='YES')
 					</a>
 					</li>
 					<li>
-						<a href="stock-register">
-							<span>Stock Register</span>
+						<a href="goods-register">
+							<span>Goods Register</span>
 						</a>
 					</li>
 							 <li>

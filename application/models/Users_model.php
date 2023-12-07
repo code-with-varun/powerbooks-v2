@@ -198,6 +198,17 @@ class Users_model extends CI_Model
 	}
 
 	
+	public function goods_register_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->from('goods_register')
+			->get()
+			->result();
+	}
+
+	
 	public function division_fetch($data)
 	{
 

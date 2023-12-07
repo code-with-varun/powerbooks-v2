@@ -267,6 +267,27 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_footer_view');
 	}
 
+	public function goods_register()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$goods_register_fetch = $this->Users_model->goods_register_fetch($data);
+		
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_goods_register_view',[
+		'goods_register_fetch'=>$goods_register_fetch,
+		
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+	}
+
 	public function item_master()
 	{
 
@@ -541,7 +562,7 @@ $i=$i+1;
 			$data['retail_price'] = $this->input->post('retail_price');
 			$data['quantity'] = $this->input->post('quantity');
 			$data['tax_slab'] = $this->input->post('tax_slab');
-			
+			if($data['tax_slab']==""){$data['tax_slab']=0;}
 			$new_temp_goods_insert = $this->Users_model->new_temp_goods_insert($data);
 
 			$temp_inward_master_fetch = $this->Users_model->temp_inward_master_fetch($data);
