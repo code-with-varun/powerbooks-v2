@@ -592,7 +592,13 @@ class Users_model extends CI_Model
 	}
 //ALL DELETE
 
+public function temp_inward_delete($data)
+	{
 
+		return $this->db->where('merchant_id', $data['merchant_id'])
+			->delete('temp_inward_master');
+		
+	}
 	
 
 // ALL UPDATE QUERIES

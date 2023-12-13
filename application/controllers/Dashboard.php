@@ -1080,6 +1080,8 @@ $i=$i+1;
 				$data['invoice_date'] = $this->input->post('invoice_date');
 
 				$new_goods_register_insert = $this->Users_model->new_goods_register_insert($data);
+
+				$temp_inward_delete = $this->Users_model->temp_inward_delete($data);
 		
 				redirect('goods-register', 'location');
 
