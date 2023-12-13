@@ -234,17 +234,21 @@ class Dashboard extends CI_Controller
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
 
 		$bill_template_fetch = $this->Users_model->bill_template_fetch($data);
-		
+		$temp_bill_fetch = $this->Users_model->temp_bill_fetch($data);
+		$product_fetch = $this->Users_model->product_fetch($data);
+		$config_master_fetch = $this->Users_model->config_master_fetch($data);
 		
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_menus_view');
 		$this->load->view('dashboard_billing_view',[
 		'bill_template_fetch'=>$bill_template_fetch,
+		'temp_bill_fetch'=>$temp_bill_fetch,
+		'product_fetch'=>$product_fetch,
 		
 		]);
 		$this->load->view('dashboard_bottom_view');
-		$this->load->view('dashboard_footer_view');
+		$this->load->view('dashboard_table_footer_view');
 	}
 
 	
@@ -871,6 +875,82 @@ $i=$i+1;
 	 
 	}
 
+	public function temp_bill_inward()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['TZ_barcode']))
+		{
+		 	$data['TZ_barcode'] = $this->input->post('TZ_barcode');
+			$specific_item_fetch = $this->Users_model->specific_item_fetch($data);
+			foreach ($specific_item_fetch as $row)
+			{
+				$data['sku']=$row->sku;
+				$data['item_name']=$row->item_name;
+				$data['item_description']=$row->item_description;
+			}
+			
+			$cat_div = explode('|-|',$this->input->post('retail_price'));
+			$data['retail_price'] = $cat_div[0];
+			$data['tax_slab'] = $cat_div[1];
+			$data['qty'] = $this->input->post('quantity');
+			$data['gross_amount']=$data['retail_price']*$data['qty'];
+			$data['tax_amount']=$data['retail_price']*($data['tax_slab']/100);
+			$data['net_amount']=$data['gross_amount']+$data['tax_amount'];
+			
+			$new_temp_bill_insert = $this->Users_model->new_temp_bill_insert($data);
+
+			$temp_bill_fetch = $this->Users_model->temp_bill_fetch($data);
+				//var_dump($item_wise_sales);
+				 //echo $this->db->last_query();
+				 foreach ($temp_bill_fetch as $row)
+				 {	
+					 $TZ_barcode = $row->TZ_barcode;
+					 $qty = $row->qty;
+					 $sku = $row->sku;
+					 $item_description = $row->item_description;
+					 $retail_price = $row->retail_price;
+					 $tax_slab = $row->tax_slab;
+					 $gross_amount = $row->gross_amount;
+					 $net_amount = $row->net_amount;
+					 $tax_amount = $row->tax_amount;
+					 
+					
+					 echo '
+					 <tr>   
+					
+					 <td>'.$TZ_barcode.'</td>
+					 <td>'.$sku.'<br><small>'.$item_description.'</small></td>
+					 <td>'.$retail_price.'</td>
+					 <td>'.$qty.'</td>
+					 <td>'.$tax_slab.'</td>
+					 <td>'.$gross_amount.'</td>
+					 <td>'.$tax_amount.'</td>
+					 <td>'.$net_amount.'</td>
+					 <td><button type="submit" class="btn bg-pink waves-effect" data-type="prompt" >
+					 <i class="material-icons">remove</i> 
+				 </button> 
+				 
+				 <button type="submit" class="btn bg-green waves-effect" data-type="prompt" >
+				 <i class="material-icons">add</i> 
+				 </button></td>
+					 
+					 
+				 </tr>';
+			 
+				 }
+		}
+		else
+		{
+				echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
+		}
+		
+		
+	 
+	}
+
 	public function temp_qty_tax()
 	{
 
@@ -924,6 +1004,36 @@ $i=$i+1;
 					</div>';
 			}
 
+			
+		}
+		else
+		{
+				echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
+		}
+		
+		
+	 
+	}
+
+	public function multi_mrp()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['TZ_barcode']))
+		{
+		 	$data['TZ_barcode'] = $this->input->post('TZ_barcode');
+			echo '<option value="" selected disabled>Please Select</option>';
+			$specific_multi_mrp_fetch = $this->Users_model->specific_multi_mrp_fetch($data);
+			foreach ($specific_multi_mrp_fetch as $row)
+			{
+				$retail_price=$row->retail_price;
+				$tax_slab=$row->tax_slab;
+				echo '<option value="'.$retail_price.'|-|'.$tax_slab.'">'.$retail_price.'</option>'; 
+			}
+			
+			
 			
 		}
 		else

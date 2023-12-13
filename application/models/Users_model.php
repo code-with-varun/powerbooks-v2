@@ -111,6 +111,17 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function specific_multi_mrp_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('TZ_barcode', $data['TZ_barcode'])
+			->where('merchant_id', $data['merchant_id'])
+			->from('multiple_price')
+			->get()
+			->result();
+	}
+
 	
 	public function config_master_fetch($data)
 	{
@@ -395,6 +406,17 @@ class Users_model extends CI_Model
 		return $this->db->select('*')
 			->where('merchant_id', $data['merchant_id'])
 			->from('temp_inward_master')
+			->get()
+			->result();
+	}
+
+	
+	public function temp_bill_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->from('temp_bill')
 			->get()
 			->result();
 	}
@@ -858,6 +880,12 @@ public function temp_inward_delete($data)
 	{
 
 		return $this->db->insert('stock_balance', $data);
+	}
+
+	public function new_temp_bill_insert($data)
+	{
+
+		return $this->db->insert('temp_bill', $data);
 	}
 	// modal ends here
 }
