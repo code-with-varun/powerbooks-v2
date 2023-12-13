@@ -7,7 +7,10 @@ $name = $sessdata['pbk_name'];
 $merchant_id= $sessdata['pbk_merchant_id'];
 $user_type= $sessdata['pbk_user_type'];
 $onboarding= $sessdata['pbk_onboarding'];
-
+foreach ($config_master_fetch as $row)
+{	
+$current_pos_date = $row->current_pos_date;
+}
 
 
 ?>
@@ -125,6 +128,13 @@ $onboarding= $sessdata['pbk_onboarding'];
                                     <div class="form-line">
                                         <input type="text"  name="invoice_no" id="invoice_no" class="form-control" required>
 										<label class="form-label">Invoice No*</label>
+										
+                                    </div>
+                                </div>
+								<div class="col-sm-2">
+                                    <div class="form-line">
+                                        <input type="date"  name="invoice_date" id="invoice_date" value="<?php echo $current_pos_date;?>" class="form-control" required>
+										<label class="form-label">Invoice Date*</label>
 										
                                     </div>
                                 </div>

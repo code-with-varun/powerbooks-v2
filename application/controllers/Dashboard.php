@@ -125,6 +125,7 @@ class Dashboard extends CI_Controller
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
 
 		$product_fetch = $this->Users_model->product_fetch($data);
+		$config_master_fetch = $this->Users_model->config_master_fetch($data);
 		$vendor_supplier_fetch = $this->Users_model->vendor_supplier_fetch($data);
 		$temp_inward_master_fetch = $this->Users_model->temp_inward_master_fetch($data);
 
@@ -134,6 +135,7 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_goods_inward_view',['temp_inward_master_fetch' => $temp_inward_master_fetch,
 		'product_fetch' => $product_fetch,
 		'vendor_supplier_fetch' => $vendor_supplier_fetch,
+		'config_master_fetch' => $config_master_fetch,
 		]);
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_table_footer_view');
@@ -480,6 +482,36 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_footer_view');
 	}
 
+	public function bill_wise_sales()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_billwise_sales_view');
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_footer_view');
+	}
+
+	public function day_wise_sales()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_daywise_sales_view');
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_footer_view');
+	}
+
 	public function IWS_reporter()
 	{
 
@@ -551,6 +583,220 @@ $i=$i+1;
 
 
 				echo '</tbody>
+				</table>';
+			}
+			else
+			{
+				echo 'NO DATA FOUND';
+			}
+		} else {
+			echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
+		}
+		
+		
+	 
+	}
+
+	public function BWS_reporter()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['rmerchantid'])) {
+		 	$data['sdate'] = $this->input->post('sdate');
+			$data['edate'] = $this->input->post('edate');
+
+		$bill_wise_check = $this->Users_model->bill_wise_check($data);
+		if ($bill_wise_check == 1) 
+		{
+			echo ' <table class="table table-hover dashboard-task-infos">
+			<thead>
+				<tr>
+					<th>SI NO</th>
+					<th>DATE</th>
+					<th>BILL NO</th>
+					<th>QTY</th>
+					<th>AMOUNT</th>
+					<th>CASH</th>
+					<th>CARD</th>
+					<th>OTHER</th>
+					<th>TENDERED</th>
+					<th>BALANCE</th>
+					<th>CUSTOMER</th>
+					<th>MOBILE</th>
+					<th>STAFF</th>
+				  
+				</tr>
+			</thead>
+			<tbody>';
+
+				$bill_wise_sales = $this->Users_model->bill_wise_sales($data);
+				//var_dump($item_wise_sales);
+				// echo $this->db->last_query();
+				foreach ($bill_wise_sales as $row) {
+
+					$rbill_no = $row->bill_no;
+					$rqty = $row->qty;
+					$bill_amt = $row->bill_amt;
+					$cash_pay = $row->cash_pay;
+					$staff_id = $row->staff_id;
+					$card_pay = $row->card_pay;
+					$other_pay = $row->other_pay;
+					$cash_tendered = $row->cash_tendered;
+					$balance_return = $row->balance_return;
+					$cust_name = $row->cust_name;
+					$cust_mobile = $row->cust_mobile;
+					$rposdate = $row->pos_bill_date;
+
+					$i=1;
+					echo '
+					<tr>   
+					<td>'.$i.'</td>
+					<td>'.$rposdate.'</td>
+					<td>'.$rbill_no.'</td>
+					<td>'.$rqty.'</td>
+					<td>'.$bill_amt.'</td>
+					<td>'.$cash_pay.'</td>
+					<td>'.$card_pay.'</td>
+					<td>'.$other_pay.'</td>
+					<td>'.$cash_tendered.'</td>
+					<td>'.$balance_return.'</td>
+					<td>'.$cust_name.'</td>
+					<td>'.$cust_mobile.'</td>
+					<td>'.$staff_id.'</td>
+					
+					
+					
+					
+					
+				</tr>';
+$i=$i+1;	 
+
+						echo '</div>';
+				}
+
+
+				echo '</tbody>
+				</table>';
+			}
+			else
+			{
+				echo 'NO DATA FOUND';
+			}
+		} else {
+			echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
+		}
+		
+		
+	 
+	}
+
+	public function DWS_reporter()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['rmerchantid'])) {
+		 	$data['sdate'] = $this->input->post('sdate');
+			$data['edate'] = $this->input->post('edate');
+
+		$day_wise_check = $this->Users_model->day_wise_check($data);
+		if ($day_wise_check == 1) 
+		{
+			echo ' <table class="table table-hover dashboard-task-infos">
+			<thead>
+				<tr>
+					<th>SI NO</th>
+					<th>DATE</th>
+					<th>GROSS BILLS</th>
+					<th>GROSS QTY</th>
+					<th>GROSS VALUE</th>
+					<th>RETURN BILLS</th>
+					<th>RETURN QTY</th>
+					<th>RETURN VALUE</th>
+					<th>NET BILLS</th>
+					<th>NET QTY</th>
+					<th>NET VALUE</th>
+					<th>CASH</th>
+					<th>CARD</th>
+					<th>OTHERS</th>
+				  
+				</tr>
+			</thead>
+			<tbody>';
+
+				$day_wise_sales = $this->Users_model->day_wise_sales($data);
+				//var_dump($item_wise_sales);
+				// echo $this->db->last_query();
+				foreach ($day_wise_sales as $row) {
+
+					$gross_bills = $row->gross_bills;
+					$gross_qty = $row->gross_qty;
+					$gross_value = $row->gross_value;
+					$return_bills = $row->return_bills;
+					$return_qty = $row->return_qty;
+					$return_value = $row->return_value;
+					$net_qty = $row->net_qty;
+					$net_value = $row->net_value;
+					$net_bills = $row->net_bills;
+					$cash_pay = $row->cash_pay;
+					$card_pay = $row->card_pay;
+					$other_pay = $row->other_pay;
+					$rposdate = $row->pos_bill_date;
+
+					$i=1;
+					echo '
+					<tr>   
+					<td>'.$i.'</td>
+					<td>'.$rposdate.'</td>
+					<td>'.$gross_bills.'</td>
+					<td>'.$gross_qty.'</td>
+					<td>'.$gross_value.'</td>
+					<td>'.$return_bills.'</td>
+					<td>'.$return_qty.'</td>
+					<td>'.$return_value.'</td>
+					<td>'.$net_bills.'</td>
+					<td>'.$net_qty.'</td>
+					<td>'.$net_value.'</td>
+
+					<td>'.$cash_pay.'</td>
+					<td>'.$card_pay.'</td>
+					<td>'.$other_pay.'</td>
+					
+					
+					
+					
+				</tr>';
+$i=$i+1;	 
+
+						echo '</div>';
+				}
+
+
+				echo '</tbody>
+				<thead>
+				<tr>
+					<th colspan="2">TOTAL</th>
+					
+					<th>GROSS BILLS</th>
+					<th>GROSS QTY</th>
+					<th>GROSS VALUE</th>
+					<th>RETURN BILLS</th>
+					<th>RETURN QTY</th>
+					<th>RETURN VALUE</th>
+					<th>NET BILLS</th>
+					<th>NET QTY</th>
+					<th>NET VALUE</th>
+					<th>CASH</th>
+					<th>CARD</th>
+					<th>OTHERS</th>
+				  
+				</tr>
+			</thead>
 				</table>';
 			}
 			else
@@ -752,18 +998,90 @@ $i=$i+1;
 	{
 
 		$sessdata = $this->session->userdata('pbk_sess');
-		$data['eid'] = $sessdata['pbk_eid'];
-		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
-		// Temp to stock purchased move and temp delete
+		// $data['eid'] = $sessdata['pbk_eid'];
+		$stdata['merchant_id'] = $mdata['merchant_id'] = 
+		$gdata['merchant_id'] = $data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		// Temp to stock purchased move 
 		// Adding entry in goods register
 		// Add price in multiple price
-		$temp_inward_master_fetch = $this->Users_model->temp_inward_master_fetch($data);
+		// Update stock balance
+		// temp inward delete
+		$max_entry_rid_fetch = $this->Users_model->max_entry_rid_fetch($gdata);
+		foreach ($max_entry_rid_fetch as $row) {
 
-		echo $data['vendor_id'] = $this->input->post('vendor_id');
-		echo $data['invoice_no'] = $this->input->post('invoice_no');
-		echo $data['invoice_date'] = $this->input->post('invoice_date');
+			$MRID = $row->MRID;
+		}
+		$data['rid']=$MRID +1;
+		$data['entry_no']=$gdata['entry_no']='P'.date('y').'/'.$data['rid'];
+
+		$config_master_fetch = $this->Users_model->config_master_fetch($gdata);
+		foreach ($config_master_fetch as $row)
+		{	
+		  $mdata['effect_date']=$data['entry_pos_date']=$gdata['entry_pos_date'] = $row->current_pos_date;
+		}
+
+		$temp_inward_master_fetch = $this->Users_model->temp_inward_master_fetch($gdata);
+		foreach ($temp_inward_master_fetch as $row)
+				{
+					 $stdata['TZ_barcode']=$mdata['TZ_barcode']=$gdata['TZ_barcode'] = $row->TZ_barcode;
+					 $mdata['cost_price']=$gdata['cost_price'] = $row->cost_price;
+					 $mdata['mrp']=$gdata['mrp'] = $row->mrp;
+					 $mdata['retail_price']=$gdata['retail_price'] = $row->retail_price;
+					 $mdata['tax_slab']=$gdata['tax_slab'] = $row->tax_slab;
+					 $stdata['current_balance_qty']=$gdata['qty'] = $row->quantity;
+					
+					$specific_item_fetch = $this->Users_model->specific_item_fetch($gdata);
+					foreach ($specific_item_fetch as $row)
+					{
+						$mdata['sku']=$gdata['sku'] = $row->sku;
+					}
+					 $gdata['gross_amount'] = $gdata['cost_price']*$gdata['qty'];
+					 $gdata['tax_amount'] = $gdata['cost_price']*$gdata['qty']*($gdata['tax_slab']/100);
+					 $gdata['net_amount'] = $gdata['gross_amount']+$gdata['tax_amount'];
+
+					$new_goods_purchased_insert = $this->Users_model->new_goods_purchased_insert($gdata);
+					
+					$multiple_price_check = $this->Users_model->multiple_price_check($mdata);
+					if ($multiple_price_check == 0)
+					{
+						$new_multiple_price_insert = $this->Users_model->new_multiple_price_insert($mdata);
+					}
+
+					$stock_balance_check = $this->Users_model->stock_balance_check($stdata);
+					if ($stock_balance_check == 0)
+					{
+						$new_stock_balance_insert = $this->Users_model->new_stock_balance_insert($stdata);
+					}
+					else
+					{
+						$specific_stock_balance_fetch = $this->Users_model->specific_stock_balance_fetch($stdata);
+							foreach ($specific_stock_balance_fetch as $row)
+							{
+								$existing_balance = $row->current_balance_qty;
+							}
+							$stdata['current_balance_qty']=$stdata['current_balance_qty']+$existing_balance;
+						$new_stock_balance_update = $this->Users_model->new_stock_balance_update($stdata);
+					}
+					
+
+				}
+
+				$inventory_summary = $this->Users_model->inventory_summary($gdata);
+				foreach ($inventory_summary as $row)
+				{	
+				 $data['qty'] = $row->SQTY;
+				 $data['gross_amount'] = $row->SGROSS;
+				 $data['tax_amount'] = $row->STAX;
+				 $data['net_amount'] = $row->SNET;
+				}
+
+				$data['vendor_id'] = $this->input->post('vendor_id');
+				$data['invoice_no'] = $this->input->post('invoice_no');
+				$data['invoice_date'] = $this->input->post('invoice_date');
+
+				$new_goods_register_insert = $this->Users_model->new_goods_register_insert($data);
 		
-		
+				redirect('goods-register', 'location');
 
 	}
 

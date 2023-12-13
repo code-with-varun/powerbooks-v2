@@ -100,6 +100,18 @@ class Users_model extends CI_Model
 	}
 
 	
+	public function specific_stock_balance_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('TZ_barcode', $data['TZ_barcode'])
+			->where('merchant_id', $data['merchant_id'])
+			->from('stock_balance')
+			->get()
+			->result();
+	}
+
+	
 	public function config_master_fetch($data)
 	{
 
@@ -123,6 +135,39 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function bill_wise_sales($data)
+	{
+
+		return $this->db->select('*')
+		->where('pos_bill_date BETWEEN "' . $data['sdate'] . '" and "' . $data['edate'] . '"')
+			->where('merchant_id', $data['merchant_id'])
+			->from('billwise_sales')
+			->get()
+			->result();
+	}
+
+	public function day_wise_sales($data)
+	{
+
+		return $this->db->select('*')
+		->where('pos_bill_date BETWEEN "' . $data['sdate'] . '" and "' . $data['edate'] . '"')
+			->where('merchant_id', $data['merchant_id'])
+			->from('daywise_sales')
+			->get()
+			->result();
+	}
+
+	public function inventory_summary($data)
+	{
+
+		return $this->db->select('sum(qty) AS SQTY, sum(gross_amount) AS SGROSS,
+		 sum(tax_amount) AS STAX, sum(net_amount) AS SNET')
+			->where('merchant_id', $data['merchant_id'])
+			->where('entry_no', $data['entry_no'])
+			->from('goods_purchased')
+			->get()
+			->result();
+	}
 
 	public function check_division_exists($data)
 	{
@@ -169,6 +214,40 @@ class Users_model extends CI_Model
 			return false;
 		}
 	}
+
+	public function multiple_price_check($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('TZ_barcode', $data['TZ_barcode'])
+			->where('cost_price', $data['cost_price'])
+			->where('mrp', $data['mrp'])
+			->where('retail_price', $data['retail_price'])
+			->where('tax_slab', $data['tax_slab'])
+			->where('merchant_id', $data['merchant_id'])
+			->get('multiple_price')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function stock_balance_check($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('TZ_barcode', $data['TZ_barcode'])
+			->where('merchant_id', $data['merchant_id'])
+			->get('stock_balance')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	public function item_wise_check($data)
 	{
@@ -177,6 +256,36 @@ class Users_model extends CI_Model
 			->where('pos_bill_date BETWEEN "' . $data['sdate'] . '" and "' . $data['edate'] . '"')
 			->where('merchant_id', $data['merchant_id'])
 			->get('itemwise_sales')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function bill_wise_check($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('pos_bill_date BETWEEN "' . $data['sdate'] . '" and "' . $data['edate'] . '"')
+			->where('merchant_id', $data['merchant_id'])
+			->get('billwise_sales')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function day_wise_check($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('pos_bill_date BETWEEN "' . $data['sdate'] . '" and "' . $data['edate'] . '"')
+			->where('merchant_id', $data['merchant_id'])
+			->get('daywise_sales')
 			->row();
 		if (!empty($result)) {
 			return true;
@@ -481,6 +590,8 @@ class Users_model extends CI_Model
 			->get()
 			->result();
 	}
+//ALL DELETE
+
 
 	
 
@@ -500,6 +611,15 @@ class Users_model extends CI_Model
 			->set('admin_mobile', $data['admin_mobile'])
 			->where('merchant_id', $data['merchant_id'])
 			->update('user_details');
+	}
+
+	
+	public function new_stock_balance_update($data)
+	{
+		return $this->db->set('current_balance_qty', $data['current_balance_qty'])
+			->where('TZ_barcode', $data['TZ_barcode'])
+			->where('merchant_id', $data['merchant_id'])
+			->update('stock_balance');
 	}
 
 	public function onboard_config_update($data)
@@ -600,6 +720,14 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function max_entry_rid_fetch($data)
+	{
+		return $this->db->select('MAX(rid) AS MRID')
+			->where('merchant_id', $data['merchant_id'])
+			->from('goods_register')
+			->get()
+			->result();
+	}
 	
 
 	// counts
@@ -701,6 +829,29 @@ class Users_model extends CI_Model
 
 		return $this->db->insert('vendor_supplier_master', $data);
 	}
+
+	public function new_goods_purchased_insert($data)
+	{
+
+		return $this->db->insert('goods_purchased', $data);
+	}
+
+	public function new_goods_register_insert($data)
+	{
+
+		return $this->db->insert('goods_register', $data);
+	}
 	
+	public function new_multiple_price_insert($data)
+	{
+
+		return $this->db->insert('multiple_price', $data);
+	}
+
+	public function new_stock_balance_insert($data)
+	{
+
+		return $this->db->insert('stock_balance', $data);
+	}
 	// modal ends here
 }
