@@ -259,6 +259,22 @@ class Users_model extends CI_Model
 			return false;
 		}
 	}
+
+	public function temp_bill_check($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('TZ_barcode', $data['TZ_barcode'])
+			->where('retail_price', $data['retail_price'])
+			->where('merchant_id', $data['merchant_id'])
+			->get('temp_bill')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	public function item_wise_check($data)
 	{
@@ -415,6 +431,18 @@ class Users_model extends CI_Model
 	{
 
 		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->from('temp_bill')
+			->get()
+			->result();
+	}
+
+	public function specific_temp_bill_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('TZ_barcode', $data['TZ_barcode'])
+			->where('retail_price', $data['retail_price'])
 			->where('merchant_id', $data['merchant_id'])
 			->from('temp_bill')
 			->get()
@@ -622,6 +650,20 @@ public function temp_inward_delete($data)
 		
 	}
 	
+	
+public function temp_bill_item_delete($data)
+{
+
+	return $this->db->where('TZ_barcode', $data['TZ_barcode'])
+		->where('qty', $data['qty'])
+		->where('retail_price', $data['retail_price'])
+		->where('net_amount', $data['net_amount'])
+		->where('gross_amount', $data['gross_amount'])
+		->where('tax_amount', $data['tax_amount'])
+		->where('merchant_id', $data['merchant_id'])
+		->delete('temp_bill');
+	
+}
 
 // ALL UPDATE QUERIES
 
@@ -648,6 +690,23 @@ public function temp_inward_delete($data)
 			->where('TZ_barcode', $data['TZ_barcode'])
 			->where('merchant_id', $data['merchant_id'])
 			->update('stock_balance');
+	}
+
+	public function temp_bill_item_update($data)
+	{
+		return $this->db->set('net_amount', $data['new_net_amount'])
+			->set('gross_amount', $data['new_gross_amount'])
+			->set('tax_amount', $data['new_tax_amount'])
+			->set('retail_price', $data['new_retail_price'])
+			->set('qty', $data['new_qty'])
+			->where('gross_amount', $data['gross_amount'])
+			->where('net_amount', $data['net_amount'])
+			->where('tax_amount', $data['tax_amount'])
+			->where('retail_price', $data['retail_price'])
+			->where('qty', $data['qty'])
+			->where('TZ_barcode', $data['TZ_barcode'])
+			->where('merchant_id', $data['merchant_id'])
+			->update('temp_bill');
 	}
 
 	public function onboard_config_update($data)

@@ -13,10 +13,17 @@ $base=base_url()."public/";
                 <!-- Task Info -->
                 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>
-                             <button type="button" class="btn bg-blue waves-effect" data-type="prompt" >
+
+				<!--billing area starts-->
+        
+         <!-- product starts -->
+				
+		 <div class="card">
+            <div class="body">
+
+			<!-- heading buttons -->
+			
+						<button type="button" class="btn bg-blue waves-effect" data-type="prompt" >
                                     <i class="material-icons">receipt</i>
                                     <span>New Bill</span>
                             </button>
@@ -88,21 +95,104 @@ $base=base_url()."public/";
                     </div>
                 </div>
             </div>
-                            </h2><br><br><h2>Bill No: 1 | Billed Items </h2>
+                            <br><br><br>
+							<!-- heading buttons -->
+				<form id="myForm" action="" method="POST">
+					<div class="form-group form-float">
+								<div class="col-sm-3">
+									<div class="form-line">
+                                        <input type="text" list="sku" id="TZ_barcode" onchange="Change_barcode();" name="TZ_barcode" class="form-control" autofocus required>
+                                        <label class="form-label">SKU / Barcode*</label>
+										<datalist id="sku">
+													<?php 
+														foreach ($product_fetch as $row) 
+														{
+
+														$TZ_barcode=$row->TZ_barcode;
+														$barcode=$row->barcode;
+														$sku=$row->sku;
+														echo '<option value="'.$TZ_barcode.'">'.$sku.' | '.$TZ_barcode.'</option>';
+														}
+													?>
+										</datalist>
+                                    </div>
+                                </div>
+								
+								<div class="col-sm-3">
+                                   <div class="form-line">
+                                        <select id="retail_price" name="retail_price" class="form-control" required>
+										<option value="" selected disabled>Please Select</option>
+										</select>
+										<label class="form-label">Retail Price*</label>
+                                    </div>
+                                </div>
+								
+								<div class="col-sm-3">
+                                    <div class="form-line">
+                                        <input type="number" value="1" min="1"  name="quantity" id="quantity"  class="form-control" required>
+                                        <label class="form-label">Qty*</label>
+										
+                                    </div>
+                                </div>
+								<button class="btn btn-lg bg-blue waves-effect" onclick="SubmitFormData();" type="button">Add Item</button>
+								<button type="button" class="btn bg-green waves-effect" onclick="payment_submit();" data-toggle="modal" id="payment_button" data-target="#defaultModal">
+									 <i class="material-icons">attach_money</i> <span>Payments</span></button>
+								
+
+					</div>
+					
+
+
                   
-                            <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                       
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                       
+                </form>
+            
+<script>
+
+function Change_barcode() {
+var TZ_barcode = $("#TZ_barcode").val();
+
+$.post("<?php echo base_url()."multi-mrp";?>", { TZ_barcode: TZ_barcode  },
+function(data) {
+ $('#retail_price').html(data);
+});
+}
+
+function SubmitFormData() {
+var TZ_barcode = $("#TZ_barcode").val();
+var retail_price = $("#retail_price").val();
+var quantity = $("#quantity").val();
+
+
+
+
+$.post("<?php echo base_url()."temp-bill-inward";?>", { TZ_barcode: TZ_barcode, retail_price: retail_price, quantity: quantity },
+function(data) {
+ $('#results').html(data);
+ $('#myForm')[0].reset();
+});
+}
+
+
+function payment_submit() {
+var TZ_barcode = $("#TZ_barcode").val();
+
+$.post("<?php echo base_url()."bill-summary";?>", { TZ_barcode: TZ_barcode},
+function(data) {
+ $('#defaultModal').html(data);
+ 
+});
+}
+</script>
+
+
+				<!-- product ends  -->
+        
+    
+        
+     
+             
+                
+          <!--billing area ends -->  
                         
                         <div class="body">
                             <div class="table-responsive">
@@ -165,13 +255,18 @@ $base=base_url()."public/";
 					<td>'.$gross_amount.'</td>
 					<td>'.$tax_amount.'</td>
 					<td>'.$net_amount.'</td>
-					<td><button type="button" class="btn bg-pink waves-effect" data-type="prompt" >
-					<i class="material-icons">remove</i> 
-				</button> 
+					<td><form action="remove-item" method="POST">
+					<input type="hidden"name="TZ_barcode" value="'.$TZ_barcode.'">
+					<input type="hidden"name="retail_price" value="'.$retail_price.'">
+					<input type="hidden"name="net_amount" value="'.$net_amount.'">
+					<input type="hidden"name="gross_amount" value="'.$gross_amount.'">
+					<input type="hidden"name="tax_amount" value="'.$tax_amount.'">
+					<input type="hidden"name="qty" value="'.$qty.'">
+					<button type="submit" style="border-radius:25px;width:25px; padding:0px; height:25px" class="btn bg-pink waves-effect" data-type="prompt" >
+					<i class="material-icons">cancel</i> 
+				</button> </form>
 				
-				<button type="button" class="btn bg-green waves-effect" data-type="prompt" >
-				<i class="material-icons">add</i> 
-				</button></td>
+				</td>
 					
 					
 				</tr>';
@@ -185,99 +280,7 @@ $base=base_url()."public/";
                     </div>
  
  
-       <!--billing area starts-->
-        
-         <!-- product starts -->
-				
-		 <div class="card">
-            <div class="body">
-                
-				<h4>Add Item</h4><hr>
-				<form id="myForm" action="" method="POST">
-					<div class="form-group form-float">
-								<div class="col-sm-3">
-									<div class="form-line">
-                                        <input type="text" list="sku" id="TZ_barcode" onchange="Change_barcode();" name="TZ_barcode" class="form-control" autofocus required>
-                                        <label class="form-label">SKU / Barcode*</label>
-										<datalist id="sku">
-													<?php 
-														foreach ($product_fetch as $row) 
-														{
-
-														$TZ_barcode=$row->TZ_barcode;
-														$barcode=$row->barcode;
-														$sku=$row->sku;
-														echo '<option value="'.$TZ_barcode.'">'.$sku.' | '.$TZ_barcode.'</option>';
-														}
-													?>
-										</datalist>
-                                    </div>
-                                </div>
-								
-								<div class="col-sm-3">
-                                   <div class="form-line">
-                                        <select id="retail_price" name="retail_price" class="form-control" required>
-										<option value="" selected disabled>Please Select</option>
-										</select>
-										<label class="form-label">Retail Price*</label>
-                                    </div>
-                                </div>
-								
-								<div class="col-sm-3">
-                                    <div class="form-line">
-                                        <input type="number" value="1" min="1"  name="quantity" id="quantity"  class="form-control" required>
-                                        <label class="form-label">Qty*</label>
-										
-                                    </div>
-                                </div>
-								<button class="btn btn-lg bg-blue waves-effect" onclick="SubmitFormData();" type="button">Add Item</button>
-								<button type="button" class="btn bg-green waves-effect" data-toggle="modal" data-target="#defaultModal">
-									 <i class="material-icons">attach_money</i> <span>Payments</span></button>
-								
-
-					</div>
-					
-
-
-                  
-                </form>
-            </div>
-<script>
-
-function Change_barcode() {
-var TZ_barcode = $("#TZ_barcode").val();
-
-$.post("<?php echo base_url()."multi-mrp";?>", { TZ_barcode: TZ_barcode  },
-function(data) {
- $('#retail_price').html(data);
-});
-}
-
-function SubmitFormData() {
-var TZ_barcode = $("#TZ_barcode").val();
-var retail_price = $("#retail_price").val();
-var quantity = $("#quantity").val();
-
-
-
-
-$.post("<?php echo base_url()."temp-bill-inward";?>", { TZ_barcode: TZ_barcode, retail_price: retail_price, quantity: quantity },
-function(data) {
- $('#results').html(data);
- $('#myForm')[0].reset();
-});
-}
-</script>
-
-
-				<!-- product ends  -->
-        
-     <!--billing area ends -->  
-        
-     
-                </div>
-                
-                
+          
                 
                 
                 <!-- #END# Task Info -->
@@ -287,107 +290,8 @@ function(data) {
         </div>
     </section>
 
-	<?php 
-                                          
+	<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
 
-                                
-										  echo'   <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
-						  <div class="modal-dialog" role="document">
-							  <div class="modal-content">
-								  <div class="modal-header">
-									  <h4 class="modal-title" id="defaultModalLabel">PAYMENT MODE & CUSTOMER DETAILS </h4>
-								  </div>
-								  <div class="modal-body">';
-								  
-									  
-									echo' <h4>Bill Number : <bold style="color:red;"> next bill</bold> | Bill Value : <bold style="color:red;"> total amount </bold>  | Total Pay : <bold style="color:Green;"> total pay </bold>   </h4> 
-									  
-									  <form action=""  id="myForm" method="post">
-									  <table class="table table-hover dashboard-task-infos" >
-									  
-									  ';
-			   echo'<div id="results">
-			 <!-- All data will display here  -->
-			 </div>';
-									  
-						  
-									  
-									  echo'<tr> 
-									  
-									  <td>
-									  
-									  Mode
-									  <select class="form-control" id="paymode" name="paymode">
-									  <option value="CASH">CASH</option>
-									  <option value="CARD"> CARD </option>
-									  <option value="UPI"> UPI </option>
-									  <option value="CHEQUE"> CHEQUE </option>
-									  <option value="NEFT"> NEFT </option>
-									  <option value="CRNOTE"> CREDIT NOTE </option>
-									  </select>
-									  </td>
-									  <td>
-									  Payment Amount
-									  <input class="form-control"type="text"   placeholder="Bill Value"  id="payvalue" name="billvalue" >
-									  </td>
-									  <td>
-									  Card No/Notes
-									  <input class="form-control"type="text"  placeholder="Notes" id="paynotes" name="billvalue" >
-									  </td>
-									  <td>
-									   Add Payment
-									   <input type="hidden" id="paybillno" value="next bill">
-									   <input type="hidden" id="billamt" value="totalamt">
-									   <input type="hidden" id="pmerchantid" value="merchant id">
-									  <button type="button" id="submitFormData" onclick="SubmitFormData();" class="btn bg-green waves-effect" data-type="prompt" >
-									  <i class="material-icons">check</i> <span>Add Payment</span>
-									  </button>
-									  </td>
-									  
-									  </tr></table></form>';
-									  
-									  
-									 echo'<form action="checkout"   method="post">
-									 <table class="table table-hover dashboard-task-infos" > <tr>
-									  
-									   
-									  Customer Address
-									 <textarea placeholder="Customer Address" class="form-control" cols="250" rows="3"    name="custaddress"></textarea>
-									  
-									  </tr>
-									  <tr> 
-									  <td>
-									  Customer Mobile
-									  <input class="form-control"type="text" required placeholder="Customer No"  name="custno" >
-									  </td>
-									  <td>
-									  Customer Name
-									  <input class="form-control"type="text" required placeholder="Customer Name"  name="custname" >
-									  </td>
-									  <td>
-									  Customer Mail
-									  <input class="form-control"type="text"  placeholder="Customer Mail"  name="custmail" >
-									  </td>
-									
-									  </tr>
-									  </table>
-									  
-									  
-								  </div>
-								  <div class="modal-footer">
-									  <input type="hidden" value="next bill" name="cbillno">
-									  <input type="hidden" value="" name="cbillamt">
-									  <input type="hidden" value="merchant id" name="cmerchantid">
-									  <button type="submit" class="btn bg-green waves-effect" data-type="prompt" >
-									  <i class="material-icons">check</i> <span>Checkout</span>
-									  </button>
-									  
-									  <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
-									  </form>
-									  
-								  </div>
-							  </div>
-						  </div>
-					  </div>';
-								
-									  ?>
+
+	</div>
+

@@ -470,6 +470,37 @@ class Dashboard extends CI_Controller
 				redirect('staffing', 'location');
 	}
 
+	public function remove_item_temp_bill()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$data['TZ_barcode'] = $this->input->post('TZ_barcode');
+		$data['retail_price'] = $this->input->post('retail_price');
+		$data['net_amount'] = $this->input->post('net_amount');
+		$data['gross_amount'] = $this->input->post('gross_amount');
+		$data['tax_amount'] = $this->input->post('tax_amount');
+		$data['qty'] = $this->input->post('qty');
+		
+		if($data['qty']==1){
+
+			$temp_bill_item_delete = $this->Users_model->temp_bill_item_delete($data);
+
+		}
+		else
+		{ 
+			$data['new_qty']=$data['qty']-1;
+			$data['new_retail_price']=$data['retail_price'];
+			$data['new_net_amount']=($data['net_amount']/$data['qty'])*$data['new_qty'];
+			$data['new_tax_amount']=($data['tax_amount']/$data['qty'])*$data['new_qty'];
+			$data['new_gross_amount']=($data['gross_amount']/$data['qty'])*$data['new_qty'];
+			$temp_bill_item_update = $this->Users_model->temp_bill_item_update($data);
+		}
+
+		
+				redirect('billing', 'location');
+	}
 	
 	public function item_wise_sales()
 	{
@@ -891,16 +922,44 @@ $i=$i+1;
 				$data['item_name']=$row->item_name;
 				$data['item_description']=$row->item_description;
 			}
+			if($this->input->post('retail_price')!=''){
+				$cat_div = explode('|-|',$this->input->post('retail_price'));
+				$data['retail_price'] = $cat_div[0];
+				$data['tax_slab'] = $cat_div[1];
+			}
 			
-			$cat_div = explode('|-|',$this->input->post('retail_price'));
-			$data['retail_price'] = $cat_div[0];
-			$data['tax_slab'] = $cat_div[1];
 			$data['qty'] = $this->input->post('quantity');
 			$data['gross_amount']=$data['retail_price']*$data['qty'];
 			$data['tax_amount']=$data['retail_price']*($data['tax_slab']/100);
 			$data['net_amount']=$data['gross_amount']+$data['tax_amount'];
 			
+			$temp_bill_check = $this->Users_model->temp_bill_check($data);
+		if ($temp_bill_check == 1) 
+		{
+			
+			$specific_temp_bill_fetch = $this->Users_model->specific_temp_bill_fetch($data);
+				 foreach ($specific_temp_bill_fetch as $row)
+				 {	
+					$TZ_barcode = $row->TZ_barcode;
+					$qty = $row->qty;
+					$retail_price = $row->retail_price;
+					$gross_amount = $row->gross_amount;
+					$tax_amount = $row->tax_amount;
+					$net_amount = $row->net_amount;
+				 }
+				 
+			$data['new_qty']=$qty+$data['qty'];
+			$data['new_retail_price']=$data['retail_price'];
+			$data['new_net_amount']=$net_amount+$data['net_amount'];
+			$data['new_tax_amount']=$tax_amount+$data['tax_amount'];
+			$data['new_gross_amount']=$gross_amount+$data['gross_amount'];
+
+			$temp_bill_item_update = $this->Users_model->temp_bill_item_update($data);
+		}
+		else{
 			$new_temp_bill_insert = $this->Users_model->new_temp_bill_insert($data);
+		}
+			
 
 			$temp_bill_fetch = $this->Users_model->temp_bill_fetch($data);
 				//var_dump($item_wise_sales);
@@ -929,18 +988,154 @@ $i=$i+1;
 					 <td>'.$gross_amount.'</td>
 					 <td>'.$tax_amount.'</td>
 					 <td>'.$net_amount.'</td>
-					 <td><button type="submit" class="btn bg-pink waves-effect" data-type="prompt" >
-					 <i class="material-icons">remove</i> 
-				 </button> 
-				 
-				 <button type="submit" class="btn bg-green waves-effect" data-type="prompt" >
-				 <i class="material-icons">add</i> 
-				 </button></td>
+					 <td><form action="remove-item" method="POST">
+					<input type="hidden"name="TZ_barcode" value="'.$TZ_barcode.'">
+					<input type="hidden"name="retail_price" value="'.$retail_price.'">
+					<input type="hidden"name="net_amount" value="'.$net_amount.'">
+					<input type="hidden"name="gross_amount" value="'.$gross_amount.'">
+					<input type="hidden"name="tax_amount" value="'.$tax_amount.'">
+					<input type="hidden"name="qty" value="'.$qty.'">
+					<button type="submit" style="border-radius:25px;width:25px; padding:0px; height:25px" class="btn bg-pink waves-effect" data-type="prompt" >
+					<i class="material-icons">cancel</i> 
+				</button> </form>
+				
+				</td>
 					 
 					 
 				 </tr>';
 			 
 				 }
+		}
+		else
+		{
+				echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
+		}
+		
+		
+	 
+	}
+
+	public function bill_summary()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['TZ_barcode']))
+		{
+		 	$data['TZ_barcode'] = $this->input->post('TZ_barcode');
+		
+			$temp_bill_fetch = $this->Users_model->temp_bill_fetch($data);
+			
+				 foreach ($temp_bill_fetch as $row)
+				 {	
+					 $TZ_barcode = $row->TZ_barcode;
+					 
+				 }
+				 echo'  
+						  <div class="modal-dialog" role="document">
+							  <div class="modal-content">
+								  <div class="modal-header">
+									  <h4 class="modal-title" id="defaultModalLabel">PAYMENT MODE & CUSTOMER DETAILS </h4>
+								  </div>
+								  <div class="modal-body">';
+								  
+									  
+									echo' <h4>
+									Bill Number : <bold style="color:red;"> next bill</bold> | Bill Value : <bold style="color:red;"> total amount </bold>  | Total Pay : <bold style="color:Green;"> total pay </bold>   
+									</h4> 
+									  
+				<!-- modal body starts -->
+									<div class="tab-content">
+								    <div role="tabpanel" class="tab-pane fade in active" id="home">
+									   <form class="form-horizontal" action="merchant-onboard" method="POST">
+									   
+                                            <h4>Payment Details</h4><hr>
+											<div class="form-group">
+                                                <label for="door_no" class="col-sm-2 control-label">Door No</label>
+                                                <div class="col-sm-3">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" id="door_no" name="door_no" value="<?php echo$door_no;?>" placeholder="Door No" required>
+                                                    </div>
+                                                </div>
+												<label for="street" class="col-sm-1 control-label">Street</label>
+                                                <div class="col-sm-2">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" id="street" name="street" value="<?php echo$street;?>" placeholder="Street" required>
+                                                    </div>
+                                                </div>
+												<label for="landmark" class="col-sm-1 control-label">Landmark</label>
+												<div class="col-sm-3">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" id="landmark" name="landmark" value="<?php echo$landmark;?>" placeholder="Landmark" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                         
+                                            
+											<div class="form-group">
+                                                <label for="area" class="col-sm-2 control-label">Area</label>
+                                                <div class="col-sm-3">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" id="area" name="area" value="<?php echo$area;?>" placeholder="Area" required>
+                                                    </div>
+                                                </div>
+												<label for="city" class="col-sm-1 control-label">City</label>
+                                                <div class="col-sm-2">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" id="city" name="city" value="<?php echo$city;?>" placeholder="City" required>
+                                                    </div>
+                                                </div>
+												<label for="state" class="col-sm-1 control-label">State</label>
+												<div class="col-sm-3">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" id="state" name="state" value="<?php echo$state;?>" placeholder="State" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+											<div class="form-group">
+                                                <label for="pincode" class="col-sm-2 control-label">Pincode</label>
+                                                <div class="col-sm-3">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" id="pincode" minlength="6" maxlength="6" name="pincode" value="<?php echo$pincode;?>" placeholder="Pincode" required>
+                                                    </div>
+                                                </div>
+												<label for="business_phone" class="col-sm-1 control-label">Phone</label>
+                                                <div class="col-sm-2">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" id="business_phone" maxlength="10" name="business_phone" value="<?php echo$business_phone;?>" placeholder="Business Phone" >
+                                                    </div>
+                                                </div>
+												<label for="business_email" class="col-sm-1 control-label">Email</label>
+												<div class="col-sm-3">
+                                                    <div class="form-line">
+                                                        <input type="email" class="form-control" id="business_email"  name="business_email" value="<?php echo$business_email;?>" placeholder="Business Email">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                            
+                                </div>
+               
+
+				<!-- modal body ends  -->
+									  
+									  
+									  
+								  </div>
+								  <div class="modal-footer">
+									  							  
+									  <button type="submit" class="btn bg-green waves-effect" data-type="prompt" >
+									  <i class="material-icons">check</i> <span>Checkout</span>
+									  </button>
+									  
+									  <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+									  </form>
+									  
+								  </div>
+							  </div>
+						  </div>
+					 ';
 		}
 		else
 		{

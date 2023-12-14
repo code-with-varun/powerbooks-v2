@@ -89,6 +89,8 @@ $route['DWS-reporter'] = 'Dashboard/DWS_reporter';
 
 $route['temp-goods-inward'] = 'Dashboard/temp_goods_inward';
 $route['temp-bill-inward'] = 'Dashboard/temp_bill_inward';
+$route['remove-item'] = 'Dashboard/remove_item_temp_bill';
+$route['bill-summary'] = 'Dashboard/bill_summary';
 $route['temp-qty-tax'] = 'Dashboard/temp_qty_tax';
 $route['multi-mrp'] = 'Dashboard/multi_mrp';
 $route['add-vendor'] = 'Dashboard/add_new_vendor';
