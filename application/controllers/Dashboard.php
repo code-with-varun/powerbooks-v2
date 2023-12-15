@@ -501,6 +501,16 @@ class Dashboard extends CI_Controller
 		
 				redirect('billing', 'location');
 	}
+
+	public function remove_all_temp_bill()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$temp_bill_item_all_delete = $this->Users_model->temp_bill_item_all_delete($data);
+			
+	}
 	
 	public function item_wise_sales()
 	{
@@ -954,16 +964,18 @@ $i=$i+1;
 			$data['new_tax_amount']=$tax_amount+$data['tax_amount'];
 			$data['new_gross_amount']=$gross_amount+$data['gross_amount'];
 
-			$temp_bill_item_update = $this->Users_model->temp_bill_item_update($data);
+			$temp_bill_item_update2 = $this->Users_model->temp_bill_item_update2($data);
+			
 		}
 		else{
 			$new_temp_bill_insert = $this->Users_model->new_temp_bill_insert($data);
+		
 		}
 			
 
-			$temp_bill_fetch = $this->Users_model->temp_bill_fetch($data);
+				$temp_bill_fetch = $this->Users_model->temp_bill_fetch($data);
 				//var_dump($item_wise_sales);
-				 //echo $this->db->last_query();
+				// echo $this->db->last_query();
 				 foreach ($temp_bill_fetch as $row)
 				 {	
 					 $TZ_barcode = $row->TZ_barcode;
@@ -1017,6 +1029,10 @@ $i=$i+1;
 
 	public function bill_summary()
 	{
+		$this->load->view('dashboard_header_view');
+
+		
+		
 
 		$sessdata = $this->session->userdata('pbk_sess');
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
@@ -1042,93 +1058,157 @@ $i=$i+1;
 								  
 									  
 									echo' <h4>
-									Bill Number : <bold style="color:red;"> next bill</bold> | Bill Value : <bold style="color:red;"> total amount </bold>  | Total Pay : <bold style="color:Green;"> total pay </bold>   
+									Bill No : <bold style="color:blue;"> Next Bill </bold> | Bill Value : <bold style="color:green;"><input type="number" id="bill_value" value="5000" style="width:15%" disabled>  </bold>  | Total Pay : <bold  style="color:red;"><input type="text" id="to_pay" value="5000" style="width:15%" disabled>  </bold>   
 									</h4> 
 									  
-				<!-- modal body starts -->
+				
 									<div class="tab-content">
 								    <div role="tabpanel" class="tab-pane fade in active" id="home">
-									   <form class="form-horizontal" action="merchant-onboard" method="POST">
+									   <form class="form-horizontal" action="bill-checkout" method="POST">
 									   
                                             <h4>Payment Details</h4><hr>
-											<div class="form-group">
-                                                <label for="door_no" class="col-sm-2 control-label">Door No</label>
-                                                <div class="col-sm-3">
-                                                    <div class="form-line">
-                                                        <input type="text" class="form-control" id="door_no" name="door_no" value="<?php echo$door_no;?>" placeholder="Door No" required>
-                                                    </div>
-                                                </div>
-												<label for="street" class="col-sm-1 control-label">Street</label>
-                                                <div class="col-sm-2">
-                                                    <div class="form-line">
-                                                        <input type="text" class="form-control" id="street" name="street" value="<?php echo$street;?>" placeholder="Street" required>
-                                                    </div>
-                                                </div>
-												<label for="landmark" class="col-sm-1 control-label">Landmark</label>
-												<div class="col-sm-3">
-                                                    <div class="form-line">
-                                                        <input type="text" class="form-control" id="landmark" name="landmark" value="<?php echo$landmark;?>" placeholder="Landmark" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                         
-                                            
-											<div class="form-group">
-                                                <label for="area" class="col-sm-2 control-label">Area</label>
-                                                <div class="col-sm-3">
-                                                    <div class="form-line">
-                                                        <input type="text" class="form-control" id="area" name="area" value="<?php echo$area;?>" placeholder="Area" required>
-                                                    </div>
-                                                </div>
-												<label for="city" class="col-sm-1 control-label">City</label>
-                                                <div class="col-sm-2">
-                                                    <div class="form-line">
-                                                        <input type="text" class="form-control" id="city" name="city" value="<?php echo$city;?>" placeholder="City" required>
-                                                    </div>
-                                                </div>
-												<label for="state" class="col-sm-1 control-label">State</label>
-												<div class="col-sm-3">
-                                                    <div class="form-line">
-                                                        <input type="text" class="form-control" id="state" name="state" value="<?php echo$state;?>" placeholder="State" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-											<div class="form-group">
-                                                <label for="pincode" class="col-sm-2 control-label">Pincode</label>
-                                                <div class="col-sm-3">
-                                                    <div class="form-line">
-                                                        <input type="text" class="form-control" id="pincode" minlength="6" maxlength="6" name="pincode" value="<?php echo$pincode;?>" placeholder="Pincode" required>
-                                                    </div>
-                                                </div>
-												<label for="business_phone" class="col-sm-1 control-label">Phone</label>
-                                                <div class="col-sm-2">
-                                                    <div class="form-line">
-                                                        <input type="text" class="form-control" id="business_phone" maxlength="10" name="business_phone" value="<?php echo$business_phone;?>" placeholder="Business Phone" >
-                                                    </div>
-                                                </div>
-												<label for="business_email" class="col-sm-1 control-label">Email</label>
-												<div class="col-sm-3">
-                                                    <div class="form-line">
-                                                        <input type="email" class="form-control" id="business_email"  name="business_email" value="<?php echo$business_email;?>" placeholder="Business Email">
-                                                    </div>
-                                                </div>
-                                            </div>
+											<!-- modal body starts -->
+											<div class="form-group form-float">
+											<div class="col-sm-4">
+											<div class="form-line">
+												<input type="text" name="customer_mobile" minlength="10" maxlength="10" class="form-control">
+												<label class="form-label">Customer Mobile</label>
+												
+											</div>
+										</div>
+			
+											<div class="col-sm-4">
+												<div class="form-line">
+													<input type="text" name="customer_name" class="form-control">
+													<label class="form-label">Customer Name</label>
+													
+												</div>
+											</div>
+											<div class="col-sm-4">
+												<div class="form-line">
+													<input type="email" name="customer_mail" class="form-control">
+													<label class="form-label">Customer Email</label>
+													
+												</div>
+											</div>
+											</div>
+											<br>
 
-                            
-                                </div>
-               
+											<div class="form-group form-float">
+											<div class="col-sm-12">
+												<div class="form-line">
+													<textarea class="form-control" name="customer_address" maxlength="250" ></textarea>
+													<label class="form-label">Customer Address (max 250char)</label>
+													
+												</div>
+											</div>
+											</div>
+			
+											
+											<br>
 
-				<!-- modal body ends  -->
-									  
-									  
-									  
+											<div class="form-group form-float">
+											<div class="col-sm-4">
+												<div class="form-line">
+													<input type="number" name="card" id="card" onkeyup="update_payment();" class="form-control" min="0">
+													<label class="form-label">Card</label>
+													
+												</div>
+											</div>
+											<div class="col-sm-4">
+												<div class="form-line">
+													<input type="number" name="online" id="online" onkeyup="update_payment();" class="form-control" min="0">
+													<label class="form-label">Online*</label>
+													
+												</div>
+											</div>
+
+											<div class="col-sm-4">
+												<div class="form-line">
+													<input type="number" name="cash" id="cash" onkeyup="update_payment();" class="form-control" min="0">
+													<label class="form-label">Cash</label>
+													
+												</div>
+											</div>
+			
+											
+											</div>
+
+											<br><br>
+
+											<div class="form-group form-float">
+											
+											<div class="col-sm-4">
+												<div class="form-line">
+												<select  name="staff_id" class="form-control">
+																	<option value="" selected disabled>Please Select</option>';
+																
+																	foreach ($options_inventory_item_type as $row) 
+																	{
+			
+																	$value=$row->option_value;
+																	echo '<option value="'.$value.'">'.$value.'</option>'; 
+																	}
+																	
+																	echo'</select> 
+			
+													<label class="form-label">Promo Codes*</label>
+													
+												</div>
+											</div>
+
+											<div class="col-sm-4">
+												<div class="form-line">
+												<select  name="staff_id" class="form-control" >
+																	<option value="" selected disabled>Please Select</option>';
+																
+																	foreach ($options_inventory_item_type as $row) 
+																	{
+			
+																	$value=$row->option_value;
+																	echo '<option value="'.$value.'">'.$value.'</option>'; 
+																	}
+																	
+																	echo'</select> 
+			
+													<label class="form-label">Billing Staff*</label>
+													
+												</div>
+											</div>
+			
+											
+											</div>
+
+											<script>
+											function update_payment(){
+												let to_pay = document.getElementById("to_pay").value;
+												let bill_value = document.getElementById("bill_value").value;
+												let cash = document.getElementById("cash").value;
+												let card = document.getElementById("card").value;
+												let online = document.getElementById("online").value;
+												
+												
+												
+												document.getElementById("to_pay").value = bill_value - card - online - cash;
+												
+																							
+											}
+
+											</script>
+											
+                                         									
+
+											<!-- modal body ends  -->
+                                	</div>
+                 
 								  </div>
+				
 								  <div class="modal-footer">
-									  							  
+									<hr>  
 									  <button type="submit" class="btn bg-green waves-effect" data-type="prompt" >
 									  <i class="material-icons">check</i> <span>Checkout</span>
 									  </button>
-									  
+									
 									  <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
 									  </form>
 									  
@@ -1143,7 +1223,7 @@ $i=$i+1;
 		}
 		
 		
-	 
+		$this->load->view('dashboard_table_footer_view');
 	}
 
 	public function temp_qty_tax()

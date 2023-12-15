@@ -649,12 +649,19 @@ public function temp_inward_delete($data)
 			->delete('temp_inward_master');
 		
 	}
-	
-	
-public function temp_bill_item_delete($data)
-{
 
-	return $this->db->where('TZ_barcode', $data['TZ_barcode'])
+	public function temp_bill_item_all_delete($data)
+	{
+
+		return $this->db->where('merchant_id', $data['merchant_id'])
+			->delete('temp_bill');
+		
+	}
+	
+	
+	public function temp_bill_item_delete($data)
+	{
+		return $this->db->where('TZ_barcode', $data['TZ_barcode'])
 		->where('qty', $data['qty'])
 		->where('retail_price', $data['retail_price'])
 		->where('net_amount', $data['net_amount'])
@@ -663,7 +670,7 @@ public function temp_bill_item_delete($data)
 		->where('merchant_id', $data['merchant_id'])
 		->delete('temp_bill');
 	
-}
+	}
 
 // ALL UPDATE QUERIES
 
@@ -704,6 +711,19 @@ public function temp_bill_item_delete($data)
 			->where('tax_amount', $data['tax_amount'])
 			->where('retail_price', $data['retail_price'])
 			->where('qty', $data['qty'])
+			->where('TZ_barcode', $data['TZ_barcode'])
+			->where('merchant_id', $data['merchant_id'])
+			->update('temp_bill');
+	}
+
+	public function temp_bill_item_update2($data)
+	{
+		return $this->db->set('net_amount', $data['new_net_amount'])
+			->set('gross_amount', $data['new_gross_amount'])
+			->set('tax_amount', $data['new_tax_amount'])
+			->set('retail_price', $data['new_retail_price'])
+			->set('qty', $data['new_qty'])
+			->where('retail_price', $data['retail_price'])
 			->where('TZ_barcode', $data['TZ_barcode'])
 			->where('merchant_id', $data['merchant_id'])
 			->update('temp_bill');

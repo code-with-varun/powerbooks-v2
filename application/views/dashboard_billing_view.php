@@ -23,7 +23,7 @@ $base=base_url()."public/";
 
 			<!-- heading buttons -->
 			
-						<button type="button" class="btn bg-blue waves-effect" data-type="prompt" >
+						<button type="button" onclick="newbill_submit();" class="btn bg-blue waves-effect" data-type="prompt" >
                                     <i class="material-icons">receipt</i>
                                     <span>New Bill</span>
                             </button>
@@ -182,6 +182,18 @@ function(data) {
  
 });
 }
+
+
+
+function newbill_submit() {
+var TZ_barcode = $("#TZ_barcode").val();
+
+$.post("<?php echo base_url()."new-bill";?>", { TZ_barcode: TZ_barcode},
+function(data) {
+ $('#results').html(data);
+ 
+});
+}
 </script>
 
 
@@ -279,8 +291,7 @@ function(data) {
 						</div>
                     </div>
  
- 
-          
+
                 
                 
                 <!-- #END# Task Info -->
@@ -295,3 +306,4 @@ function(data) {
 
 	</div>
 
+	
