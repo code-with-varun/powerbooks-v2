@@ -502,15 +502,29 @@ class Dashboard extends CI_Controller
 				redirect('billing', 'location');
 	}
 
-	public function remove_all_temp_bill()
+	public function staffing_status()
 	{
 
 		$sessdata = $this->session->userdata('pbk_sess');
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
 
-		$temp_bill_item_all_delete = $this->Users_model->temp_bill_item_all_delete($data);
+		$data['staff_id'] = $this->input->post('staff_id');
+		$specific_staff_manager_fetch = $this->Users_model->specific_staff_manager_fetch($data);
+		foreach ($specific_staff_manager_fetch as $row) 
+		{
+			$profile_status = $row->profile_status;
+		}	
+
+		if($profile_status=='INACTIVE')
+		{$data['profile_status']='ACTIVE';}
+		else{$data['profile_status']='INACTIVE';}
+
+		$staff_status_update = $this->Users_model->staff_status_update($data);
+
+		redirect('staffing', 'location');
 			
 	}
+
 	
 	public function item_wise_sales()
 	{
@@ -877,6 +891,7 @@ $i=$i+1;
 			$data['quantity'] = $this->input->post('quantity');
 			$data['tax_slab'] = $this->input->post('tax_slab');
 			if($data['tax_slab']==""){$data['tax_slab']=0;}
+			if($data['quantity']==""){$data['quantity']=0;}
 			$new_temp_goods_insert = $this->Users_model->new_temp_goods_insert($data);
 
 			$temp_inward_master_fetch = $this->Users_model->temp_inward_master_fetch($data);

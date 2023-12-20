@@ -4,6 +4,7 @@ $base=base_url()."public/";
 $sessdata = $this->session->userdata('pbk_sess');
 $user_type= $sessdata['pbk_user_type'];
 $onboarding= $sessdata['pbk_onboarding'];
+$eid= $sessdata['pbk_eid'];
 
 
 
@@ -66,8 +67,10 @@ $onboarding= $sessdata['pbk_onboarding'];
         		 $status=$row->profile_status;
         		 if($status=='INACTIVE'){$bg='red';$lstatus="";}
         		 elseif($status=='ACTIVE'){$bg='green';$lstatus="CHECKED";}
-        		  else{$bg='blue';}
+        		  else{$lstatus='blue';}
         		 $staff_id=$row->staff_id;
+
+                  if($eid==$staff_mail){$enabled_disable='disabled';}else{$enabled_disable='';}
         		 
         		 
         		 echo'<tr>   
@@ -77,10 +80,11 @@ $onboarding= $sessdata['pbk_onboarding'];
                                              <td>'.$staff_contact.'</td>
                                             <td><span class="label bg-'.$bg.'">'.$status.'</span></td>
                                             <td>'.$staff_id.'</td>
-                                          	<td><form action="#" method="post">
-                                            <input type="hidden" name="oppid" value="'.$staff_mail.'">
+                                          	<td><form action="update-staff" id="'.$staff_id.'staff_form" method="post">
+                                            <input type="hidden" name="staff_id" value="'.$staff_id.'">
+											
 											<div class="switch">
-											<label><input type="checkbox" '.$lstatus.' id="account_status" name="account_status" value="YES"><span class="lever"></span></label>
+											<label><input type="checkbox" '.$lstatus.' id="status_changer"  onchange="this.form.submit();" value="YES" '.$enabled_disable.'><span class="lever"></span></label>
 												</div>
 											</form>
                                             </td>
@@ -88,13 +92,17 @@ $onboarding= $sessdata['pbk_onboarding'];
         		 
         		 
 		    }
+
+            
 ?>  
-                                        
+                 
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+
+           
                      <div class="card">
             <div class="body">
                 <form id="sign_up" action="new-staff" method="POST">

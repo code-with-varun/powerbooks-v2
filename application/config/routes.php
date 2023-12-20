@@ -64,6 +64,7 @@ $route['dashboard'] = 'Dashboard/index';
 $route['billing'] = 'Dashboard/billing';
 $route['onboarding'] = 'Dashboard/onboarding';
 $route['staffing'] = 'Dashboard/staffing';
+$route['update-staff'] = 'Dashboard/staffing_status';
 $route['item-master'] = 'Dashboard/item_master';
 $route['goods-inward'] = 'Dashboard/goods_inward';
 $route['inward-items'] = 'Dashboard/inward_items';
@@ -105,3 +106,6 @@ $route['activate/(:any)/(:any)'] = 'Home/account_activate/$1/$2';
 $route['options-master'] = 'Dashboard/options_master';
 $route['new-options'] = 'Dashboard/new_options';
 $route['add-new-options'] = 'Dashboard/add_new_options';
+
+
+$route['pay-page'] = 'Payments/index';

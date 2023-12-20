@@ -325,9 +325,11 @@ class Users_model extends CI_Model
 	{
 
 		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->group_start()
 			->where('user_type', "MANAGER")
 			->or_where('user_type', "STAFF")
-			->where('merchant_id', $data['merchant_id'])
+			->group_end()
 			->from('user_details')
 			->get()
 			->result();
@@ -727,6 +729,23 @@ public function temp_inward_delete($data)
 			->where('TZ_barcode', $data['TZ_barcode'])
 			->where('merchant_id', $data['merchant_id'])
 			->update('temp_bill');
+	}
+
+	public function staff_status_update($data)
+	{
+		return $this->db->set('profile_status', $data['profile_status'])
+			->where('staff_id', $data['staff_id'])
+			->update('user_details');
+	}
+	
+	public function specific_staff_manager_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('staff_id', $data['staff_id'])
+			->from('user_details')
+			->get()
+			->result();
 	}
 
 	public function onboard_config_update($data)
