@@ -180,6 +180,17 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function temp_bill_summary_fetch($data)
+	{
+
+		return $this->db->select('sum(qty) AS TOTQTY, sum(gross_amount) AS TOTGROSS,
+		 sum(tax_amount) AS TOTTAX, sum(net_amount) AS TOTNET')
+			->where('merchant_id', $data['merchant_id'])
+			->from('temp_bill')
+			->get()
+			->result();
+	}
+
 	public function check_division_exists($data)
 	{
 		
@@ -237,6 +248,24 @@ class Users_model extends CI_Model
 			->where('tax_slab', $data['tax_slab'])
 			->where('merchant_id', $data['merchant_id'])
 			->get('multiple_price')
+			->row();
+		if (!empty($result)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function new_customer_check($data)
+	{
+		
+		$result = $this->db->select('*')
+			->where('cust_mobile', $data['cust_mobile'])
+			// ->where('customer_name', $data['customer_name'])
+			// ->where('customer_email', $data['customer_email'])
+			// ->where('customer_address', $data['customer_address'])
+			->where('merchant_id', $data['merchant_id'])
+			->get('customer_base')
 			->row();
 		if (!empty($result)) {
 			return true;
@@ -335,6 +364,20 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function active_staff_manager_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('profile_status', 'ACTIVE')
+			->where('merchant_id', $data['merchant_id'])
+			->group_start()
+			->where('user_type', "MANAGER")
+			->or_where('user_type', "STAFF")
+			->group_end()
+			->from('user_details')
+			->get()
+			->result();
+	}
 	
 	public function goods_register_fetch($data)
 	{
@@ -447,6 +490,17 @@ class Users_model extends CI_Model
 			->where('retail_price', $data['retail_price'])
 			->where('merchant_id', $data['merchant_id'])
 			->from('temp_bill')
+			->get()
+			->result();
+	}
+
+	
+	public function all_customer_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->from('customer_base')
 			->get()
 			->result();
 	}
@@ -984,6 +1038,11 @@ public function temp_inward_delete($data)
 	{
 
 		return $this->db->insert('temp_bill', $data);
+	}
+	public function new_customer_insert($data)
+	{
+
+		return $this->db->insert('customer_base', $data);
 	}
 	// modal ends here
 }

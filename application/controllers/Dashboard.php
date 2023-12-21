@@ -525,6 +525,39 @@ class Dashboard extends CI_Controller
 			
 	}
 
+	public function bill_checkout()
+	{
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['customer_mobile'])) {
+		 	$data['cust_mobile'] = $this->input->post('customer_mobile');
+			$data['cust_name'] = $this->input->post('customer_name');
+			$data['cust_email'] = $this->input->post('customer_email');
+			$data['cust_address'] = $this->input->post('customer_address');
+			//$data['staff_id'] = $this->input->post('staff_id');
+			
+
+			$new_customer_check = $this->Users_model->new_customer_check($data);
+		if ($new_customer_check == 1) 
+		{
+			$new_customer_update = $this->Users_model->new_customer_update($data);
+		}
+		else
+		{
+			$new_customer_insert = $this->Users_model->new_customer_insert($data);
+		}
+			//billing insert logic
+			$temp_bill_item_all_delete = $this->Users_model->temp_bill_item_all_delete($data);
+			
+			redirect('billing', 'location');
+		}
+		else{
+			echo'Something Went Wrong';
+		}
+	
+			
+	}
 	
 	public function item_wise_sales()
 	{
@@ -1032,6 +1065,33 @@ $i=$i+1;
 				 </tr>';
 			 
 				 }
+				 $temp_bill_summary_fetch = $this->Users_model->temp_bill_summary_fetch($data);
+			
+				 if(!empty($temp_bill_summary_fetch))
+				 {
+					 foreach ($temp_bill_summary_fetch as $row)
+				 {	
+					 $TOTQTY = $row->TOTQTY;
+					 $TOTGROSS = $row->TOTGROSS;
+					 $TOTTAX = $row->TOTTAX;
+					 $TOTNET = $row->TOTNET;
+ 
+				 }
+				 echo '
+				 <tr style="color:Crimson; font-weight:bold; font-size:large">    
+				
+				 <td>Total</td>
+				 <td>-</td>
+				 <td>-</td>
+				 <td>'.$TOTQTY.'</td>
+				 <td>-</td>
+				 <td>'.$TOTGROSS.'</td>
+				 <td>'.$TOTTAX.'</td>
+				 <td>'.round($TOTNET,0).'</td>
+				 <td>-</td>
+				 
+				 
+			 </tr>';}
 		}
 		else
 		{
@@ -1055,6 +1115,19 @@ $i=$i+1;
 		if (isset($_POST['TZ_barcode']))
 		{
 		 	$data['TZ_barcode'] = $this->input->post('TZ_barcode');
+			 $temp_bill_summary_fetch = $this->Users_model->temp_bill_summary_fetch($data);
+			
+				if(!empty($temp_bill_summary_fetch))
+				{
+					foreach ($temp_bill_summary_fetch as $row)
+				{	
+					$TOTQTY = $row->TOTQTY;
+					$TOTGROSS = $row->TOTGROSS;
+					$TOTTAX = $row->TOTTAX;
+					$TOTNET = $row->TOTNET;
+
+				}
+				$TOTNET=round($TOTNET,0);
 		
 			$temp_bill_fetch = $this->Users_model->temp_bill_fetch($data);
 			
@@ -1063,6 +1136,8 @@ $i=$i+1;
 					 $TZ_barcode = $row->TZ_barcode;
 					 
 				 }
+
+				
 				 echo'  
 						  <div class="modal-dialog" role="document">
 							  <div class="modal-content">
@@ -1073,20 +1148,35 @@ $i=$i+1;
 								  
 									  
 									echo' <h4>
-									Bill No : <bold style="color:blue;"> Next Bill </bold> | Bill Value : <bold style="color:green;"><input type="number" id="bill_value" value="5000" style="width:15%" disabled>  </bold>  | Total Pay : <bold  style="color:red;"><input type="text" id="to_pay" value="5000" style="width:15%" disabled>  </bold>   
+									Bill No : <bold style="color:blue;"> Next Bill </bold> | Bill Value : <bold style="color:green;"><input type="number" id="bill_value" value="'.$TOTNET.'" style="width:15%" disabled>  </bold>  | Total Pay : <bold  style="color:red;"><input type="text" id="to_pay" value="'.$TOTNET.'" style="width:15%" disabled>  </bold>   
 									</h4> 
 									  
-				
 									<div class="tab-content">
 								    <div role="tabpanel" class="tab-pane fade in active" id="home">
-									   <form class="form-horizontal" action="bill-checkout" method="POST">
+									   <form class="form-horizontal" id="checkout" action="bill-checkout" method="POST">
 									   
                                             <h4>Payment Details</h4><hr>
 											<!-- modal body starts -->
 											<div class="form-group form-float">
 											<div class="col-sm-4">
 											<div class="form-line">
-												<input type="text" name="customer_mobile" minlength="10" maxlength="10" class="form-control">
+												
+												<input type="text" list="customer" id="customer_mobile" name="customer_mobile"  onchange="customer_found();" class="form-control" autofocus required>
+												
+												<datalist id="customer">';
+												$all_customer_fetch = $this->Users_model->all_customer_fetch($data);
+			
+												foreach ($all_customer_fetch as $row)
+												{	
+													$cust_mobile = $row->cust_mobile;
+													$cust_name = $row->cust_name;
+													$cust_address = $row->cust_address;
+													$cust_email = $row->cust_email;
+
+												echo '<option value="'.$cust_mobile.'|-|'.$cust_name.'|-|'.$cust_email.'|-|'.$cust_address.'">'.$cust_mobile.' | '.$cust_name.'</option>';
+												}
+															
+												echo '</datalist>
 												<label class="form-label">Customer Mobile</label>
 												
 											</div>
@@ -1094,14 +1184,14 @@ $i=$i+1;
 			
 											<div class="col-sm-4">
 												<div class="form-line">
-													<input type="text" name="customer_name" class="form-control">
+													<input type="text" id="customer_name" name="customer_name" onkeyup="newcust_name();" class="form-control">
 													<label class="form-label">Customer Name</label>
 													
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="form-line">
-													<input type="email" name="customer_mail" class="form-control">
+													<input type="email" id="customer_email" name="customer_email" onkeyup="newcust_email();" class="form-control">
 													<label class="form-label">Customer Email</label>
 													
 												</div>
@@ -1112,7 +1202,7 @@ $i=$i+1;
 											<div class="form-group form-float">
 											<div class="col-sm-12">
 												<div class="form-line">
-													<textarea class="form-control" name="customer_address" maxlength="250" ></textarea>
+													<textarea class="form-control" id="customer_address" name="customer_address" onkeyup="newcust_address();" maxlength="250" ></textarea>
 													<label class="form-label">Customer Address (max 250char)</label>
 													
 												</div>
@@ -1125,22 +1215,22 @@ $i=$i+1;
 											<div class="form-group form-float">
 											<div class="col-sm-4">
 												<div class="form-line">
-													<input type="number" name="card" id="card" onkeyup="update_payment();" class="form-control" min="0">
+													<input type="number" name="card" id="card" onkeyup="update_payment();" class="form-control" min="0" value="0">
 													<label class="form-label">Card</label>
 													
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="form-line">
-													<input type="number" name="online" id="online" onkeyup="update_payment();" class="form-control" min="0">
-													<label class="form-label">Online*</label>
+													<input type="number" name="online" id="online" onkeyup="update_payment();" class="form-control" min="0" value="0">
+													<label class="form-label">Online</label>
 													
 												</div>
 											</div>
 
 											<div class="col-sm-4">
 												<div class="form-line">
-													<input type="number" name="cash" id="cash" onkeyup="update_payment();" class="form-control" min="0">
+													<input type="number" name="cash" id="cash" onkeyup="update_payment();" class="form-control" min="0" value="0">
 													<label class="form-label">Cash</label>
 													
 												</div>
@@ -1155,36 +1245,29 @@ $i=$i+1;
 											
 											<div class="col-sm-4">
 												<div class="form-line">
-												<select  name="staff_id" class="form-control">
-																	<option value="" selected disabled>Please Select</option>';
-																
-																	foreach ($options_inventory_item_type as $row) 
-																	{
+												
 			
-																	$value=$row->option_value;
-																	echo '<option value="'.$value.'">'.$value.'</option>'; 
-																	}
-																	
-																	echo'</select> 
-			
-													<label class="form-label">Promo Codes*</label>
+													<label class="form-label">Promo Codes</label>
 													
 												</div>
 											</div>
 
 											<div class="col-sm-4">
 												<div class="form-line">
-												<select  name="staff_id" class="form-control" >
+												<select  id="staff_id" name="staff_id" onchange="staff_id_change();" class="form-control" required>
 																	<option value="" selected disabled>Please Select</option>';
-																
-																	foreach ($options_inventory_item_type as $row) 
+																	$active_staff_manager_fetch = $this->Users_model->active_staff_manager_fetch($data);
+																	foreach ($active_staff_manager_fetch as $row)
 																	{
-			
-																	$value=$row->option_value;
-																	echo '<option value="'.$value.'">'.$value.'</option>'; 
+																		$staff_id=$row->staff_id;
+																		$name=$row->name;
+																	echo '<option value="'.$staff_id.'">'.$name.'</option>'; 
 																	}
 																	
-																	echo'</select> 
+																	
+																	echo'
+																	<option value="se">opt</option>
+																	</select> 
 			
 													<label class="form-label">Billing Staff*</label>
 													
@@ -1208,6 +1291,38 @@ $i=$i+1;
 												
 																							
 											}
+											function customer_found(){
+												let cust_data = document.getElementById("customer_mobile").value;
+												let customer_mobile,customer_name,customer_email,customer_address="";
+												cust_data = cust_data.split("|-|");
+												if(cust_data.length===4)
+												{
+													customer_mobile =cust_data[0];
+													customer_name =cust_data[1];
+													customer_email =cust_data[2];
+													customer_address =cust_data[3];
+
+													document.getElementById("customer_name").value=customer_name;
+													document.getElementById("customer_email").value=customer_email;
+													document.getElementById("customer_address").value=customer_address;
+													document.getElementById("customer_mobile").value=customer_mobile;
+
+												}
+												else
+												{
+													document.getElementById("customer_name").value="";
+													document.getElementById("customer_email").value="";
+													document.getElementById("customer_address").value="";
+
+												
+													
+												
+												}
+
+												
+												
+																							
+											}
 
 											</script>
 											
@@ -1217,25 +1332,36 @@ $i=$i+1;
                                 	</div>
                  
 								  </div>
-				
+								
 								  <div class="modal-footer">
 									<hr>  
-									  <button type="submit" class="btn bg-green waves-effect" data-type="prompt" >
+									  <button type="button"  onclick="checkout_now();"class="btn bg-green waves-effect">
 									  <i class="material-icons">check</i> <span>Checkout</span>
 									  </button>
-									
-									  <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
 									  </form>
+									  <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+									
 									  
 								  </div>
 							  </div>
 						  </div>
 					 ';
+					 echo '<script>
+					 function checkout_now() {
+						//window.location.href = "'.base_url().'settings";
+						document.getElementById("checkout").submit();		
+					 }
+		 
+		 </script>';
+
+					}
 		}
 		else
 		{
 				echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
 		}
+
+		
 		
 		
 		$this->load->view('dashboard_table_footer_view');

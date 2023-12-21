@@ -2,6 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $base=base_url()."public/";
 
+$sessdata = $this->session->userdata('pbk_sess');
+$user_type= $sessdata['pbk_user_type'];
+$onboarding= $sessdata['pbk_onboarding'];
+$merchant_id= $sessdata['pbk_merchant_id'];
+$data['merchant_id']=$merchant_id;
 ?>
 <section class="content">
         <div class="container-fluid">
@@ -284,6 +289,33 @@ function(data) {
 				</tr>';
 				 
 				}
+				$temp_bill_summary_fetch = $this->Users_model->temp_bill_summary_fetch($data);
+			
+				if(!empty($temp_bill_summary_fetch))
+				{
+					foreach ($temp_bill_summary_fetch as $row)
+				{	
+					$TOTQTY = $row->TOTQTY;
+					$TOTGROSS = $row->TOTGROSS;
+					$TOTTAX = $row->TOTTAX;
+					$TOTNET = $row->TOTNET;
+					
+				}
+				echo '
+				<tr style="color:Crimson; font-weight:bold; font-size:large">    
+			   
+				<td>Total</td>
+				<td>-</td>
+				<td>-</td>
+				<td>'.$TOTQTY.'</td>
+				<td>-</td>
+				<td>'.$TOTGROSS.'</td>
+				<td>'.$TOTTAX.'</td>
+				<td>'.round($TOTNET,0).'</td>
+				<td>-</td>
+				
+				
+			</tr>';}
                      ?>                 
                                     </tbody>
                                 </table>
@@ -291,7 +323,7 @@ function(data) {
 						</div>
                     </div>
  
-
+					
                 
                 
                 <!-- #END# Task Info -->
