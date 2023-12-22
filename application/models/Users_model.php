@@ -771,7 +771,15 @@ public function temp_inward_delete($data)
 			->where('merchant_id', $data['merchant_id'])
 			->update('temp_bill');
 	}
-
+	public function new_customer_update($data)
+	{
+		return $this->db->set('cust_name', $data['cust_name'])
+			->set('cust_email', $data['cust_email'])
+			->set('cust_address', $data['cust_address'])
+			->where('cust_mobile', $data['cust_mobile'])
+			->where('merchant_id', $data['merchant_id'])
+			->update('customer_base');
+	}
 	public function temp_bill_item_update2($data)
 	{
 		return $this->db->set('net_amount', $data['new_net_amount'])
@@ -868,6 +876,18 @@ public function temp_inward_delete($data)
 			->get()
 			->result();
 	}
+
+	public function max_bill_rid_fetch($data)
+	{
+		$bill_prefix = '%'.$data['bill_prefix'].'%';
+		$merchantid=$data['merchant_id'];
+
+		$my_query = "SELECT MAX(rsino) AS MRID FROM  `billwise_sales` WHERE `bill_no` LIKE '$bill_prefix' AND `merchant_id`='$merchantid'";
+		
+		return $this->db->query($my_query);
+	}
+
+	
 
 	public function max_category_id_fetch()
 	{
@@ -1044,5 +1064,28 @@ public function temp_inward_delete($data)
 
 		return $this->db->insert('customer_base', $data);
 	}
+
+	public function new_bill_insert($data)
+	{
+
+		return $this->db->insert('billwise_sales', $data);
+	}
+
+	public function new_itemwise_insert($data)
+	{
+		$merchantid = $data['merchant_id'];
+		$bill_no = $data['bill_no'];
+		$pos_bill_date = $data['pos_bill_date'];
+	
+		$my_query = "INSERT INTO itemwise_sales (
+			bill_no, TZ_barcode, sku, item_name, item_description, qty, retail_price, tax_slab,
+			gross_amount, tax_amount, net_amount, merchant_id, pos_bill_date)
+			SELECT '$bill_no', TZ_barcode, sku, item_name, item_description, qty, retail_price, tax_slab,
+			gross_amount, tax_amount, net_amount, merchant_id, '$pos_bill_date'
+			FROM temp_bill WHERE `merchant_id` = '$merchantid'";
+	
+		return $this->db->query($my_query);
+	}
+
 	// modal ends here
 }

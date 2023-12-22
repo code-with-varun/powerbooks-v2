@@ -528,14 +528,22 @@ class Dashboard extends CI_Controller
 	public function bill_checkout()
 	{
 		$sessdata = $this->session->userdata('pbk_sess');
-		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		$idata['merchant_id']=$data['merchant_id'] = $sessdata['pbk_merchant_id'];
 		
 		if (isset($_POST['customer_mobile'])) {
-		 	$data['cust_mobile'] = $this->input->post('customer_mobile');
-			$data['cust_name'] = $this->input->post('customer_name');
-			$data['cust_email'] = $this->input->post('customer_email');
-			$data['cust_address'] = $this->input->post('customer_address');
-			//$data['staff_id'] = $this->input->post('staff_id');
+			$idata['cust_mobile']=$data['cust_mobile'] = ucwords($this->input->post('customer_mobile'));
+			$idata['cust_name']=$data['cust_name'] = strtoupper($this->input->post('customer_name'));
+			$data['cust_email'] = strtolower($this->input->post('customer_email'));
+			$data['cust_address'] = ucwords($this->input->post('customer_address'));
+			$idata['card_pay'] = $this->input->post('card');
+			$idata['other_pay'] = $this->input->post('online');
+			$idata['cash_tendered'] = $this->input->post('cash');
+			$idata['qty'] = $this->input->post('qty');
+			$idata['balance_return'] = $this->input->post('balance_return');
+			$idata['cash_pay'] = $idata['cash_tendered']+$idata['balance_return'];
+			$idata['bill_amt'] = $this->input->post('bill_amt');
+			$idata['staff_id'] = $this->input->post('staff_id');
+
 			
 
 			$new_customer_check = $this->Users_model->new_customer_check($data);
@@ -548,6 +556,42 @@ class Dashboard extends CI_Controller
 			$new_customer_insert = $this->Users_model->new_customer_insert($data);
 		}
 			//billing insert logic
+			
+		$config_master_fetch = $this->Users_model->config_master_fetch($data);
+		foreach ($config_master_fetch as $row)
+		{	
+		  $sales_pfx = $row->sales_pfx;
+		  $fy_cy = $row->fy_cy;
+		  $idata['pos_bill_date'] = $row->current_pos_date;
+		}
+		 
+		if($fy_cy=='FY')
+		{
+			if(date('m')<=3)
+			{$fy=date('y')-1;}
+			else
+			{
+				$fy=date('y');
+			}
+		}
+		else{$fy=date('y');}
+
+		$data['bill_prefix']=$sales_pfx.$fy.'/';
+
+		$max_bill_rid_fetch = $this->Users_model->max_bill_rid_fetch($data);
+			foreach ($max_bill_rid_fetch->result() as $row) {
+	
+				$MRID = $row->MRID;
+				
+			}
+			// if($idata['rsino']==''){$idata['rsino']=1;}
+			$idata['rsino'] = $MRID + 1;
+			
+			$idata['bill_no'] = $data['bill_prefix'].$idata['rsino'];
+				
+			$new_bill_insert = $this->Users_model->new_bill_insert($idata);
+			$new_itemwise_insert = $this->Users_model->new_itemwise_insert($idata);
+
 			$temp_bill_item_all_delete = $this->Users_model->temp_bill_item_all_delete($data);
 			
 			redirect('billing', 'location');
@@ -628,7 +672,7 @@ class Dashboard extends CI_Controller
 					<th>SKU</th>
 					<th>PRODUCT</th>
 					<th>ITEM DESCRIPTION</th>
-					<th>MRP</th>
+					<th>RATE</th>
 					<th>QTY</th>
 					<th>AMOUNT</th>
 				  
@@ -642,13 +686,13 @@ class Dashboard extends CI_Controller
 				foreach ($item_wise_sales as $row) {
 
 					$rbill_no = $row->bill_no;
-					$rbarcode = $row->LD_Barcode;
+					$rbarcode = $row->TZ_barcode;
 					$rqty = $row->qty;
-					$rsku = $row->SKU;
-					$ramount = $row->amount;
-					$rmrp = $row->mrp;
-					$rproduct = $row->Product_Name;
-					$ridiscr = $row->Item_Description;
+					$rsku = $row->sku;
+					$ramount = $row->net_amount;
+					$rmrp = $row->retail_price;
+					$rproduct = $row->item_name;
+					$ridiscr = $row->item_description;
 					$rposdate = $row->pos_bill_date;
 
 					$i=1;
@@ -1154,7 +1198,9 @@ $i=$i+1;
 									<div class="tab-content">
 								    <div role="tabpanel" class="tab-pane fade in active" id="home">
 									   <form class="form-horizontal" id="checkout" action="bill-checkout" method="POST">
-									   
+									   <input type="hidden" id="bill_value2" name="bill_amt" value="'.$TOTNET.'">
+									   <input type="hidden" id="to_pay2" name="balance_return" >
+									   <input type="hidden" name="qty" value="'.$TOTQTY.'">
                                             <h4>Payment Details</h4><hr>
 											<!-- modal body starts -->
 											<div class="form-group form-float">
@@ -1254,19 +1300,19 @@ $i=$i+1;
 
 											<div class="col-sm-4">
 												<div class="form-line">
-												<select  id="staff_id" name="staff_id" onchange="staff_id_change();" class="form-control" required>
+												<select  id="staff_id" name="staff_id" class="form-control" required>
 																	<option value="" selected disabled>Please Select</option>';
 																	$active_staff_manager_fetch = $this->Users_model->active_staff_manager_fetch($data);
 																	foreach ($active_staff_manager_fetch as $row)
 																	{
 																		$staff_id=$row->staff_id;
 																		$name=$row->name;
-																	echo '<option value="'.$staff_id.'">'.$name.'</option>'; 
+																	echo '<option value="'.$staff_id.'">'.$name.'-'.$staff_id.'</option>'; 
 																	}
 																	
 																	
 																	echo'
-																	<option value="se">opt</option>
+																
 																	</select> 
 			
 													<label class="form-label">Billing Staff*</label>
@@ -1288,6 +1334,7 @@ $i=$i+1;
 												
 												
 												document.getElementById("to_pay").value = bill_value - card - online - cash;
+												document.getElementById("to_pay2").value = bill_value - card - online - cash;
 												
 																							
 											}
