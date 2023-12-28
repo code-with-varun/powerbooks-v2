@@ -27,7 +27,7 @@ $data['merchant_id']=$merchant_id;
             <div class="body">
 
 			<!-- heading buttons -->
-			
+			<form id="new_bill_form" action="new-bill" method="POST"> </form>
 						<button type="button" onclick="newbill_submit();" class="btn bg-blue waves-effect" data-type="prompt" >
                                     <i class="material-icons">receipt</i>
                                     <span>New Bill</span>
@@ -102,11 +102,11 @@ $data['merchant_id']=$merchant_id;
             </div>
                             <br><br><br>
 							<!-- heading buttons -->
-				<form id="myForm" action="" method="POST">
+				<form id="form_advanced_validation" action="" method="POST">
 					<div class="form-group form-float">
 								<div class="col-sm-3">
 									<div class="form-line">
-                                        <input type="text" list="sku" id="TZ_barcode" onchange="Change_barcode();" name="TZ_barcode" class="form-control" autofocus required>
+                                        <input type="text" list="sku" id="TZ_barcode" onchange="Change_barcode();" name="TZ_barcode" class="form-control" value="0" autofocus required>
                                         <label class="form-label">SKU / Barcode*</label>
 										<datalist id="sku">
 													<?php 
@@ -163,19 +163,29 @@ function(data) {
 }
 
 function SubmitFormData() {
-var TZ_barcode = $("#TZ_barcode").val();
-var retail_price = $("#retail_price").val();
-var quantity = $("#quantity").val();
+    // Get input values
+    var TZ_barcode = $("#TZ_barcode").val();
+    var retail_price = $("#retail_price").val();
+    var quantity = $("#quantity").val();
 
+    // Perform basic form validation
+    if (!TZ_barcode || !retail_price || !quantity) {
+        // Display an error message or handle validation failure as needed
+        alert("All fields are required");
+        return;
+    }
 
-
-
-$.post("<?php echo base_url()."temp-bill-inward";?>", { TZ_barcode: TZ_barcode, retail_price: retail_price, quantity: quantity },
-function(data) {
- $('#results').html(data);
- $('#myForm')[0].reset();
-});
+    // If validation passes, proceed with AJAX request
+    $.post(
+        "<?php echo base_url()."temp-bill-inward";?>",
+        { TZ_barcode: TZ_barcode, retail_price: retail_price, quantity: quantity },
+        function(data) {
+            $('#results').html(data);
+            $('#myForm')[0].reset();
+        }
+    );
 }
+
 
 
 function payment_submit() {
@@ -187,18 +197,13 @@ function(data) {
  
 });
 }
-
-
-
 function newbill_submit() {
-var TZ_barcode = $("#TZ_barcode").val();
+var form = document.getElementById("new_bill_form");
 
-$.post("<?php echo base_url()."new-bill";?>", { TZ_barcode: TZ_barcode},
-function(data) {
- $('#results').html(data);
- 
-});
+  form.submit();
+
 }
+
 </script>
 
 

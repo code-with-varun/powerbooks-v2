@@ -502,6 +502,16 @@ class Dashboard extends CI_Controller
 				redirect('billing', 'location');
 	}
 
+	public function remove_all_temp_bill()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$temp_bill_item_all_delete = $this->Users_model->temp_bill_item_all_delete($data);
+		redirect('billing', 'location');
+	}
+
 	public function staffing_status()
 	{
 
@@ -1192,12 +1202,12 @@ $i=$i+1;
 								  
 									  
 									echo' <h4>
-									Bill No : <bold style="color:blue;"> Next Bill </bold> | Bill Value : <bold style="color:green;"><input type="number" id="bill_value" value="'.$TOTNET.'" style="width:15%" disabled>  </bold>  | Total Pay : <bold  style="color:red;"><input type="text" id="to_pay" value="'.$TOTNET.'" style="width:15%" disabled>  </bold>   
+									Bill Value : <bold style="color:green;"><input type="number" id="bill_value" value="'.$TOTNET.'" style="width:15%" disabled>  </bold>  | Total Pay : <bold  style="color:red;"><input type="text" id="to_pay" value="'.$TOTNET.'" style="width:15%" disabled>  </bold>   
 									</h4> 
 									  
 									<div class="tab-content">
 								    <div role="tabpanel" class="tab-pane fade in active" id="home">
-									   <form class="form-horizontal" id="checkout" action="bill-checkout" method="POST">
+									   <form class="form-horizontal" id="payment_form" action="bill-checkout" method="POST">
 									   <input type="hidden" id="bill_value2" name="bill_amt" value="'.$TOTNET.'">
 									   <input type="hidden" id="to_pay2" name="balance_return" >
 									   <input type="hidden" name="qty" value="'.$TOTQTY.'">
@@ -1230,7 +1240,7 @@ $i=$i+1;
 			
 											<div class="col-sm-4">
 												<div class="form-line">
-													<input type="text" id="customer_name" name="customer_name" onkeyup="newcust_name();" class="form-control">
+													<input type="text" id="customer_name" name="customer_name" onkeyup="newcust_name();" class="form-control" required>
 													<label class="form-label">Customer Name</label>
 													
 												</div>
@@ -1289,16 +1299,7 @@ $i=$i+1;
 
 											<div class="form-group form-float">
 											
-											<div class="col-sm-4">
-												<div class="form-line">
-												
-			
-													<label class="form-label">Promo Codes</label>
-													
-												</div>
-											</div>
-
-											<div class="col-sm-4">
+											<div class="col-sm-6">
 												<div class="form-line">
 												<select  id="staff_id" name="staff_id" class="form-control" required>
 																	<option value="" selected disabled>Please Select</option>';
@@ -1316,6 +1317,15 @@ $i=$i+1;
 																	</select> 
 			
 													<label class="form-label">Billing Staff*</label>
+													
+												</div>
+											</div>
+
+											<div class="col-sm-4">
+												<div class="form-line">
+												
+			
+													<label class="form-label">Promo Codes</label>
 													
 												</div>
 											</div>
@@ -1382,9 +1392,10 @@ $i=$i+1;
 								
 								  <div class="modal-footer">
 									<hr>  
-									  <button type="button"  onclick="checkout_now();"class="btn bg-green waves-effect">
+									  <button type="button" onclick="submit_payment();" class="btn bg-green waves-effect" >
 									  <i class="material-icons">check</i> <span>Checkout</span>
 									  </button>
+									  
 									  </form>
 									  <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
 									
@@ -1392,14 +1403,35 @@ $i=$i+1;
 								  </div>
 							  </div>
 						  </div>
+
+						  <script>
+
+						  function submit_payment() {
+							// Get input values
+							var customerMobile = document.getElementById("customer_mobile").value;
+							var customerName = document.getElementById("customer_name").value;
+							var staffId = document.getElementById("staff_id").value;
+							var to_pay = parseFloat(document.getElementById("to_pay").value);
+						
+							// Perform basic form validation
+							if (!customerMobile || !customerName || !staffId || to_pay > 0) {
+								// Display an error message or handle validation failure as needed
+								if (to_pay > 0) {
+									alert("Collect proper bill amount");
+								} else {
+									alert("Customer Mobile, Name, Staff are required");
+								}
+								return;
+							}
+						
+							// If validation passes, proceed with form submission
+							document.forms["payment_form"].submit();
+						}
+						
+						
+						  </script>
 					 ';
-					 echo '<script>
-					 function checkout_now() {
-						//window.location.href = "'.base_url().'settings";
-						document.getElementById("checkout").submit();		
-					 }
-		 
-		 </script>';
+				
 
 					}
 		}

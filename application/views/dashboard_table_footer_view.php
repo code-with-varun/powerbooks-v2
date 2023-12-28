@@ -44,7 +44,7 @@ $base=base_url()."public/";
     <!-- Custom Js -->
     <script src="<?php echo $base;?>js/admin.js"></script>
     <script src="<?php echo $base;?>js/pages/tables/jquery-datatable.js"></script>
-
+		
     <!-- Demo Js -->
 <script src="<?php echo $base;?>js/demo.js"></script>
 
