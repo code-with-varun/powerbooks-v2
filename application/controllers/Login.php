@@ -28,7 +28,7 @@ class Login extends CI_Controller
 				$eid = $row->eid;
 				$user_type = $row->user_type;
 				$name = $row->name;
-				$merchant_id = $row->merchant_id;
+				$data['merchant_id']=$merchant_id = $row->merchant_id;
 				$onboarding = $row->onboarding;
 				
 
@@ -44,7 +44,24 @@ class Login extends CI_Controller
 
 				$this->session->set_userdata('pbk_sess', $sesdata);
 
-				redirect('dashboard', 'location');
+				$config_master_fetch = $this->Users_model->config_master_fetch($data);
+				foreach ($config_master_fetch as $row)
+				{
+					$direct_billing = $row->direct_billing;
+				}
+
+				if($direct_billing=='YES' && ($data['user_type']!="ADMIN"))
+				{
+					redirect('billing', 'location');
+				}
+				elseif($onboarding=='NO')
+				{
+					redirect('onboarding', 'location');
+				}
+				else{
+					redirect('dashboard', 'location');
+				}
+				
 			}
 		} else {
 			//echo 'no user found';

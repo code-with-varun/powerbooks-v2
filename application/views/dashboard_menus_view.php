@@ -149,7 +149,7 @@ if($onboarding=='YES')
 						</a>
 					</li>
 							 <li>
-								<a href="report-designer">
+								<a href="#">
 									<span>Report Designer</span>
 								</a>
 							</li>
@@ -171,6 +171,7 @@ if($onboarding=='YES')
 							<span>Day Open/Close</span>
 						</a>
 					</li>
+					<!--
 					<li>
 						<a href="backups">
 							<span>Backups</span>
@@ -181,6 +182,7 @@ if($onboarding=='YES')
 							<span>Manual Sync</span>
 						</a>
 					</li>
+					-->
 				   
 				</ul>
 			</li>

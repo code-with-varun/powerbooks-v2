@@ -88,6 +88,12 @@ $route['IWS-reporter'] = 'Dashboard/IWS_reporter';
 $route['BWS-reporter'] = 'Dashboard/BWS_reporter';
 $route['DWS-reporter'] = 'Dashboard/DWS_reporter';
 
+$route['day-open-close'] = 'Dashboard/day_open_close';
+$route['update-pos'] = 'Dashboard/pos_update';
+$route['stock-balance'] = 'Dashboard/stock_balance';
+$route['tax-register'] = 'Dashboard/tax_register';
+
+
 $route['temp-goods-inward'] = 'Dashboard/temp_goods_inward';
 $route['temp-bill-inward'] = 'Dashboard/temp_bill_inward';
 $route['remove-item'] = 'Dashboard/remove_item_temp_bill';

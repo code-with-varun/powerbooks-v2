@@ -72,10 +72,7 @@ class Dashboard extends CI_Controller
 		{
 			redirect('onboarding', 'location');
 		}
-		elseif($direct_billing=='YES' && ($data['user_type']!="ADMIN"))
-		{
-			redirect('billing', 'location');
-		}
+		
 		else
 		{
 		$this->load->view('dashboard_header_view');
@@ -163,6 +160,50 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_table_footer_view');
 	}
 
+	public function stock_balance()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['user_type'] = $sessdata['pbk_user_type'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$merchant_stock_balance_fetch = $this->Users_model->merchant_stock_balance_fetch($data);
+		
+		
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_stock_balance_view',['merchant_stock_balance_fetch' => $merchant_stock_balance_fetch,
+		'merchant_stock_balance_fetch' => $merchant_stock_balance_fetch,
+		
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+	}
+
+	public function tax_register()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['user_type'] = $sessdata['pbk_user_type'];
+		$merchantId=$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		$updateTaxRegister = $this->Users_model->updateTaxRegister($merchantId);
+		$merchant_tax_register_fetch = $this->Users_model->merchant_tax_register_fetch($data);
+		
+		
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_tax_register_view',['merchant_tax_register_fetch' => $merchant_tax_register_fetch,
+		'merchant_tax_register_fetch' => $merchant_tax_register_fetch,
+		
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+	}
+
 	public function new_product()
 	{
 
@@ -232,12 +273,22 @@ class Dashboard extends CI_Controller
 		$sessdata = $this->session->userdata('pbk_sess');
 		$data['eid'] = $sessdata['pbk_eid'];
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
-
+		$data['current_pos_date']=date('Y-m-d');
+		
 		$bill_template_fetch = $this->Users_model->bill_template_fetch($data);
 		$temp_bill_fetch = $this->Users_model->temp_bill_fetch($data);
 		$product_fetch = $this->Users_model->product_fetch($data);
 		$config_master_fetch = $this->Users_model->config_master_fetch($data);
-		
+		foreach ($config_master_fetch as $row)
+		{
+			$auto_day_end = $row->auto_day_end;
+			$pos_status = $row->pos_status;
+			$current_pos_date = $row->current_pos_date;
+		}
+		if($auto_day_end=='YES'&& $pos_status=='OPENED')
+		{
+			$data['pos_status']='OPENED';
+		$current_posdate_update = $this->Users_model->current_posdate_update($data);
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_menus_view');
@@ -249,6 +300,59 @@ class Dashboard extends CI_Controller
 		]);
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_table_footer_view');
+		}
+		elseif($auto_day_end!='YES'&& $pos_status=='OPENED')
+		{
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_billing_view',[
+		'bill_template_fetch'=>$bill_template_fetch,
+		'temp_bill_fetch'=>$temp_bill_fetch,
+		'product_fetch'=>$product_fetch,
+		
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+		}
+		elseif($pos_status=='CLOSED')
+		{
+			redirect('day-open-close', 'location');
+		}
+	}
+
+	public function pos_update()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		$data['pos_status'] = $this->input->post('change_status');
+
+		$config_master_fetch = $this->Users_model->config_master_fetch($data);
+		foreach ($config_master_fetch as $row)
+		{
+			$auto_day_end = $row->auto_day_end;
+			$pos_status = $row->pos_status;
+			$current_pos_date = $row->current_pos_date;
+		}
+		if($auto_day_end!='YES' && $data['pos_status']=='OPENED')
+		{
+
+			$next_day_timestamp = strtotime($current_pos_date . ' +1 day');
+			$data['current_pos_date'] = date('Y-m-d', $next_day_timestamp);
+		
+		 	$current_posdate_update = $this->Users_model->current_posdate_update($data);
+		
+		}
+		else
+		{
+			$data['current_pos_date']=$current_pos_date;
+			$current_posdate_update = $this->Users_model->current_posdate_update($data);
+		}
+		redirect('day-open-close', 'location');
+		
 	}
 
 	
@@ -272,7 +376,20 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_footer_view');
 	}
+	public function day_open_close()
+	{
 
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+	
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_day_open_close_view');
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_footer_view');
+	}
 	public function goods_register()
 	{
 
@@ -538,7 +655,7 @@ class Dashboard extends CI_Controller
 	public function bill_checkout()
 	{
 		$sessdata = $this->session->userdata('pbk_sess');
-		$idata['merchant_id']=$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		$merchantId=$idata['merchant_id']=$data['merchant_id'] = $sessdata['pbk_merchant_id'];
 		
 		if (isset($_POST['customer_mobile'])) {
 			$idata['cust_mobile']=$data['cust_mobile'] = ucwords($this->input->post('customer_mobile'));
@@ -601,7 +718,7 @@ class Dashboard extends CI_Controller
 				
 			$new_bill_insert = $this->Users_model->new_bill_insert($idata);
 			$new_itemwise_insert = $this->Users_model->new_itemwise_insert($idata);
-
+			$updateTaxRegister = $this->Users_model->updateTaxRegister($merchantId);
 			$temp_bill_item_all_delete = $this->Users_model->temp_bill_item_all_delete($data);
 			
 			redirect('billing', 'location');
@@ -648,8 +765,8 @@ class Dashboard extends CI_Controller
 
 		$sessdata = $this->session->userdata('pbk_sess');
 		$data['eid'] = $sessdata['pbk_eid'];
-		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
-		
+		$merchantId=$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		$updateDaywiseSummary= $this->Users_model->updateDaywiseSummary($merchantId);
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_menus_view');
