@@ -70,6 +70,7 @@ $route['goods-inward'] = 'Dashboard/goods_inward';
 $route['inward-items'] = 'Dashboard/inward_items';
 $route['goods-register'] = 'Dashboard/goods_register';
 $route['goods-purchased'] = 'Dashboard/goods_purchased';
+$route['promo-offers'] = 'Dashboard/promo_offers';
 
 $route['vendor-supplier'] = 'Dashboard/vendor_supplier_master';
 $route['add-division'] = 'Dashboard/new_division';
@@ -94,6 +95,7 @@ $route['stock-balance'] = 'Dashboard/stock_balance';
 $route['tax-register'] = 'Dashboard/tax_register';
 
 
+
 $route['temp-goods-inward'] = 'Dashboard/temp_goods_inward';
 $route['temp-bill-inward'] = 'Dashboard/temp_bill_inward';
 $route['remove-item'] = 'Dashboard/remove_item_temp_bill';
@@ -103,6 +105,7 @@ $route['bill-checkout'] = 'Dashboard/bill_checkout';
 $route['temp-qty-tax'] = 'Dashboard/temp_qty_tax';
 $route['multi-mrp'] = 'Dashboard/multi_mrp';
 $route['add-vendor'] = 'Dashboard/add_new_vendor';
+$route['add-offer'] = 'Dashboard/add_new_offer';
 
 
 $route['messages'] = 'Home/messages';

@@ -160,6 +160,31 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_table_footer_view');
 	}
 
+	public function promo_offers()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['user_type'] = $sessdata['pbk_user_type'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$merchant_promo_offers_fetch = $this->Users_model->merchant_promo_offers_fetch($data);
+		$all_offers_fetch = $this->Users_model->all_offers_fetch();
+		$offer_category_fetch = $this->Users_model->offer_category_fetch();
+		
+		
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_promo_offers_view',['merchant_promo_offers_fetch' => $merchant_promo_offers_fetch,
+		'all_offers_fetch' => $all_offers_fetch,
+		'offer_category_fetch' => $offer_category_fetch,
+		
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+	}
+
 	public function stock_balance()
 	{
 
@@ -669,6 +694,9 @@ class Dashboard extends CI_Controller
 			$idata['balance_return'] = $this->input->post('balance_return');
 			$idata['cash_pay'] = $idata['cash_tendered']+$idata['balance_return'];
 			$idata['bill_amt'] = $this->input->post('bill_amt');
+			$idata['discount_logic'] = $this->input->post('discount_logic');
+			$idata['promo_offer'] = $this->input->post('promo_offer');
+			$idata['discount'] = $this->input->post('discount');
 			$idata['staff_id'] = $this->input->post('staff_id');
 
 			
@@ -1218,6 +1246,7 @@ $i=$i+1;
 					 <td>'.$tax_slab.'</td>
 					 <td>'.$gross_amount.'</td>
 					 <td>'.$tax_amount.'</td>
+					 <td>0</td>
 					 <td>'.$net_amount.'</td>
 					 <td><form action="remove-item" method="POST">
 					<input type="hidden"name="TZ_barcode" value="'.$TZ_barcode.'">
@@ -1258,6 +1287,7 @@ $i=$i+1;
 				 <td>-</td>
 				 <td>'.$TOTGROSS.'</td>
 				 <td>'.$TOTTAX.'</td>
+				 <td></td>
 				 <td>'.round($TOTNET,0).'</td>
 				 <td>-</td>
 				 
@@ -1319,7 +1349,9 @@ $i=$i+1;
 								  
 									  
 									echo' <h4>
-									Bill Value : <bold style="color:green;"><input type="number" id="bill_value" value="'.$TOTNET.'" style="width:15%" disabled>  </bold>  | Total Pay : <bold  style="color:red;"><input type="text" id="to_pay" value="'.$TOTNET.'" style="width:15%" disabled>  </bold>   
+									Bill Value : <bold style="color:green;"><input type="number" id="bill_value" value="'.$TOTNET.'" style="width:15%" disabled>  </bold> 
+									 | Total Pay : <bold  style="color:red;"><input type="text" id="to_pay" value="'.$TOTNET.'" style="width:15%" disabled>  </bold>  
+									 | Discount : <bold  style="color:red;"><input type="text" id="discount" value="0" style="width:15%" disabled>  </bold>   
 									</h4> 
 									  
 									<div class="tab-content">
@@ -1328,6 +1360,7 @@ $i=$i+1;
 									   <input type="hidden" id="bill_value2" name="bill_amt" value="'.$TOTNET.'">
 									   <input type="hidden" id="to_pay2" name="balance_return" >
 									   <input type="hidden" name="qty" value="'.$TOTQTY.'">
+									   <input type="hidden" id="discount2" name="discount" >
                                             <h4>Payment Details</h4><hr>
 											<!-- modal body starts -->
 											<div class="form-group form-float">
@@ -1383,8 +1416,64 @@ $i=$i+1;
 											</div>
 			
 											
-											<br>
+											<br><br>
 
+											<div class="form-group form-float">
+											
+											<div class="col-sm-4">
+												<div class="form-line">
+												<select  id="staff_id" name="staff_id" class="form-control" required>
+																	<option value="" selected disabled>Please Select</option>';
+																	$active_staff_manager_fetch = $this->Users_model->active_staff_manager_fetch($data);
+																	foreach ($active_staff_manager_fetch as $row)
+																	{
+																		$staff_id=$row->staff_id;
+																		$name=$row->name;
+																	echo '<option value="'.$staff_id.'">'.$name.'-'.$staff_id.'</option>'; 
+																	}
+																	
+																	
+																	echo'
+																
+																	</select> 
+			
+													<label class="form-label">Billing Staff*</label>
+													
+												</div>
+											</div>
+
+											<div class="col-sm-4">
+												<div class="form-line">
+												<select  id="promo_offer" name="promo_offer" onchange="update_discount();" class="form-control">
+																	<option value="" selected disabled>Please Select</option>';
+																	$merchant_promo_offers_fetch = $this->Users_model->merchant_promo_offers_fetch($data);
+																	foreach ($merchant_promo_offers_fetch as $row)
+																	{
+																		
+																		$offer_type=$row->offer_type;
+																	echo '<option value="'.$offer_type.'">'.$offer_type.'</option>'; 
+																	}
+																	
+																	
+																	echo'
+																
+																	</select> 
+			
+													<label class="form-label">Promo/Offer</label>
+													
+												</div>
+											</div>
+											<div class="col-sm-4">
+												<div class="form-line">
+													<input type="number" name="discount_logic" id="discount_logic" onkeyup="update_discount();" class="form-control" min="0" value="0" disabled>
+													<label class="form-label">Discount</label>
+													
+												</div>
+											</div>
+			
+											
+											</div>
+											<br><br>
 											<div class="form-group form-float">
 											<div class="col-sm-4">
 												<div class="form-line">
@@ -1411,44 +1500,7 @@ $i=$i+1;
 			
 											
 											</div>
-
-											<br><br>
-
-											<div class="form-group form-float">
-											
-											<div class="col-sm-6">
-												<div class="form-line">
-												<select  id="staff_id" name="staff_id" class="form-control" required>
-																	<option value="" selected disabled>Please Select</option>';
-																	$active_staff_manager_fetch = $this->Users_model->active_staff_manager_fetch($data);
-																	foreach ($active_staff_manager_fetch as $row)
-																	{
-																		$staff_id=$row->staff_id;
-																		$name=$row->name;
-																	echo '<option value="'.$staff_id.'">'.$name.'-'.$staff_id.'</option>'; 
-																	}
-																	
-																	
-																	echo'
-																
-																	</select> 
-			
-													<label class="form-label">Billing Staff*</label>
-													
-												</div>
-											</div>
-
-											<div class="col-sm-4">
-												<div class="form-line">
-												
-			
-													<label class="form-label">Promo Codes</label>
-													
-												</div>
-											</div>
-			
-											
-											</div>
+											<br>
 
 											<script>
 											function update_payment(){
@@ -1457,14 +1509,43 @@ $i=$i+1;
 												let cash = document.getElementById("cash").value;
 												let card = document.getElementById("card").value;
 												let online = document.getElementById("online").value;
+												let discount = document.getElementById("discount").value;
 												
-												
-												
-												document.getElementById("to_pay").value = bill_value - card - online - cash;
-												document.getElementById("to_pay2").value = bill_value - card - online - cash;
+												document.getElementById("to_pay").value = bill_value - discount - card - online - cash;
+												document.getElementById("to_pay2").value = bill_value - discount - card - online - cash;
 												
 																							
 											}
+
+											function update_discount(){
+												document.getElementById("discount_logic").disabled=false;
+												let discount_logic = document.getElementById("discount_logic").value;
+												let promo_offer = document.getElementById("promo_offer").value;
+												let bill_value = document.getElementById("bill_value").value;
+												
+	
+												if(promo_offer==="Flat Discount (% off)")
+												{
+													bill_discount = Math.round(bill_value * discount_logic/100);
+													if (isNaN(bill_discount)) {bill_discount = 0;}
+													document.getElementById("discount").value = bill_discount;
+													document.getElementById("discount2").value = bill_discount;
+													document.getElementById("to_pay").value= bill_value - document.getElementById("discount").value ;
+													update_payment();
+													
+												}
+												else if(promo_offer==="Flat Discount (Amount off)")
+												{
+													bill_discount = Math.round(discount_logic);
+													if (isNaN(bill_discount)) {bill_discount = 0;}
+													document.getElementById("discount").value = bill_discount;
+													document.getElementById("discount2").value = bill_discount;
+													document.getElementById("to_pay").value= bill_value - document.getElementById("discount").value ;
+													update_payment();
+												}
+												
+																								
+												}
 											function customer_found(){
 												let cust_data = document.getElementById("customer_mobile").value;
 												let customer_mobile,customer_name,customer_email,customer_address="";
@@ -1706,6 +1787,62 @@ $i=$i+1;
 				</tr>';
 					 
 				}
+		}
+		else
+		{
+				echo '<span style="color:red;"> SOMTHING WENT WRONG</span>';
+		}
+		
+		
+	 
+	}
+
+	public function add_new_offer()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['offer_type']))
+		{
+		 	$data['offer_type'] = $this->input->post('offer_type');
+			$data['item_bill_wise'] = $this->input->post('item_bill');
+			$data['offer_descr'] = $this->input->post('offer_descr');
+			$data['offer_logic'] = $this->input->post('offer_logic');
+			$data['promo_code'] = $this->input->post('promo_code');
+			$data['scheduled'] = $this->input->post('scheduled');
+			$data['offer_start_date'] = $this->input->post('offer_start_date');
+			$data['offer_end_date'] = $this->input->post('offer_end_date');
+		
+			$new_promo_insert = $this->Users_model->new_promo_insert($data);
+
+			$merchant_promo_offers_fetch = $this->Users_model->merchant_promo_offers_fetch($data);
+				//var_dump($item_wise_sales);
+				 //echo $this->db->last_query();
+				 foreach ($merchant_promo_offers_fetch as $row)
+				 {	
+					$offer_type = $row->offer_type;
+					$item_bill_wise = $row->item_bill_wise;
+					$promo_code = $row->promo_code;
+					$offer_logic = $row->offer_logic;
+					$scheduled = $row->scheduled;
+					 
+					 
+				 
+					 echo '
+					 <tr>   
+ 
+					 <td>'.$offer_type.'</td>
+					 <td>'.$item_bill_wise.'</td>
+					 <td>'.$promo_code.'</td>
+					 <td>'.$offer_logic.'</td>
+					 <td>'.$scheduled.'</td>
+					 <td>Action</td>
+					 
+					 
+				 </tr>';
+					  
+				 }
 		}
 		else
 		{

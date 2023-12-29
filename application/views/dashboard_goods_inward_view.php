@@ -101,7 +101,7 @@ $current_pos_date = $row->current_pos_date;
                                 </table>
                             </div>
 							<!-- ********** -->
-				<form id="myForm" action="inward-items" method="POST">
+				<form id="myForm2" action="inward-items" method="POST">
 				<h4>Supplier Details</h4><hr>
 
 					<div class="form-group form-float">

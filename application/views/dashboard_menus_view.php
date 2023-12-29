@@ -94,6 +94,11 @@ if($onboarding=='YES')
 						<span>Goods Inward</span>
 					</a>
 					</li>
+					<li>
+					<a href="promo-offers">
+						<span>Promo/Offers</span>
+					</a>
+					</li>
 
 					<li>
 						<a href="staffing">

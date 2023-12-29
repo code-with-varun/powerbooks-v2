@@ -102,7 +102,7 @@ $data['merchant_id']=$merchant_id;
             </div>
                             <br><br><br>
 							<!-- heading buttons -->
-				<form id="form_advanced_validation" action="" method="POST">
+				<form id="myForm" action="" method="POST">
 					<div class="form-group form-float">
 								<div class="col-sm-3">
 									<div class="form-line">
@@ -231,6 +231,7 @@ var form = document.getElementById("new_bill_form");
 											<th>Tax %</th>
 											<th>Gross</th>
 											<th>Tax</th>
+											<th>Discount</th>
 											<th>Net</th>
 											<th>Action</th>
                                         </tr>
@@ -246,6 +247,7 @@ var form = document.getElementById("new_bill_form");
 											<th>Tax %</th>
 											<th>Gross</th>
 											<th>Tax</th>
+											<th>Discount</th>
 											<th>Net</th>
 											<th>Action</th>
 											
@@ -276,6 +278,7 @@ var form = document.getElementById("new_bill_form");
 					<td>'.$tax_slab.'</td>
 					<td>'.$gross_amount.'</td>
 					<td>'.$tax_amount.'</td>
+					<td>0</td>
 					<td>'.$net_amount.'</td>
 					<td><form action="remove-item" method="POST">
 					<input type="hidden"name="TZ_barcode" value="'.$TZ_barcode.'">
@@ -316,6 +319,7 @@ var form = document.getElementById("new_bill_form");
 				<td>-</td>
 				<td>'.$TOTGROSS.'</td>
 				<td>'.$TOTTAX.'</td>
+				<td></td>
 				<td>'.round($TOTNET,0).'</td>
 				<td>-</td>
 				

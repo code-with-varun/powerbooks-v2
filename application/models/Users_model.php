@@ -660,6 +660,36 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function offer_category_fetch()
+	{
+
+		return $this->db->select('DISTINCT(option_key)')
+			->where('category', 'OFFER TYPE')
+			->from('options_master')
+			->get()
+			->result();
+	}
+
+	public function all_offers_fetch()
+	{
+
+		return $this->db->select('*')
+			->where('category', 'OFFER TYPE')
+			->from('options_master')
+			->get()
+			->result();
+	}
+
+	public function merchant_promo_offers_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->from('promo_offers')
+			->get()
+			->result();
+	}
+
 	public function options_membership()
 	{
 
@@ -1201,6 +1231,13 @@ public function temp_inward_delete($data)
 
 		return $this->db->insert('customer_base', $data);
 	}
+
+	public function new_promo_insert($data)
+	{
+
+		return $this->db->insert('promo_offers', $data);
+	}
+
 
 	public function new_bill_insert($data)
 	{
