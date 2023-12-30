@@ -66,6 +66,10 @@ class Dashboard extends CI_Controller
 		$config_master_fetch = $this->Users_model->config_master_fetch($data);
 		foreach ($config_master_fetch as $row) {
 			$direct_billing = $row->direct_billing;
+			$data['current_pos_date'] = $row->current_pos_date;
+			$data['fy_cy'] = $row->fy_cy;
+			
+			
 		}
 
 		if($onboarding=='NO')
@@ -75,10 +79,16 @@ class Dashboard extends CI_Controller
 		
 		else
 		{
+
+		$pos_month_summary_fetch = $this->Users_model->pos_month_summary_fetch($data);
+		$pos_year_summary_fetch = $this->Users_model->pos_year_summary_fetch($data);
+		// echo $this->db->last_query();
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_menus_view');
-		$this->load->view('dashboard_panel_view');
+		$this->load->view('dashboard_panel_view',['pos_month_summary_fetch' => $pos_month_summary_fetch,
+		'pos_year_summary_fetch' => $pos_year_summary_fetch,
+		]);
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_footer_view');
 		}
@@ -291,6 +301,22 @@ class Dashboard extends CI_Controller
 
 		
 	}
+
+	public function add_new_walkin()
+	{
+	
+		echo$data['name'] = $this->input->post('name',true);
+		$data['email'] = $this->input->post('email',true);
+		$data['mobile'] = $this->input->post('mobile',true);
+		$data['msg_subject'] = $this->input->post('msg_subject',true);
+		$data['message'] = $this->input->post('message',true);
+		
+		$new_walkin_insert = $this->Users_model->new_walkin_insert($data);
+
+		//redirect('home', 'location');
+
+		
+	}
 	
 	public function billing()
 	{
@@ -399,7 +425,7 @@ class Dashboard extends CI_Controller
 		
 		]);
 		$this->load->view('dashboard_bottom_view');
-		$this->load->view('dashboard_footer_view');
+		$this->load->view('dashboard_table_footer_view');
 	}
 	public function day_open_close()
 	{
@@ -488,7 +514,7 @@ class Dashboard extends CI_Controller
 		
 		]);
 		$this->load->view('dashboard_bottom_view');
-		$this->load->view('dashboard_footer_view');
+		$this->load->view('dashboard_table_footer_view');
 	}
 
 	public function new_division()
@@ -697,6 +723,7 @@ class Dashboard extends CI_Controller
 			$idata['discount_logic'] = $this->input->post('discount_logic');
 			$idata['promo_offer'] = $this->input->post('promo_offer');
 			$idata['discount'] = $this->input->post('discount');
+			$idata['to_pay'] = $idata['bill_amt']-$idata['discount'];
 			$idata['staff_id'] = $this->input->post('staff_id');
 
 			
@@ -817,7 +844,7 @@ class Dashboard extends CI_Controller
 		$item_wise_check = $this->Users_model->item_wise_check($data);
 		if ($item_wise_check == 1) 
 		{
-			echo ' <table class="table table-hover dashboard-task-infos">
+			echo ' <table class="table table-bordered table-striped table-hover dataTable js-exportable">
 			<thead>
 				<tr>
 					<th>SI NO</th>
@@ -838,6 +865,7 @@ class Dashboard extends CI_Controller
 				$item_wise_sales = $this->Users_model->item_wise_sales($data);
 				//var_dump($item_wise_sales);
 				// echo $this->db->last_query();
+				$i=1;
 				foreach ($item_wise_sales as $row) {
 
 					$rbill_no = $row->bill_no;
@@ -850,7 +878,7 @@ class Dashboard extends CI_Controller
 					$ridiscr = $row->item_description;
 					$rposdate = $row->pos_bill_date;
 
-					$i=1;
+					
 					echo '
 					<tr>   
 					<td>'.$i.'</td>
@@ -875,6 +903,7 @@ $i=$i+1;
 
 				echo '</tbody>
 				</table>';
+				$this->load->view('dashboard_table_footer_view');
 			}
 			else
 			{
@@ -902,7 +931,7 @@ $i=$i+1;
 		$bill_wise_check = $this->Users_model->bill_wise_check($data);
 		if ($bill_wise_check == 1) 
 		{
-			echo ' <table class="table table-hover dashboard-task-infos">
+			echo ' <table class="table table-bordered table-striped table-hover dataTable js-exportable">
 			<thead>
 				<tr>
 					<th>SI NO</th>
@@ -910,6 +939,9 @@ $i=$i+1;
 					<th>BILL NO</th>
 					<th>QTY</th>
 					<th>AMOUNT</th>
+					<th>PROMO</th>
+					<th>OFFER</th>
+					<th>DISCOUNT</th>
 					<th>CASH</th>
 					<th>CARD</th>
 					<th>OTHER</th>
@@ -926,11 +958,15 @@ $i=$i+1;
 				$bill_wise_sales = $this->Users_model->bill_wise_sales($data);
 				//var_dump($item_wise_sales);
 				// echo $this->db->last_query();
+				$i=1;
 				foreach ($bill_wise_sales as $row) {
 
 					$rbill_no = $row->bill_no;
 					$rqty = $row->qty;
 					$bill_amt = $row->bill_amt;
+					$promo_offer = $row->promo_offer;
+					$discount_logic = $row->discount_logic;
+					$discount = $row->discount;
 					$cash_pay = $row->cash_pay;
 					$staff_id = $row->staff_id;
 					$card_pay = $row->card_pay;
@@ -941,7 +977,7 @@ $i=$i+1;
 					$cust_mobile = $row->cust_mobile;
 					$rposdate = $row->pos_bill_date;
 
-					$i=1;
+					
 					echo '
 					<tr>   
 					<td>'.$i.'</td>
@@ -949,6 +985,9 @@ $i=$i+1;
 					<td>'.$rbill_no.'</td>
 					<td>'.$rqty.'</td>
 					<td>'.$bill_amt.'</td>
+					<td>'.$promo_offer.'</td>
+					<td>'.$discount_logic.'</td>
+					<td>'.$discount.'</td>
 					<td>'.$cash_pay.'</td>
 					<td>'.$card_pay.'</td>
 					<td>'.$other_pay.'</td>
@@ -966,11 +1005,15 @@ $i=$i+1;
 $i=$i+1;	 
 
 						echo '</div>';
+						
+						
+					
 				}
 
 
 				echo '</tbody>
 				</table>';
+				$this->load->view('dashboard_table_footer_view');
 			}
 			else
 			{
@@ -998,7 +1041,7 @@ $i=$i+1;
 		$day_wise_check = $this->Users_model->day_wise_check($data);
 		if ($day_wise_check == 1) 
 		{
-			echo ' <table class="table table-hover dashboard-task-infos">
+			echo ' <table class="table table-bordered table-striped table-hover dataTable js-exportable">
 			<thead>
 				<tr>
 					<th>SI NO</th>
@@ -1023,6 +1066,7 @@ $i=$i+1;
 				$day_wise_sales = $this->Users_model->day_wise_sales($data);
 				//var_dump($item_wise_sales);
 				// echo $this->db->last_query();
+				$i=1;
 				foreach ($day_wise_sales as $row) {
 
 					$gross_bills = $row->gross_bills;
@@ -1039,7 +1083,7 @@ $i=$i+1;
 					$other_pay = $row->other_pay;
 					$rposdate = $row->pos_bill_date;
 
-					$i=1;
+					
 					echo '
 					<tr>   
 					<td>'.$i.'</td>
@@ -1089,6 +1133,7 @@ $i=$i+1;
 				</tr>
 			</thead>
 				</table>';
+				$this->load->view('dashboard_table_footer_view');
 			}
 			else
 			{

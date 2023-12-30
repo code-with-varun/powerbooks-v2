@@ -2,6 +2,36 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $base=base_url()."public/";
 
+$sessdata = $this->session->userdata('pbk_sess');
+$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+$data['eid'] = $sessdata['pbk_eid'];
+
+$specific_user_fetch_login = $this->Users_model->specific_user_fetch_login($data);
+	foreach ($specific_user_fetch_login as $row)
+	{
+	$onboarding = $row->onboarding;
+	}
+if($onboarding=='YES')
+
+{
+	$config_master_fetch = $this->Users_model->config_master_fetch($data);
+	foreach ($config_master_fetch as $row)
+	{
+	$brand_name = $row->brand_name;
+	$company_name = $row->company_name;
+	$current_pos_date = $row->current_pos_date;
+	$pos_status = $row->pos_status;
+	}
+
+}
+
+else{
+	$brand_name = "Brand Name";
+	$company_name = "Company Name";
+	$current_pos_date = "";
+	$pos_status="";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +41,7 @@ $base=base_url()."public/";
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>POWERBOOKS | <?php echo ucwords(str_replace("-"," ",uri_string())); ?> </title>
+    <title>POWERBOOKS - <?php echo $brand_name.' | '.ucwords(str_replace("-"," ",uri_string())); ?> </title>
     <!-- Favicon-->
     <link rel="icon" href="<?php echo $base;?>favicon.ico" type="image/x-icon">
 

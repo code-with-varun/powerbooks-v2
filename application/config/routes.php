@@ -56,6 +56,7 @@ $route['translate_uri_dashes'] = FALSE;
 $route['sign-in'] = 'Home/sign_in';
 $route['sign-up'] = 'Home/sign_up';
 $route['new-merchant'] = 'Home/add_new_merchant';
+$route['new-walkin'] = 'Dashboard/add_new_walkin';
 
 $route['login'] = 'Login/user_login';
 $route['logout'] = 'Login/user_logout';

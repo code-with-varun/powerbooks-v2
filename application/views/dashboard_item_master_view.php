@@ -48,7 +48,7 @@ foreach ($config_master_fetch as $row)
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-hover dashboard-task-infos">
+							<table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                     <thead>
                                         <tr>
 											<th>Division Name</th>
@@ -123,7 +123,7 @@ foreach ($config_master_fetch as $row)
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-hover dashboard-task-infos">
+							<table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                     <thead>
                                         <tr>
 											<th>Category Name</th>
@@ -220,7 +220,7 @@ foreach ($config_master_fetch as $row)
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-hover dashboard-task-infos">
+							<table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                     <thead>
                                         <tr>
 											<th>Classification Name</th>
@@ -296,7 +296,7 @@ foreach ($config_master_fetch as $row)
 						
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-hover dashboard-task-infos">
+							<table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                     <thead>
                                         <tr>
                                             <th>TZ Barcode</th>

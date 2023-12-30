@@ -2,6 +2,22 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $base=base_url()."public/";
 
+
+foreach ($pos_month_summary_fetch as $row) {
+	
+	$TOTBILLS = $row->TOTBILLS;
+	$TOTQTY = $row->TOTQTY;
+	$TOTVALUE = $row->TOTVALUE;
+}
+
+foreach ($pos_year_summary_fetch as $row) {
+	
+	$YTOTBILLS = $row->TOTBILLS;
+	$YTOTQTY = $row->TOTQTY;
+	$YTOTVALUE = $row->TOTVALUE;
+}
+
+
 ?>
 
 <section class="content">
@@ -64,7 +80,7 @@ $base=base_url()."public/";
                         </div>
                         <div class="content">
                             <div class="text">BILLS</div>
-                            <div class="number count-to" data-from="0" data-to="45" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="<?php echo $YTOTBILLS;?>" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>
@@ -83,24 +99,25 @@ $base=base_url()."public/";
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="card">
                         <div class="body bg-pink">
-                            <div class="font-bold m-b--35">Status</div>
+                            <div class="font-bold m-b--35">Status - POS Month</div>
                             <ul class="dashboard-stat-list">
-                                <li>
+                                <?php echo'<li>
                                     TOTAL BILLS
-                                    <span class="pull-right"><b>12</b> <small>BILLS</small></span>
+                                    <span class="pull-right"><b>'.$TOTBILLS.'</b> <small>BILLS</small></span>
                                 </li>
                                 <li>
                                     TOTAL QTY
-                                    <span class="pull-right"><b>15</b> <small>QTY</small></span>
+                                    <span class="pull-right"><b>'.$TOTQTY.'</b> <small>QTY</small></span>
                                 </li>
                                 <li>
                                     MTD VALUE
-                                    <span class="pull-right"><b>14500</b> <small>Value in MRP</small></span>
+                                    <span class="pull-right"><b>₹'.number_format($TOTVALUE, 0, '.', ',').'</b> <small>Retail Price</small></span>
                                 </li>
                                                                 <li>
                                     YTD VALUE
-                                    <span class="pull-right"><b>14500</b> <small>Value in MRP</small></span>
-                                </li>
+                                    <span class="pull-right"><b>₹'.number_format($YTOTVALUE, 0, '.', ',').'</b> <small>Retail Price</small></span>
+                                </li>';
+								?>
                                 
                                
                             </ul>
@@ -149,15 +166,15 @@ $base=base_url()."public/";
                                 </li>
                                 <li>
                                     CUSTOMER CARE
-                                    <span class="pull-right"> <a href="https://lavishdreamers.com/helpdesk/" target="helpdesk"><input class="btn btn-info waves-effect" type="button" value="Click To Go"></a></span>
+                                    <span class="pull-right"> <a href="https://helpdesk.thamizhanda.in/" target="helpdesk"><input class="btn btn-info waves-effect" type="button" value="Click To Go"></a></span>
                                 </li>
                                 <li>
                                     APP SETTINGS
-                                    <span class="pull-right"> <a href="onboarding"><input class="btn btn-danger waves-effect" type="button" value="Click To Go"></a></span>
+                                    <span class="pull-right"> <a href="settings"><input class="btn btn-danger waves-effect" type="button" value="Click To Go"></a></span>
                                 </li>
                                 <li>
-                                    TAX SETTINGS
-                                    <span class="pull-right"> <input class="btn bg-pink waves-effect" type="button" value="Click To Go"></span>
+                                    SALES REPORT
+                                    <span class="pull-right"> <a href="daywise-sales"><input class="btn bg-pink waves-effect" type="button" value="Click To Go"></span>
                                 </li>
                                 
                                 

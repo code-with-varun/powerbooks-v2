@@ -210,6 +210,49 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function pos_month_summary_fetch($data)
+	{
+		$data['current_pos_date'] = substr($data['current_pos_date'],0,7);
+		
+		return $this->db->select('SUM(net_qty) AS TOTQTY, SUM(net_bills) AS TOTBILLS, SUM(net_value) AS TOTVALUE')
+			->where('pos_bill_date LIKE "' . $data['current_pos_date'] . '%"')
+			->where('merchant_id', $data['merchant_id'])
+			->from('daywise_sales')
+			->get()
+			->result();
+	}
+
+	public function pos_year_summary_fetch($data)
+{
+    $current_year = substr($data['current_pos_date'], 0, 4);
+    $data['fy_cy'] = strtoupper($data['fy_cy']); // Ensure it is uppercase (FY or CY)
+
+    // Set the start and end dates based on fy_cy parameter
+    if ($data['fy_cy'] === 'FY') {
+        // Financial Year: April 1st to March 31st (inclusive)
+        $start_date = ($current_year - 1) . '-04-01';
+        $end_date = $current_year . '-03-31';
+    } elseif ($data['fy_cy'] === 'CY') {
+        // Calendar Year: January 1st to December 31st (inclusive)
+        $start_date = $current_year . '-01-01';
+        $end_date = $current_year . '-12-31';
+    } else {
+        // Default to the whole year
+        $start_date = $current_year . '-01-01';
+        $end_date = $current_year . '-12-31';
+    }
+
+    return $this->db->select('SUM(net_qty) AS TOTQTY, SUM(net_bills) AS TOTBILLS, SUM(net_value) AS TOTVALUE')
+        ->where('pos_bill_date >=', $start_date)
+        ->where('pos_bill_date <=', $end_date)
+        ->where('merchant_id', $data['merchant_id'])
+        ->from('daywise_sales')
+        ->get()
+        ->result();
+}
+
+	
+
 	public function check_division_exists($data)
 	{
 		
@@ -906,13 +949,13 @@ public function temp_inward_delete($data)
         $this->db->select("
             COUNT(*) AS gross_bills,
             SUM(qty) AS gross_qty,
-            SUM(bill_amt) AS gross_value,
+            SUM(to_pay) AS gross_value,
             SUM(CASE WHEN bill_no LIKE 'R%' THEN 1 ELSE 0 END) AS return_bills,
             SUM(CASE WHEN bill_no LIKE 'R%' THEN qty ELSE 0 END) AS return_qty,
-            SUM(CASE WHEN bill_no LIKE 'R%' THEN bill_amt ELSE 0 END) AS return_value,
+            SUM(CASE WHEN bill_no LIKE 'R%' THEN to_pay ELSE 0 END) AS return_value,
             COUNT(CASE WHEN bill_no LIKE 'S%' THEN 1 ELSE NULL END) AS net_bills,
             SUM(CASE WHEN bill_no LIKE 'S%' THEN qty ELSE 0 END) AS net_qty,
-            SUM(CASE WHEN bill_no LIKE 'S%' THEN bill_amt ELSE 0 END) AS net_value,
+            SUM(CASE WHEN bill_no LIKE 'S%' THEN to_pay ELSE 0 END) AS net_value,
             SUM(cash_pay) AS cash_pay,
             SUM(card_pay) AS card_pay,
             SUM(other_pay) AS other_pay,
@@ -956,6 +999,8 @@ public function temp_inward_delete($data)
 
         return true;
     }
+
+	
 
 	public function updateTaxRegister($merchantId) {
         $this->db->trans_start(); // Start transaction
@@ -1244,7 +1289,11 @@ public function temp_inward_delete($data)
 
 		return $this->db->insert('billwise_sales', $data);
 	}
+	public function new_walkin_insert($data)
+	{
 
+		return $this->db->insert('walkin_details', $data);
+	}
 	public function new_itemwise_insert($data)
 	{
 		$merchantid = $data['merchant_id'];

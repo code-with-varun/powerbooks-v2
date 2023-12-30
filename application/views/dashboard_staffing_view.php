@@ -43,7 +43,7 @@ $eid= $sessdata['pbk_eid'];
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-hover dashboard-task-infos">
+							<table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                     <thead>
                                         <tr>
                                             <th>Staff EID</th>

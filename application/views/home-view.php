@@ -10,10 +10,10 @@ $base=base_url()."public/";
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="description" content="Making Accounting process simple and easy for all small and medium startup companies. Powerbooks is excelent product of Thamizhanda.in.">
-     <meta name="keywords" content="powerbooks, quickbooks,zohobooks, Thamizhanda.in, Powerus Sharepoint">
+     <meta name="keywords" content="powerbooks, quickbooks,zohobooks, Thamizhanda.in, Runit Infotech, Powerus Sharepoint">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Powerbooks - Thamizhanda.in</title>
+    <title>Powerbooks - Runit Infotech</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?php echo $base?>assets/css/bootstrap.min.css" >
@@ -220,7 +220,7 @@ $base=base_url()."public/";
                   <p>
                     Maintaining end to end progress and statistics of your purchase, sales and tax payments. Our system helps small and medium sized companies to keep their book keeping process well organised.
                   </p>
-                  <a href="https://Thamizhanda.in.com/newspoint/new-launch/powerbooks/" class="btn btn-common mt-3">Read More</a>
+                  <a href="https://thamizhanda.in/tag/powerbooks/" class="btn btn-common mt-3">Read More</a>
                 </div>
               </div>
             </div>
@@ -418,71 +418,100 @@ $base=base_url()."public/";
           <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Pricing</h2>
           <div class="shape wow fadeInDown" data-wow-delay="0.3s"></div>
         </div>
-        <div class="row">
-          <div class="col-lg-4 col-md-6 col-xs-12">
-            <div class="table wow fadeInLeft" data-wow-delay="1.2s">
-              <div class="icon-box">
-                <i class="lni-package"></i>
-              </div>
-              <div class="pricing-header">
-                <p class="price-value">₹3500<span> /Year</span></p>
-              </div>
-              <div class="title">
-                <h3>Classic</h3>
-              </div>
-              <ul class="description">
-                <li>Single user</li>
-                <li>Single store Location</li>
-                <li>Helpdesk support</li>
-                <li>Lifetime updates</li>
-              </ul>
-              <button class="btn btn-common">Buy Now</button>
-            </div> 
-          </div>
-          <div class="col-lg-4 col-md-6 col-xs-12 active">
-            <div class="table wow fadeInUp" id="active-tb" data-wow-delay="1.2s">
-              <div class="icon-box">
-                <i class="lni-drop"></i>
-              </div>
-              <div class="pricing-header">
-                <p class="price-value">₹5500<span> /Year</span></p>
-              </div>
-              <div class="title">
-                <h3>Professional</h3>
-              </div>
-              <ul class="description">
-                <li>10 user</li>
-                <li>3 store Locations</li>
-                <li>Priority Helpdesk support</li>
-                <li>Lifetime updates</li>
-              </ul>
-              <button class="btn btn-common">Buy Now</button>
-           </div> 
-          </div>
-          <div class="col-lg-4 col-md-6 col-xs-12">
-            <div class="table wow fadeInRight" data-wow-delay="1.2s">
-              <div class="icon-box">
-                <i class="lni-star"></i>
-              </div>
-              <div class="pricing-header">
-                <p class="price-value">₹7500<span> /Year</span></p>
-              </div>
-              <div class="title">
-                <h3>Premium</h3>
-              </div>
-              <ul class="description">
-                <li>Unlimited users</li>
-                <li>Unlimited store Locations</li>
-                <li>24/7 support</li>
-                <li>Lifetime updates</li>
-              </ul>
-              <button class="btn btn-common">Buy Now</button>
-            </div> 
-          </div>
+        
+				<div class="body table-responsive">
+          
+				<table class="table table-hover">
+        <tr>
+            <th>PLAN</th>
+            <th>YEARLY Min</th>
+            <th>YEARLY Max</th>
+            <th>Sample</th>
+            <th>Price/Bill</th>
+            <th>Total Amount</th>
+            <th>MIN</th>
+            <th>MAX</th>
+        </tr>
+        <tr>
+            <td>Free Trial</td>
+            <td>0</td>
+            <td>10</td>
+            <td>5</td>
+            <td>₹0</td>
+            <td>₹0</td>
+            <td>₹0</td>
+            <td>₹0</td>
+        </tr>
+        <tr>
+            <td>STANDARD1</td>
+            <td>11</td>
+            <td>100</td>
+            <td>18</td>
+            <td>₹10</td>
+            <td>₹180</td>
+            <td>₹110</td>
+            <td>₹1000</td>
+        </tr>
+        <tr>
+            <td>STANDARD2</td>
+            <td>101</td>
+            <td>500</td>
+            <td>152</td>
+            <td>₹5</td>
+            <td>₹760</td>
+            <td>₹505</td>
+            <td>₹2500</td>
+        </tr>
+        <tr>
+            <td>STANDARD3</td>
+            <td>501</td>
+            <td>1000</td>
+            <td>635</td>
+            <td>₹3</td>
+            <td>₹1905</td>
+            <td>₹1503</td>
+            <td>₹3000</td>
+        </tr>
+        <tr>
+            <td>PRO1</td>
+            <td>1001</td>
+            <td>2500</td>
+            <td>1200</td>
+            <td>₹2</td>
+            <td>₹2400</td>
+            <td>₹2002</td>
+            <td>₹5000</td>
+        </tr>
+        <tr>
+            <td>PRO2</td>
+            <td>2501</td>
+            <td>5000</td>
+            <td>3654</td>
+            <td>₹1.5</td>
+            <td>₹5481</td>
+            <td>₹3751.5</td>
+            <td>₹7500</td>
+        </tr>
+        <tr>
+            <td>PRO3</td>
+            <td>5001</td>
+            <td>15000</td>
+            <td>8587</td>
+            <td>₹0.75</td>
+            <td>₹6440.25</td>
+            <td>₹3750.75</td>
+            <td>₹11250</td>
+        </tr>
+    </table>
+          
+          
         </div>
+				
       </div>
     </section>
     <!-- Pricing Table Section End -->
+
+		
   
     <!-- Testimonial Section Start -->
     <section id="testimonial" class="testimonial section-padding">
@@ -608,13 +637,13 @@ $base=base_url()."public/";
           <div class="shape wow fadeInDown" data-wow-delay="0.3s"></div>
         </div>
         <div class="row contact-form-area wow fadeInUp" data-wow-delay="0.3s">   
-          <div class="col-lg-7 col-md-12 col-sm-12">
+          <!-- <div class="col-lg-7 col-md-12 col-sm-12">
             <div class="contact-block">
-              <form id="contactForm">
+              <form id="contactForm1" action="new-walkin" method="POST">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <input type="text" class="form-control" id="name" name="name" placeholder="Name" required data-error="Please enter your name">
+                      <input type="text" class="form-control" id="name" name="name" placeholder="Name" maxlength="25" required data-error="Please enter your name">
                       <div class="help-block with-errors"></div>
                     </div>                                 
                   </div>
@@ -624,19 +653,25 @@ $base=base_url()."public/";
                       <div class="help-block with-errors"></div>
                     </div> 
                   </div>
-                   <div class="col-md-12">
+									<div class="col-md-6">
                     <div class="form-group">
-                      <input type="text" placeholder="Subject" id="msg_subject" class="form-control" required data-error="Please enter your subject">
+                      <input type="number" placeholder="Mobile No." id="mobile" name="mobile" class="form-control" maxlength="10" required data-error="Please enter your Mobile">
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                   <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="text" placeholder="Subject" id="msg_subject" name="msg_subject" class="form-control" maxlength="50" required data-error="Please enter your subject">
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-group"> 
-                      <textarea class="form-control" id="message" placeholder="Your Message" rows="7" data-error="Write your message" required></textarea>
+                      <textarea class="form-control" id="message" name="message" placeholder="Your Message (Max 150Char)" rows="7" maxlength="150"data-error="Write your message" required></textarea>
                       <div class="help-block with-errors"></div>
                     </div>
                     <div class="submit-button text-left">
-                      <button class="btn btn-common" id="form-submit" type="submit">Send Message</button>
+										<button class="btn btn-common"  type="submit">Send Message</button>
                       <div id="msgSubmit" class="h3 text-center hidden"></div> 
                       <div class="clearfix"></div> 
                     </div>
@@ -644,10 +679,10 @@ $base=base_url()."public/";
                 </div>            
               </form>
             </div>
-          </div>
-          <div class="col-lg-5 col-md-12 col-xs-12">
+          </div> -->
+          <div class="col-lg-12 col-md-12 col-xs-12">
             <div class="map">
-              <object style="border:0; height: 300px; width: 100%;" data="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9284.316590658724!2d79.8278230336426!3d11.934688071331555!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xd02bc6b90ecf8c5e!2sPlugins%20Technologies!5e0!3m2!1sen!2sin!4v1584341377628!5m2!1sen!2sin"></object>
+              <object style="border:0; height: 300px; width: 100%;" data="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3903.6687051734198!2d79.80893547505923!3d11.928128438299495!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5361e327d255af%3A0x47f56ec8f9c6a5d6!2sRUNIT%20INFOTECH!5e0!3m2!1sen!2sin!4v1703872244187!5m2!1sen!2sin"></object>
             </div>
           </div>
         </div>
@@ -698,10 +733,10 @@ $base=base_url()."public/";
               <h3 class="footer-titel">Contact</h3>
               <ul class="address">
                 <li>
-                  <a href="#"><i class="lni-map-marker"></i> 106 ,Ground Floor,  Chetty Street  <br> Puducherry 605001.</a>
+                  <a href="#"><i class="lni-map-marker"></i>#11 Kasthuribai Nagar, Nellithope, Puducherry-5.</a>
                 </li>
                 <li>
-                  <a href="#"><i class="lni-phone-handset"></i>  +8870462362</a>
+                  <a href="#"><i class="lni-phone-handset"></i>  +9092608362</a>
                 </li>
                 <li>
                   <a href="#"><i class="lni-envelope"></i> Thamizhanda.in@gmail.com</a>
@@ -716,7 +751,7 @@ $base=base_url()."public/";
           <div class="row">
             <div class="col-md-12">
               <div class="copyright-content">
-                <p>Copyright © <?php echo date('Y')?> <a rel="nofollow" href="http://www.thamizhanda.in">Thamizhanda.in</a> All Right Reserved</p>
+                <p>Copyright © <?php echo date('Y')?> <a rel="nofollow" href="http://www.thamizhanda.in">RUNIT INFOTECH</a> All Right Reserved</p>
               </div>
             </div>
           </div>
