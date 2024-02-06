@@ -106,7 +106,7 @@ $data['merchant_id']=$merchant_id;
 					<div class="form-group form-float">
 								<div class="col-sm-3">
 									<div class="form-line">
-                                        <input type="text" list="sku" id="TZ_barcode" onchange="Change_barcode();" name="TZ_barcode" class="form-control" value="0" autofocus required>
+                                        <input type="text" list="sku" id="TZ_barcode" onchange="Change_barcode();" name="TZ_barcode" class="form-control" value=" " autofocus required>
                                         <label class="form-label">SKU / Barcode*</label>
 										<datalist id="sku">
 													<?php 
