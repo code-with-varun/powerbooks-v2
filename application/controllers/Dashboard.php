@@ -336,6 +336,9 @@ class Dashboard extends CI_Controller
 			$pos_status = $row->pos_status;
 			$current_pos_date = $row->current_pos_date;
 		}
+		// $pos_mode = $row->pos_mode;
+		// if($pos_mode=='YES'){redirect('billing-pos', 'location');}
+
 		if($auto_day_end=='YES'&& $pos_status=='OPENED')
 		{
 			$data['pos_status']='OPENED';
@@ -370,6 +373,182 @@ class Dashboard extends CI_Controller
 		{
 			redirect('day-open-close', 'location');
 		}
+	}
+
+	public function billing_pos($one=null,$two=null)
+	{
+		$paramKey=$one;
+		$paramValue=$two;
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		$data['current_pos_date']=date('Y-m-d');
+		
+		$bill_template_fetch = $this->Users_model->bill_template_fetch($data);
+		$temp_bill_fetch = $this->Users_model->temp_bill_fetch($data);
+		$product_fetch = $this->Users_model->product_fetch($data);
+		$category_fetch = $this->Users_model->category_fetch($data);
+		$config_master_fetch = $this->Users_model->config_master_fetch($data);
+		foreach ($config_master_fetch as $row)
+		{
+			$auto_day_end = $row->auto_day_end;
+			$pos_status = $row->pos_status;
+			$current_pos_date = $row->current_pos_date;
+		}
+		if($auto_day_end=='YES'&& $pos_status=='OPENED')
+		{
+			$data['pos_status']='OPENED';
+		
+		$current_posdate_update = $this->Users_model->current_posdate_update($data);
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+
+		if($paramKey=='division')
+		{
+			$data['division_id']=$paramValue;
+			$specific_division_byid_fetch = $this->Users_model->specific_division_byid_fetch($data);
+			foreach ($specific_division_byid_fetch as $row) 
+			{
+				$data['division_code'] = $row->division_code;
+			}
+			if($data['division_code']=='')
+			{
+				redirect('billing-pos', 'location');	
+			}
+
+			$division_wise_category_fetch = $this->Users_model->division_wise_category_fetch($data);
+			$this->load->view('dashboard_billing_pos_view',[
+				'division_wise_category_fetch'=>$division_wise_category_fetch,
+				
+				]);
+		}
+
+		if($paramKey=='category')
+		{
+			
+			 $data['category_id']=$paramValue;
+			$specific_category_byid_fetch = $this->Users_model->specific_category_byid_fetch($data);
+			foreach ($specific_category_byid_fetch as $row) 
+			{
+				$data['category'] = $row->category_name;
+			}
+			if($data['category']=='')
+			{
+				redirect('billing-pos', 'location');	
+			}
+
+			$category_wise_product_fetch = $this->Users_model->category_wise_product_fetch($data);
+			$this->load->view('dashboard_billing_pos_view',[
+				'category_wise_product_fetch'=>$category_wise_product_fetch,
+				
+				]);
+		}
+
+		elseif($paramKey=='product')
+		{
+			$data['TZ_barcode']=$paramValue;
+			$specific_item_fetch = $this->Users_model->specific_item_fetch($data);
+			$this->load->view('dashboard_billing_pos_view',[
+				'specific_item_fetch'=>$specific_item_fetch,
+				
+				]);
+		}
+		else
+		{
+			$division_fetch = $this->Users_model->division_fetch($data);
+			$this->load->view('dashboard_billing_pos_view',[
+				'division_fetch'=>$division_fetch,
+				
+				]);
+
+		}
+
+		
+
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+		}
+		elseif($auto_day_end!='YES'&& $pos_status=='OPENED')
+		{
+			$this->load->view('dashboard_header_view');
+			$this->load->view('dashboard_top_view');
+			$this->load->view('dashboard_menus_view');
+	
+			if($paramKey=='division')
+			{
+				$data['division_id']=$paramValue;
+				$specific_division_byid_fetch = $this->Users_model->specific_division_byid_fetch($data);
+				foreach ($specific_division_byid_fetch as $row) 
+				{
+					$data['division_code'] = $row->division_code;
+				}
+				if($data['division_code']=='')
+				{
+					redirect('billing-pos', 'location');	
+				}
+	
+				$division_wise_category_fetch = $this->Users_model->division_wise_category_fetch($data);
+				$this->load->view('dashboard_billing_pos_view',[
+					'division_wise_category_fetch'=>$division_wise_category_fetch,
+					
+					]);
+			}
+	
+			if($paramKey=='category')
+			{
+				
+				 $data['category_id']=$paramValue;
+				$specific_category_byid_fetch = $this->Users_model->specific_category_byid_fetch($data);
+				foreach ($specific_category_byid_fetch as $row) 
+				{
+					$data['category'] = $row->category_name;
+				}
+				if($data['category']=='')
+				{
+					redirect('billing-pos', 'location');	
+				}
+	
+				$category_wise_product_fetch = $this->Users_model->category_wise_product_fetch($data);
+				$this->load->view('dashboard_billing_pos_view',[
+					'category_wise_product_fetch'=>$category_wise_product_fetch,
+					
+					]);
+			}
+	
+			elseif($paramKey=='product')
+			{
+				$data['TZ_barcode']=$paramValue;
+				$specific_item_fetch = $this->Users_model->specific_item_fetch($data);
+				$this->load->view('dashboard_billing_pos_view',[
+					'specific_item_fetch'=>$specific_item_fetch,
+					
+					]);
+			}
+			else
+			{
+				$division_fetch = $this->Users_model->division_fetch($data);
+				$this->load->view('dashboard_billing_pos_view',[
+					'division_fetch'=>$division_fetch,
+					
+					]);
+	
+			}
+	
+			
+	
+			$this->load->view('dashboard_bottom_view');
+			$this->load->view('dashboard_table_footer_view');
+		}
+		elseif($pos_status=='CLOSED')
+		{
+			redirect('day-open-close', 'location');
+		}
+
+		
+
+		
 	}
 
 	public function pos_update()
@@ -743,6 +922,7 @@ class Dashboard extends CI_Controller
 		foreach ($config_master_fetch as $row)
 		{	
 		  $sales_pfx = $row->sales_pfx;
+		  $pos_mode = $row->pos_mode;
 		  $fy_cy = $row->fy_cy;
 		  $idata['pos_bill_date'] = $row->current_pos_date;
 		}
@@ -776,7 +956,10 @@ class Dashboard extends CI_Controller
 			$updateTaxRegister = $this->Users_model->updateTaxRegister($merchantId);
 			$temp_bill_item_all_delete = $this->Users_model->temp_bill_item_all_delete($data);
 			
-			redirect('billing', 'location');
+			
+			if($pos_mode=='YES'){redirect('billing-pos', 'location');}
+			else{redirect('billing', 'location');}
+			
 		}
 		else{
 			echo'Something Went Wrong';
@@ -1348,12 +1531,69 @@ $i=$i+1;
 	 
 	}
 
+	public function add_to_cart()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if (isset($_POST['TZ_barcode']))
+		{
+		 	$data['TZ_barcode'] = $this->input->post('TZ_barcode');
+			$specific_item_fetch = $this->Users_model->specific_item_fetch($data);
+			foreach ($specific_item_fetch as $row)
+			{
+				$data['sku']=$row->sku;
+				$data['item_name']=$row->item_name;
+				echo $data['item_description']=$row->item_description;
+			}
+			if($this->input->post('retail_price')!=''){
+				$cat_div = explode('|-|',$this->input->post('retail_price'));
+				$data['retail_price'] = $cat_div[0];
+				$data['tax_slab'] = $cat_div[1];
+			}
+			
+			$data['qty'] = $this->input->post('quantity');
+			$data['gross_amount']=$data['retail_price']*$data['qty'];
+			$data['tax_amount']=$data['retail_price']*($data['tax_slab']/100);
+			$data['net_amount']=$data['gross_amount']+$data['tax_amount'];
+			
+			$temp_bill_check = $this->Users_model->temp_bill_check($data);
+		if ($temp_bill_check == 1) 
+		{
+			
+			$specific_temp_bill_fetch = $this->Users_model->specific_temp_bill_fetch($data);
+				 foreach ($specific_temp_bill_fetch as $row)
+				 {	
+					$TZ_barcode = $row->TZ_barcode;
+					$qty = $row->qty;
+					$retail_price = $row->retail_price;
+					$gross_amount = $row->gross_amount;
+					$tax_amount = $row->tax_amount;
+					$net_amount = $row->net_amount;
+				 }
+				 
+			$data['new_qty']=$qty+$data['qty'];
+			$data['new_retail_price']=$data['retail_price'];
+			$data['new_net_amount']=$net_amount+$data['net_amount'];
+			$data['new_tax_amount']=$tax_amount+$data['tax_amount'];
+			$data['new_gross_amount']=$gross_amount+$data['gross_amount'];
+
+			$temp_bill_item_update2 = $this->Users_model->temp_bill_item_update2($data);
+			
+		}
+		else{
+			$new_temp_bill_insert = $this->Users_model->new_temp_bill_insert($data);
+		
+		}
+
+	}	
+	redirect('billing-pos', 'location');
+	}
+
 	public function bill_summary()
 	{
 		$this->load->view('dashboard_header_view');
-
-		
-		
 
 		$sessdata = $this->session->userdata('pbk_sess');
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
@@ -1374,7 +1614,7 @@ $i=$i+1;
 
 				}
 				$TOTNET=round($TOTNET,0);
-		
+			
 			$temp_bill_fetch = $this->Users_model->temp_bill_fetch($data);
 			
 				 foreach ($temp_bill_fetch as $row)
@@ -1412,7 +1652,7 @@ $i=$i+1;
 											<div class="col-sm-4">
 											<div class="form-line">
 												
-												<input type="text" list="customer" id="customer_mobile" name="customer_mobile"  onchange="customer_found();" class="form-control" autofocus required>
+												<input type="text" list="customer" id="customer_mobile" name="customer_mobile" value="0000000000" onfocus="this.select(); onchange="customer_found();" class="form-control" autofocus required>
 												
 												<datalist id="customer">';
 												$all_customer_fetch = $this->Users_model->all_customer_fetch($data);
@@ -1429,7 +1669,12 @@ $i=$i+1;
 															
 												echo '</datalist>
 												<label class="form-label">Customer Mobile</label>
-												
+												<script>
+    // Automatically select the input value when the field gains focus
+    document.getElementById("customer_mobile").addEventListener("focus", function() {
+        this.select();
+    });
+</script>
 											</div>
 										</div>
 			

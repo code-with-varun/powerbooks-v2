@@ -40,7 +40,7 @@ if($onboarding=='YES')
 		<ul class="list">
 		  
 			<li class="active">
-				<a href="dashboard">
+				<a href="<?=$base?>dashboard">
 					<i class="material-icons">dashboard</i>
 					<span>Dashboard</span>
 				</a>
@@ -49,7 +49,7 @@ if($onboarding=='YES')
 
 if($onboarding=='YES')
 {echo '<!-- <li>
-				<a href="opportunity">
+				<a href="'.$base.'opportunity">
 					<i class="material-icons">face</i>
 					<span>Opportunity</span>
 				</a>
@@ -64,7 +64,7 @@ if($onboarding=='YES')
 		if($user_type=='MANAGER' || $user_type=='STAFF')
 		{			
 		echo '<li>
-			<a href="billing">
+			<a href="'.$base.'billing">
 				<i class="material-icons">shopping_cart</i>
 				<span>Billing</span>
 			</a>
@@ -80,28 +80,28 @@ if($onboarding=='YES')
 				</a>
 				<ul class="ml-menu">
 					<li>
-						<a href="vendor-supplier">
+						<a href="'.$base.'vendor-supplier">
 							<span>Vendors/Suppliers</span>
 						</a>
 					</li>
 					<li>
-						<a href="item-master">
+						<a href="'.$base.'item-master">
 							<span>Item Master</span>
 						</a>
 					</li>
 					<li>
-					<a href="goods-inward">
+					<a href="'.$base.'goods-inward">
 						<span>Goods Inward</span>
 					</a>
 					</li>
 					<li>
-					<a href="promo-offers">
+					<a href="'.$base.'promo-offers">
 						<span>Promo/Offers</span>
 					</a>
 					</li>
 
 					<li>
-						<a href="staffing">
+						<a href="'.$base.'staffing">
 							<span>Staffing</span>
 							</a>
 					</li>
@@ -118,17 +118,17 @@ if($onboarding=='YES')
 				</a>
 				<ul class="ml-menu">
 					<li>
-						<a href="billwise-sales">
+						<a href="'.$base.'billwise-sales">
 							<span>Billwise Sales</span>
 						</a>
 					</li>
 					<li>
-						<a href="itemwise-sales">
+						<a href="'.$base.'itemwise-sales">
 							<span>Itemwise Sales</span>
 						</a>
 					</li>
 					 <li>
-						<a href="daywise-sales">
+						<a href="'.$base.'daywise-sales">
 							<span>Daywise Sales</span>
 						</a>
 					</li>
@@ -139,17 +139,17 @@ if($onboarding=='YES')
 						</a>
 						<ul class="ml-menu">
 							<li>
-								<a href="tax-register">
+								<a href="'.$base.'tax-register">
 									<span>Tax Register</span>
 								</a>
 							</li>
 							<li>
-					<a href="stock-balance">
+					<a href="'.$base.'stock-balance">
 						<span>Stock Balance</span>
 					</a>
 					</li>
 					<li>
-						<a href="goods-register">
+						<a href="'.$base.'goods-register">
 							<span>Goods Register</span>
 						</a>
 					</li>
@@ -172,18 +172,18 @@ if($onboarding=='YES')
 				</a>
 				<ul class="ml-menu">
 					<li>
-						<a href="day-open-close">
+						<a href="'.$base.'day-open-close">
 							<span>Day Open/Close</span>
 						</a>
 					</li>
 					<!--
 					<li>
-						<a href="backups">
+						<a href="'.$base.'backups">
 							<span>Backups</span>
 						</a>
 					</li>
 					<li>
-						<a href="manual-sync">
+						<a href="'.$base.'manual-sync">
 							<span>Manual Sync</span>
 						</a>
 					</li>
@@ -196,7 +196,7 @@ if($onboarding=='YES')
 if($user_type=='MANAGER' || $user_type=='ADMIN')
 {
 echo '<li>
-		<a href="settings">
+		<a href="'.$base.'settings">
 			<i class="material-icons">settings</i>
 			<span>Settings</span>
 		</a>
@@ -210,7 +210,7 @@ echo '<li>
 if($user_type=='SUPER ADMIN')
 {
 echo '<li>
-		<a href="options-master">
+		<a href="'.$base.'options-master">
 			<i class="material-icons">list</i>
 			<span>Options Master</span>
 		</a>
@@ -219,7 +219,7 @@ echo '<li>
 }
 ?>	  
 			<li>
-				<a href="logout">
+				<a href="<?=$base?>logout">
 					<i class="material-icons">logout</i>
 					<span>Logout</span>
 				</a>

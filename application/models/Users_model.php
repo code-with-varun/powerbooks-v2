@@ -482,6 +482,28 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function specific_category_byid_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('rid', $data['category_id'])
+			->where('merchant_id', $data['merchant_id'])
+			->from('category_details')
+			->get()
+			->result();
+	}
+
+	public function specific_division_byid_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('rid', $data['division_id'])
+			->where('merchant_id', $data['merchant_id'])
+			->from('division_details')
+			->get()
+			->result();
+	}
+
 	public function specific_item_fetch($data)
 	{
 
@@ -522,6 +544,28 @@ class Users_model extends CI_Model
 			->get()
 			->result();
 	}
+
+	public function category_wise_product_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->where('category', $data['category'])
+			->from('item_master')
+			->get()
+			->result();
+	}
+	public function division_wise_category_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('merchant_id', $data['merchant_id'])
+			->where('division_code', $data['division_code'])
+			->from('category_details')
+			->get()
+			->result();
+	}
+
 
 	public function temp_inward_master_fetch($data)
 	{

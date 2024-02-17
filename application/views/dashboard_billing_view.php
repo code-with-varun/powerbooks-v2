@@ -46,6 +46,11 @@ $data['merchant_id']=$merchant_id;
                                     <i class="material-icons">print</i>
                                     <span>Reprint</span>
                              </button>
+                             <a href="billing-pos">
+							<button type="button" class="btn bg-orange waves-effect" data-type="prompt" >
+                                    <i class="material-icons">point_of_sale</i>
+                                    <span>POS Mode</span>
+                            </button></a>
                              <div class="modal fade" id="reprintModal" tabindex="-1" role="dialog">
                 	<div class="modal-dialog" role="document">
                     <div class="modal-content">
