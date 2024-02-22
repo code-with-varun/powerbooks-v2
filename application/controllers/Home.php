@@ -11,6 +11,7 @@ class Home extends CI_Controller {
 	public function sign_in()
 	{
 		$this->load->view('signin-view');
+		//this is in branch changes
 	}
 
 	public function sign_up()
