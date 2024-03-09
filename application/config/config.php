@@ -33,7 +33,7 @@ if (!empty($_SERVER['HTTPS']))
 else
 {
 //echo 'http is enabled'."\n";
-$config['base_url'] = 'http://' . $_SERVER['SERVER_NAME'] . ':81/runit/powerbooks-v2';
+$config['base_url'] = 'http://' . $_SERVER['SERVER_NAME'] . '/runit/powerbooks-v2';
 
 }
 

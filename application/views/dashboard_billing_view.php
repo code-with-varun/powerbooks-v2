@@ -11,7 +11,7 @@ $data['merchant_id']=$merchant_id;
 <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2>this is Billing Area</h2>
+                <h2>this is a Billing Area</h2>
             </div>
     
             <div class="row clearfix">
