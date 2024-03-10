@@ -545,6 +545,29 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function product_fetch_by_division_category($data)
+	{
+    return $this->db->select('*')
+        ->where('merchant_id', $data['merchant_id'])
+        ->from('item_master')
+        // ->group_by('division') // Group by both division and category
+        ->order_by('category','asc') // Optional: Order the results by division and category
+        ->get()
+        ->result();
+	}
+
+	public function top_10_products($data)
+	{
+		return $this->db->select('TZ_barcode, item_name, SUM(qty) as total_qty')
+			->where('merchant_id', $data['merchant_id'])
+			->from('itemwise_sales')
+			->group_by('TZ_barcode')
+			->order_by('total_qty', 'DESC')
+			->limit(10)
+			->get()
+			->result();
+	}
+
 	public function category_wise_product_fetch($data)
 	{
 

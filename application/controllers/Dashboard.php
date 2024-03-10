@@ -337,7 +337,7 @@ class Dashboard extends CI_Controller
 			$current_pos_date = $row->current_pos_date;
 		}
 		// $pos_mode = $row->pos_mode;
-		// if($pos_mode=='YES'){redirect('billing-pos', 'location');}
+		// if($pos_mode=='YES'){redirect('pos-billing', 'location');}
 
 		if($auto_day_end=='YES'&& $pos_status=='OPENED')
 		{
@@ -373,6 +373,28 @@ class Dashboard extends CI_Controller
 		{
 			redirect('day-open-close', 'location');
 		}
+	}
+
+	public function pos_billing()
+	{
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$product_fetch_by_division_category = $this->Users_model->product_fetch_by_division_category($data);
+		$top_10_products = $this->Users_model->top_10_products($data);
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_pos_view',[
+			 'product_fetch_by_division_category'=>$product_fetch_by_division_category,
+			 'top_10_products'=>$top_10_products,
+			
+			]);
+			
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
 	}
 
 	public function billing_pos($one=null,$two=null)
@@ -415,7 +437,7 @@ class Dashboard extends CI_Controller
 			}
 			if($data['division_code']=='')
 			{
-				redirect('billing-pos', 'location');	
+				redirect('pos-billing', 'location');	
 			}
 
 			$division_wise_category_fetch = $this->Users_model->division_wise_category_fetch($data);
@@ -436,7 +458,7 @@ class Dashboard extends CI_Controller
 			}
 			if($data['category']=='')
 			{
-				redirect('billing-pos', 'location');	
+				redirect('pos-billing', 'location');	
 			}
 
 			$category_wise_product_fetch = $this->Users_model->category_wise_product_fetch($data);
@@ -486,7 +508,7 @@ class Dashboard extends CI_Controller
 				}
 				if($data['division_code']=='')
 				{
-					redirect('billing-pos', 'location');	
+					redirect('pos-billing', 'location');	
 				}
 	
 				$division_wise_category_fetch = $this->Users_model->division_wise_category_fetch($data);
@@ -507,7 +529,7 @@ class Dashboard extends CI_Controller
 				}
 				if($data['category']=='')
 				{
-					redirect('billing-pos', 'location');	
+					redirect('pos-billing', 'location');	
 				}
 	
 				$category_wise_product_fetch = $this->Users_model->category_wise_product_fetch($data);
@@ -957,7 +979,7 @@ class Dashboard extends CI_Controller
 			$temp_bill_item_all_delete = $this->Users_model->temp_bill_item_all_delete($data);
 			
 			
-			if($pos_mode=='YES'){redirect('billing-pos', 'location');}
+			if($pos_mode=='YES'){redirect('pos-billing', 'location');}
 			else{redirect('billing', 'location');}
 			
 		}
@@ -1588,7 +1610,7 @@ $i=$i+1;
 		}
 
 	}	
-	redirect('billing-pos', 'location');
+	redirect('pos-billing', 'location');
 	}
 
 	public function bill_summary()
