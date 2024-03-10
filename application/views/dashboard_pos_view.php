@@ -78,7 +78,7 @@ $data['merchant_id']=$merchant_id;
                                     <i class="material-icons">print</i>
                                     <span>Reprint</span>
                              </button>
-                             <a href="billing-pos">
+                             <!-- <a href="billing-pos"> -->
 							<a href="billing">
 							<button type="button" class="btn bg-blue waves-effect" data-type="prompt" >
                                     <i class="material-icons">shopping_cart</i>
@@ -102,7 +102,7 @@ $data['merchant_id']=$merchant_id;
                     
                    
                 </h5>
-                <form id="new_pos_checkout" action="bill-summary" method="POST"> <input type="hidden" value="<?= $TOTNET ?>" id="cart_value" name="TZ_barcode"> </form>		
+                <form id="new_pos_checkout" action="pos-summary" method="POST"> <input type="hidden" value="<?= $TOTNET ?>" id="cart_value" name="TZ_barcode"> </form>		
                 
                 
        

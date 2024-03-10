@@ -336,6 +336,17 @@ class Users_model extends CI_Model
 		}
 	}
 
+	public function specific_customer_fetch($data)
+	{
+		
+		return $this->db->select('*')
+			->where('cust_mobile', $data['cust_mobile'])
+			->where('merchant_id', $data['merchant_id'])
+			->get('customer_base')
+			->result();		
+	}
+
+
 	public function stock_balance_check($data)
 	{
 		

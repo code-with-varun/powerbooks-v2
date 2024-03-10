@@ -1612,6 +1612,17 @@ $i=$i+1;
 	}	
 	redirect('pos-billing', 'location');
 	}
+	public function pos_summary()
+	{
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_pos_summary_view');
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+	
+	}
+
 
 	public function bill_summary()
 	{
@@ -1955,6 +1966,41 @@ $i=$i+1;
 		
 		$this->load->view('dashboard_table_footer_view');
 	}
+
+	public function check_customer()
+	{
+		// Get merchant ID from session
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+	
+		// Initialize variables
+		$response = array('customerFound' => false);
+	
+		if ($this->input->post('customerMobile'))
+		{
+			$data['cust_mobile'] = $this->input->post('customerMobile');
+	
+			// Fetch specific customer details
+			$specific_customer_fetch = $this->Users_model->specific_customer_fetch($data);
+	
+			// Check if customer data exists
+			if (!empty($specific_customer_fetch))
+			{
+				$row = $specific_customer_fetch[0];
+				$response = array(
+					'customerFound' => true,
+					'customerName' => $row->cust_name,
+					'customerEmail' => $row->cust_email,
+					'customerAddress' => $row->cust_address
+				);
+			}
+		}
+	
+		// Send JSON response
+		echo json_encode($response);
+	}
+	
+
 
 	public function temp_qty_tax()
 	{

@@ -4,7 +4,12 @@ $base=base_url()."public/";
 $sessdata = $this->session->userdata('pbk_sess');
 $user_type= $sessdata['pbk_user_type'];
 $onboarding= $sessdata['pbk_onboarding'];
-$merchant_id= $sessdata['pbk_merchant_id'];
+$data['merchant_id']=$merchant_id= $sessdata['pbk_merchant_id'];
+$config_master_fetch = $this->Users_model->config_master_fetch($data);
+foreach ($config_master_fetch as $row)
+{	
+  $current_pos_date= $row->current_pos_date;
+}
 
 ?>
 
@@ -45,7 +50,7 @@ $merchant_id= $sessdata['pbk_merchant_id'];
                             <form action=""  id="myForm" method="post">
                             <div class="table-responsive">
                                 <table  class="table table-hover dashboard-task-infos">
-                                    <th> <input type="date" class="form-control" value="<?php echo date("Y-m-01"); ?>" id="sdate" name="sdate"  required></th>
+                                    <th> <input type="date" class="form-control" value="<?php echo $current_pos_date; ?>" id="sdate" name="sdate"  required></th>
                                     <th><input type="date" class="form-control" value="<?php echo date("Y-m-d"); ?>" id="edate"name="edate" required></th>
                                     <th><input type="hidden"class="form-control" id="rmerchantid" value="<?php echo $merchant_id;?>">
                                          <button type="button" id="submitFormData" onclick="SubmitFormData();" class="btn bg-green waves-effect" data-type="prompt" >

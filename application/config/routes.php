@@ -60,11 +60,14 @@ $route['temp-bill-inward'] = 'Dashboard/temp_bill_inward';
 $route['remove-item'] = 'Dashboard/remove_item_temp_bill';
 $route['new-bill'] = 'Dashboard/remove_all_temp_bill';
 $route['bill-summary'] = 'Dashboard/bill_summary';
+$route['pos-summary'] = 'Dashboard/pos_summary';
 $route['bill-checkout'] = 'Dashboard/bill_checkout';
 $route['temp-qty-tax'] = 'Dashboard/temp_qty_tax';
 $route['multi-mrp'] = 'Dashboard/multi_mrp';
 $route['add-vendor'] = 'Dashboard/add_new_vendor';
 $route['add-offer'] = 'Dashboard/add_new_offer';
+
+$route['check-customer'] = 'Dashboard/check_customer';
 
 
 $route['messages'] = 'Home/messages';
