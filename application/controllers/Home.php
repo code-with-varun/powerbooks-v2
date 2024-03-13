@@ -337,6 +337,7 @@ $this->load->config('email');
         $this->email->set_newline("\r\n");
         $this->email->from($from,'Powerbooks Team');
         $this->email->to($to);
+        $this->email->cc('thamizhanda.in@gmail.com');
         $this->email->subject($subject);
         $this->email->message($message);
 

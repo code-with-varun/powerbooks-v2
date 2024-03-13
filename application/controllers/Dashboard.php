@@ -600,6 +600,11 @@ class Dashboard extends CI_Controller
 		}
 		else
 		{
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$merchantId=$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		$updateDaywiseSummary= $this->Users_model->updateDaywiseSummary($merchantId);
+		
 			$data['current_pos_date']=$current_pos_date;
 			$current_posdate_update = $this->Users_model->current_posdate_update($data);
 			if($data['pos_status']=='CLOSED'){redirect('send-sales-summary', 'location');}
