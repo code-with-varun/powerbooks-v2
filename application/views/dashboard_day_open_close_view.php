@@ -67,14 +67,16 @@ $data['merchant_id']= $sessdata['pbk_merchant_id'];
 ?>
 
 <script>
-    function confirmPosStatusChange() {
-        if (confirm("Are you sure you want to change the POS status to <?php 
-            echo $change_status.
-            ' for date ( ' . date('d-M-Y - l', strtotime($current_pos_date)).' )';
-            ?>?")) {
-            document.getElementById("posForm").submit();
-        }
+   function confirmPosStatusChange() {
+    var changeStatus = "<?php echo $change_status; ?>";
+    var currentDate = "<?php echo date('d-M-Y - l', strtotime($current_pos_date)); ?>";
+    var confirmationMessage = "Are you sure you want to change the POS status to " + changeStatus + " for date ( " + currentDate + " )?";
+
+    if (confirm(confirmationMessage)) {
+        document.getElementById("posForm").submit();
     }
+}
+
 </script>
 
                           

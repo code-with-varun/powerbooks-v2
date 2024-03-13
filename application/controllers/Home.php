@@ -196,6 +196,166 @@ $this->load->config('email');
 		
 
 	}
+	public function send_sales_summary()
+	{
+	
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		$config_master_fetch = $this->Users_model->config_master_fetch($data);
+		foreach ($config_master_fetch as $row)
+		{
+			$business_email = $row->business_email;
+			$company_name = $row->company_name;
+			$data['pos_status'] = $row->pos_status;
+			$current_pos_date = $row->current_pos_date;
+			
+		}
+
+$data['current_pos_date'] = $current_pos_date;
+
+$specific_day_wise_sales = $this->Users_model->specific_day_wise_sales($data);
+
+// Check if any rows are returned
+if ($specific_day_wise_sales) {
+    foreach ($specific_day_wise_sales as $row) {
+        $net_bills = $row->net_bills;
+        $net_qty = $row->net_qty;
+        $net_value = $row->net_value;
+        $cash_pay = $row->cash_pay;
+        $card_pay = $row->card_pay;
+        $other_pay = $row->other_pay;
+    }
+} else {
+    // No rows returned, set all values to 0
+    $net_bills = 0;
+    $net_qty = 0;
+    $net_value = 0;
+    $cash_pay = 0;
+    $card_pay = 0;
+    $other_pay = 0;
+}
+//echo $this->db->last_query();
+$avg_ticket_size = ($net_value / ($net_bills != 0 ? $net_bills : 1)); // Avoid division by zero
+
+		
+
+// summary mail STARTS
+$to =$business_email;
+
+//email subject
+$subject = 'Powerbook Daily POS Summary for '.$data['merchant_id'].' - '.$company_name.' Dated on ('.$current_pos_date.')'; 
+
+$htmlContent = '
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="center">'.$company_name.' <br> Daily Summary</h2>
+
+        <p><strong>POS Date:</strong> ' . $current_pos_date . '</p>
+        <p><strong>Report Date:</strong> ' . date('Y-m-d') . '</p>
+        
+        <table>
+            <tr>
+                <th>Total Bills</th>
+                <th>Total Qty</th>
+                <th>Total Sales</th>
+            </tr>
+            <tr>
+                <td>' . $net_bills . '</td>
+                <td>' . $net_qty . '</td>
+                <td>' . $net_value . '</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th>Total Cash</th>
+                <th>Total Online</th>
+                <th>Avg Ticket</th>
+            </tr>
+            <tr>
+                <td>' . $cash_pay . '</td>
+                <td>' . $other_pay . '</td>
+                <td>' . $avg_ticket_size . '</td>
+            </tr>
+        </table>
+
+        <p><strong>Daybook Expense (Dr)</strong></p>
+        <p><strong>Petty cash/Sales Profit (Cr)</strong></p>
+    </div>
+</body>
+</html>';
+
+
+$this->load->config('email');
+        $this->load->library('email');
+        
+        $from = $this->config->item('smtp_user');
+        $message = $htmlContent;
+
+        $this->email->set_newline("\r\n");
+        $this->email->from($from,'Powerbooks Team');
+        $this->email->to($to);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if ($this->email->send()) {
+			// $this->session->set_flashdata('registration_status','Your Email has successfully been sent.');
+           // echo 'Your Email has successfully been sent.';
+        } else {
+            //show_error($this->email->print_debugger());
+        }
+							
+	//email message ends
+
+	redirect('day-open-close', 'location');
+  
+
+	}
+
+	// END OF CLASS
+
 }
 
 

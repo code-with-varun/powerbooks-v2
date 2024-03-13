@@ -602,6 +602,7 @@ class Dashboard extends CI_Controller
 		{
 			$data['current_pos_date']=$current_pos_date;
 			$current_posdate_update = $this->Users_model->current_posdate_update($data);
+			if($data['pos_status']=='CLOSED'){redirect('send-sales-summary', 'location');}
 		}
 		redirect('day-open-close', 'location');
 		

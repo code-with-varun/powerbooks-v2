@@ -96,7 +96,7 @@ $TOTNET=round($TOTNET,0);
                                             
 											<div class="form-group">
                                                 <label for="area" class="col-sm-2 control-label">Billing Staff</label>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-2">
                                                     <div class="form-line">
                                                     <select  id="staff_id" name="staff_id" class="form-control" required>
 																	<option value="" selected disabled>Please Select</option>';
@@ -116,7 +116,7 @@ $TOTNET=round($TOTNET,0);
                                                     </div>
                                                 </div>
 												<label for="city" class="col-sm-1 control-label">Promo/Offer</label>
-                                                <div class="col-sm-2">
+                                                <div class="col-sm-3">
                                                     <div class="form-line">
                                                     <select  id="promo_offer" name="promo_offer" onchange="update_discount();" class="form-control">
 																	<option value="" selected disabled>Please Select</option>';
@@ -143,13 +143,13 @@ $TOTNET=round($TOTNET,0);
 
 											<div class="form-group">
                                                 <label for="pincode" class="col-sm-2 control-label">Card</label>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-2">
                                                     <div class="form-line">
                                                     <input type="number" name="card" id="card" onkeyup="update_payment();" class="form-control" min="0" value="0">
                                                     </div>
                                                 </div>
 												<label for="business_phone" class="col-sm-1 control-label">Online</label>
-                                                <div class="col-sm-2">
+                                                <div class="col-sm-3">
                                                     <div class="form-line">
                                                     <input type="number" name="online" id="online" onkeyup="update_payment();" class="form-control" min="0" value="0">
                                                     </div>

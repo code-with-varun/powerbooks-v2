@@ -187,6 +187,17 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function specific_day_wise_sales($data)
+	{
+
+		return $this->db->select('*')
+			->where('pos_bill_date', $data['current_pos_date'])
+			->where('merchant_id', $data['merchant_id'])
+			->from('daywise_sales')
+			->get()
+			->result();
+	}
+
 	public function inventory_summary($data)
 	{
 

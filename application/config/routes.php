@@ -87,3 +87,5 @@ $route['billing-pos'] = 'Dashboard/pos_billing';
 $route['add-to-cart'] = 'Dashboard/add_to_cart';
 
 $route['pos-billing'] = 'Dashboard/pos_billing';
+
+$route['send-sales-summary'] = 'Home/send_sales_summary';
