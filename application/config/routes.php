@@ -19,7 +19,7 @@ $route['login'] = 'Login/user_login';
 $route['logout'] = 'Login/user_logout';
 
 $route['dashboard'] = 'Dashboard/index';
-$route['billing'] = 'Dashboard/pos_billing';
+$route['billing'] = 'Dashboard/billing';
 
 $route['onboarding'] = 'Dashboard/onboarding';
 $route['staffing'] = 'Dashboard/staffing';
