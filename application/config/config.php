@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 if (!empty($_SERVER['HTTPS'])) 
 {
   //echo 'https is enabled';
- $config['base_url'] = $_ENV['BASE_URL'];
+ $config['base_url'] = $_ENV['PROJECT_PATH'];
 
 }
 else
