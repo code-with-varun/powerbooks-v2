@@ -82,12 +82,17 @@ class Dashboard extends CI_Controller
 
 		$pos_month_summary_fetch = $this->Users_model->pos_month_summary_fetch($data);
 		$pos_year_summary_fetch = $this->Users_model->pos_year_summary_fetch($data);
+		$pos_full_month_fetch = $this->Users_model->pos_full_month_fetch($data);
+		$pos_last_bill_fetch = $this->Users_model->pos_last_bill_fetch($data);
+		
 		// echo $this->db->last_query();
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_menus_view');
 		$this->load->view('dashboard_panel_view',['pos_month_summary_fetch' => $pos_month_summary_fetch,
 		'pos_year_summary_fetch' => $pos_year_summary_fetch,
+		'pos_full_month_fetch' => $pos_full_month_fetch,
+		'pos_last_bill_fetch' => $pos_last_bill_fetch,
 		]);
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_footer_view');

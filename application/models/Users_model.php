@@ -198,6 +198,19 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function pos_last_bill_fetch($data)
+	{
+
+		return $this->db->select('*')
+			// ->where('pos_bill_date BETWEEN "' . $data['sdate'] . '" and "' . $data['edate'] . '"')
+			->where('merchant_id', $data['merchant_id'])
+			->from('billwise_sales')
+			->order_by('pos_bill_date','DESC','rsino', 'DESC')
+			->limit(1)
+			->get()
+			->result();
+	}
+
 	public function inventory_summary($data)
 	{
 
@@ -226,6 +239,18 @@ class Users_model extends CI_Model
 		$data['current_pos_date'] = substr($data['current_pos_date'],0,7);
 		
 		return $this->db->select('SUM(net_qty) AS TOTQTY, SUM(net_bills) AS TOTBILLS, SUM(net_value) AS TOTVALUE')
+			->where('pos_bill_date LIKE "' . $data['current_pos_date'] . '%"')
+			->where('merchant_id', $data['merchant_id'])
+			->from('daywise_sales')
+			->get()
+			->result();
+	}
+
+	public function pos_full_month_fetch($data)
+	{
+		$data['current_pos_date'] = substr($data['current_pos_date'],0,7);
+		
+		return $this->db->select('*')
 			->where('pos_bill_date LIKE "' . $data['current_pos_date'] . '%"')
 			->where('merchant_id', $data['merchant_id'])
 			->from('daywise_sales')
