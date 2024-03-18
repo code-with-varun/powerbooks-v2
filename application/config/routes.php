@@ -82,9 +82,9 @@ $route['add-new-options'] = 'Dashboard/add_new_options';
 
 $route['pay-page'] = 'Payments/index';
 
-// $route['billing-pos'] = 'Dashboard/pos_billing';
-// // $route['billing-pos/(:any)/(:any)'] = 'Dashboard/billing_pos/$1/$2';
-// $route['add-to-cart'] = 'Dashboard/add_to_cart';
+$route['billing-pos'] = 'Dashboard/pos_billing';
+// $route['billing-pos/(:any)/(:any)'] = 'Dashboard/billing_pos/$1/$2';
+$route['add-to-cart'] = 'Dashboard/add_to_cart';
 
 $route['pos-billing'] = 'Dashboard/pos_billing';
 
