@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 if (!empty($_SERVER['HTTPS'])) 
 {
   //echo 'https is enabled';
- $config['base_url'] = 'https://apps.1lybio.in/powerbooks-dev';
+ $config['base_url'] = $_ENV['BASE_URL'];
 
 }
 else
