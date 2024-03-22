@@ -237,7 +237,8 @@ if ($specific_day_wise_sales) {
     $other_pay = 0;
 }
 //echo $this->db->last_query();
-$avg_ticket_size = ($net_value / ($net_bills != 0 ? $net_bills : 1)); // Avoid division by zero
+$avg_ticket_size = round($net_value / ($net_bills != 0 ? $net_bills : 1), 2); // Round to 2 decimal places
+
 
 		
 

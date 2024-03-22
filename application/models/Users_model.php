@@ -200,16 +200,14 @@ class Users_model extends CI_Model
 
 	public function pos_last_bill_fetch($data)
 	{
-
 		return $this->db->select('*')
-			// ->where('pos_bill_date BETWEEN "' . $data['sdate'] . '" and "' . $data['edate'] . '"')
-			->where('merchant_id', $data['merchant_id'])
-			->from('billwise_sales')
-			->order_by('pos_bill_date','DESC','rsino', 'DESC')
-			->limit(1)
-			->get()
-			->result();
+						->where('merchant_id', $data['merchant_id'])
+						->order_by('sino', 'DESC')
+						->limit(1)
+						->get('billwise_sales')
+						->result();
 	}
+	
 
 	public function inventory_summary($data)
 	{

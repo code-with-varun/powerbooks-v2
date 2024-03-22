@@ -84,8 +84,10 @@ class Dashboard extends CI_Controller
 		$pos_year_summary_fetch = $this->Users_model->pos_year_summary_fetch($data);
 		$pos_full_month_fetch = $this->Users_model->pos_full_month_fetch($data);
 		$pos_last_bill_fetch = $this->Users_model->pos_last_bill_fetch($data);
+		$specific_day_wise_sales = $this->Users_model->specific_day_wise_sales($data);
+		$top_10_products = $this->Users_model->top_10_products($data);
 		
-		// echo $this->db->last_query();
+		//echo $this->db->last_query();
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_menus_view');
@@ -93,6 +95,8 @@ class Dashboard extends CI_Controller
 		'pos_year_summary_fetch' => $pos_year_summary_fetch,
 		'pos_full_month_fetch' => $pos_full_month_fetch,
 		'pos_last_bill_fetch' => $pos_last_bill_fetch,
+		'specific_day_wise_sales' => $specific_day_wise_sales,
+		'top_10_products' => $top_10_products,
 		]);
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_footer_view');

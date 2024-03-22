@@ -113,10 +113,29 @@ foreach ($pos_last_bill_fetch as $row) {
     $other_pay = $row->other_pay;
     $bill_no = $row->bill_no;
 }
+
+if ($specific_day_wise_sales) {
+    foreach ($specific_day_wise_sales as $row) {
+        $net_bills = $row->net_bills;
+        $net_qty = $row->net_qty;
+        $net_value = $row->net_value;
+        $cash_pay = $row->cash_pay;
+        $card_pay = $row->card_pay;
+        $other_pay = $row->other_pay;
+    }
+} else {
+    // No rows returned, set all values to 0
+    $net_bills = 0;
+    $net_qty = 0;
+    $net_value = 0;
+    $cash_pay = 0;
+    $card_pay = 0;
+    $other_pay = 0;
+}
 ?>
                             <ul class="dashboard-stat-list">
                                 <li>
-                                    BILL NO QTY | (<?php echo $qty;?>)
+                                QTY : (<?php echo $qty;?>) | BILL NO 
                                     <span class="pull-right"><b><?php echo $bill_no;?></b></span>
                                 </li>
                                 <li>
@@ -142,23 +161,24 @@ foreach ($pos_last_bill_fetch as $row) {
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="card">
                         <div class="body bg-orange">
-                            <div class="font-bold m-b--35">Statistics</div>
+                            <div class="font-bold m-b--35">Current Day</div>
                             <ul class="dashboard-stat-list">
                                 <li>
-                                    TOP SELLER
-                                    <span class="pull-right"><b>12</b> <small>QTY</small></span>
+                                 NET BILLS 
+                                    <span class="pull-right"><b><?php echo $net_bills;?></b></span>
                                 </li>
                                 <li>
-                                    CUSTOMER
-                                    <span class="pull-right"><b>15</b> <small>TICKETS</small></span>
+                                NET QTY 
+                                    <span class="pull-right"><b><?php echo $net_qty;?></b></span>
                                 </li>
                                 <li>
-                                    LAST WEEK
-                                    <span class="pull-right"><b>90</b> <small>TICKETS</small></span>
+                                    NET VALUE
+                                    <span class="pull-right"><b><?php echo $net_value;?></b></span>
                                 </li>
                                 <li>
-                                    LAST MONTH
-                                    <span class="pull-right"><b>342</b> <small>TICKETS</small></span>
+                                    PAYMENT
+                                    
+                                    <span class="pull-right"><b><?php echo 'Cash: '.$cash_pay.' | Card: '.$card_pay.' | Online: '.$other_pay;?></b></span>
                                 </li>
                                 
                                 
@@ -254,34 +274,70 @@ foreach ($pos_last_bill_fetch as $row) {
                         </div>
                     </div>
                 </div>
+                <!-- Answered Tickets -->
+<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    <div class="card">
+        <div class="body bg-pink">
+            <div class="font-bold m-b--35">Top Sellers</div>
+            <table class="table">
 
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                    <div class="card">
-                        <div class="body bg-pink">
-                            <div class="font-bold m-b--35">Utility</div>
-                            <ul class="dashboard-stat-list">
-                                <li>
-                                    TOP SELLER
-                                    <span class="pull-right"><b>12</b> <small>QTY</small></span>
-                                </li>
-                                <li>
-                                    CUSTOMER
-                                    <span class="pull-right"><b>15</b> <small>TICKETS</small></span>
-                                </li>
-                                <li>
-                                    LAST WEEK
-                                    <span class="pull-right"><b>90</b> <small>TICKETS</small></span>
-                                </li>
-                                <li>
-                                    LAST MONTH
-                                    <span class="pull-right"><b>342</b> <small>TICKETS</small></span>
-                                </li>
-                                
-                                
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="dashboard-stat-list" style="padding-bottom: 12px;">
+                                <?php
+                                if ($top_10_products) {
+                                    $left_products = array_slice($top_10_products, 0, 5); // Get the first 5 products for the left side
+                                    foreach ($left_products as $row) {
+                                        $TZ_barcode = $row->TZ_barcode;
+                                        $item_name = $row->item_name;
+                                        $total_qty = $row->total_qty;
+                                        echo '<span class="barcode" data-toggle="tooltip" title="'.$item_name.'">'.$TZ_barcode.' ('.$total_qty.')</span><br>';
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="dashboard-stat-list" style="padding-bottom: 12px;">
+                                <?php
+                                if ($top_10_products) {
+                                    $right_products = array_slice($top_10_products, 5, 5); // Get the next 5 products for the right side
+                                    foreach ($right_products as $row) {
+                                        $TZ_barcode = $row->TZ_barcode;
+                                        $item_name = $row->item_name;
+                                        $total_qty = $row->total_qty;
+                                        echo '<span class="barcode" data-toggle="tooltip" title="'.$item_name.'">'.$TZ_barcode.' ('.$total_qty.')</span><br>';
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Include jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Include Bootstrap library for tooltips -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+$(document).ready(function(){
+    // Initialize tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // Handle click event on barcode
+    $('.barcode').click(function(){
+        // Toggle tooltip display
+        $(this).tooltip('toggle');
+    });
+});
+</script>
 
                 
                 <!-- Include Chart.js library -->
@@ -340,6 +396,60 @@ foreach ($pos_last_bill_fetch as $row) {
                         </div>
                     </div>
                 </div>
+                <!-- #END# Bar Chart -->
+            </div>
+
+           
+        </div>
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <!-- Line Chart -->
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>TOP SELLERS</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <canvas id="topseller_pie_chart" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- #END# Line Chart -->
+                <!-- Bar Chart -->
+                <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>MONTHLY BILLS</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <canvas id="current_month_bar_chart" height="150"></canvas>
+                        </div>
+                    </div>
+                </div> -->
                 <!-- #END# Bar Chart -->
             </div>
 
@@ -461,6 +571,96 @@ var config = {
         }
     }
 };
+
+    // Create a new Chart instance
+    var myChart = new Chart(ctx, config);
+</script>
+
+<?php
+// Initialize arrays to store labels and data
+$labels = [];
+$data = [];
+
+// Loop through your database fetched data and populate the arrays
+foreach ($top_10_products as $row) {
+    // Assuming $row->pos_bill_date contains the month name (e.g., "January")
+    $labels[] = $row->item_name;
+    // Assuming $row->net_value contains the corresponding net value
+    $data[] = $row->total_qty;
+}
+?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
+<canvas id="topseller_pie_chart" width="400" height="400"></canvas>
+
+<script>
+    // Get the canvas element
+    var ctx = document.getElementById('topseller_pie_chart').getContext('2d');
+
+    // Data fetched from PHP
+    var data = {
+        labels: <?php echo json_encode($labels); ?>,
+        datasets: [{
+            label: 'Net Qty',
+            backgroundColor: [
+                '#ff6384',
+                '#36a2eb',
+                '#ffce56',
+                '#4bc0c0',
+                '#9966ff',
+                '#ff9f40',
+                '#ff6384',
+                '#36a2eb',
+                '#ffce56',
+                '#4bc0c0'
+            ],
+            borderColor: '#fff',
+            borderWidth: 1,
+            data: <?php echo json_encode($data); ?>
+        }]
+    };
+
+    // Chart configuration
+    var config = {
+        type: 'pie',
+        data: data,
+        options: {
+            responsive: true,
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Top Selling Products'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            var label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed) {
+                                label += context.parsed.toLocaleString();
+                            }
+                            return label;
+                        }
+                    }
+                },
+                legend: {
+                    display: false,
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            }
+        }
+    };
 
     // Create a new Chart instance
     var myChart = new Chart(ctx, config);
