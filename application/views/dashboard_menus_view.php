@@ -69,6 +69,17 @@ if($onboarding=='YES')
 				<span>Billing</span>
 			</a>
 		</li>';
+		
+		}
+		if($user_type=='MANAGER' || $user_type=='ADMIN')
+		{			
+		echo '<li>
+						<a href="'.$base.'customers">
+						<i class="material-icons">people</i>
+							<span>Customers</span>
+							</a>
+					</li>';
+		
 		}
 		if($user_type=='MANAGER' || $user_type=='ADMIN')
 		{

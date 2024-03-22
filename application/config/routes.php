@@ -23,6 +23,7 @@ $route['billing'] = 'Dashboard/billing';
 
 $route['onboarding'] = 'Dashboard/onboarding';
 $route['staffing'] = 'Dashboard/staffing';
+$route['customers'] = 'Dashboard/customers';
 $route['update-staff'] = 'Dashboard/staffing_status';
 $route['item-master'] = 'Dashboard/item_master';
 $route['goods-inward'] = 'Dashboard/goods_inward';

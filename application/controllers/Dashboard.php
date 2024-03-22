@@ -104,6 +104,31 @@ class Dashboard extends CI_Controller
 	}
 
 
+	public function customers()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['user_type'] = $sessdata['pbk_user_type'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if($data['user_type']=="STAFF")
+		{
+			redirect('dashboard', 'location');
+		}
+
+
+		$all_customer_fetch = $this->Users_model->all_customer_fetch($data);
+		
+
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_customer_base_view',['all_customer_fetch' => $all_customer_fetch,
+		
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+	}
 	
 	public function options_master()
 	{
@@ -112,6 +137,7 @@ class Dashboard extends CI_Controller
 		$data['user_type'] = $sessdata['pbk_user_type'];
 		
 		if($data['user_type']!="SUPER ADMIN")
+		
 		{
 			redirect('dashboard', 'location');
 		}
