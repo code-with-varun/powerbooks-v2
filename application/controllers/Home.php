@@ -312,16 +312,16 @@ $htmlContent = '
         <table>
             <tr>
                 <th>Total Cash</th>
+                <th>Total Card</th>
                 <th>Total Online</th>
-                <th>Avg Ticket</th>
             </tr>
             <tr>
                 <td>' . $cash_pay . '</td>
+                <td>' . $card_pay . '</td>
                 <td>' . $other_pay . '</td>
-                <td>' . $avg_ticket_size . '</td>
             </tr>
         </table>
-
+        <p><strong>Avg Ticket: ' . $avg_ticket_size . '</strong></p>
         <p><strong>Daybook Expense (Dr)</strong></p>
         <p><strong>Petty cash/Sales Profit (Cr)</strong></p>
     </div>
