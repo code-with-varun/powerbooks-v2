@@ -87,6 +87,10 @@ class Dashboard extends CI_Controller
 		$specific_day_wise_sales = $this->Users_model->specific_day_wise_sales($data);
 		$top_10_products = $this->Users_model->top_10_products($data);
 		
+		$month_on_month_sales = $this->Users_model->month_on_month_sales($data);
+		$current_day_item_wise_sales = $this->Users_model->current_day_item_wise_sales($data);
+		
+        
 		//echo $this->db->last_query();
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
@@ -97,6 +101,8 @@ class Dashboard extends CI_Controller
 		'pos_last_bill_fetch' => $pos_last_bill_fetch,
 		'specific_day_wise_sales' => $specific_day_wise_sales,
 		'top_10_products' => $top_10_products,
+		'month_on_month_sales' => $month_on_month_sales,
+		'current_day_item_wise_sales' => $current_day_item_wise_sales,
 		]);
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_footer_view');
@@ -1017,6 +1023,7 @@ class Dashboard extends CI_Controller
 			$new_bill_insert = $this->Users_model->new_bill_insert($idata);
 			$new_itemwise_insert = $this->Users_model->new_itemwise_insert($idata);
 			$updateTaxRegister = $this->Users_model->updateTaxRegister($merchantId);
+			$updateDaywiseSummary= $this->Users_model->updateDaywiseSummary($merchantId);
 			$temp_bill_item_all_delete = $this->Users_model->temp_bill_item_all_delete($data);
 			
 			

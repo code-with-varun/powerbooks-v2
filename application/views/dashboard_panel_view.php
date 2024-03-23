@@ -5,9 +5,9 @@ $base=base_url()."public/";
 
 foreach ($pos_month_summary_fetch as $row) {
 	
-	$TOTBILLS = $row->TOTBILLS;
-	$TOTQTY = $row->TOTQTY;
-	$TOTVALUE = $row->TOTVALUE;
+	$MTOTBILLS = $row->TOTBILLS;
+	$MTOTQTY = $row->TOTQTY;
+	$MTOTVALUE = $row->TOTVALUE;
 }
 
 foreach ($pos_year_summary_fetch as $row) {
@@ -164,21 +164,22 @@ if ($specific_day_wise_sales) {
                             <div class="font-bold m-b--35">Current Day</div>
                             <ul class="dashboard-stat-list">
                                 <li>
-                                 NET BILLS 
-                                    <span class="pull-right"><b><?php echo $net_bills;?></b></span>
-                                </li>
-                                <li>
-                                NET QTY 
-                                    <span class="pull-right"><b><?php echo $net_qty;?></b></span>
+                                 NET BILLS | QTY 
+                                    <span class="pull-right"><b><?php echo $net_bills.' Bills | '.$net_qty.' Qty'; ?></b></span>
                                 </li>
                                 <li>
                                     NET VALUE
                                     <span class="pull-right"><b><?php echo $net_value;?></b></span>
                                 </li>
                                 <li>
-                                    PAYMENT
+                                    NET CASH
+                                    <span class="pull-right"><b><?php echo $cash_pay ;?></b></span>
+                                </li>
+                                
+                                <li>
+                                    OTHERS
                                     
-                                    <span class="pull-right"><b><?php echo 'Cash: '.$cash_pay.' | Card: '.$card_pay.' | Online: '.$other_pay;?></b></span>
+                                    <span class="pull-right"><b><?php echo 'Card: '.$card_pay.' | Online: '.$other_pay;?></b></span>
                                 </li>
                                 
                                 
@@ -222,16 +223,16 @@ if ($specific_day_wise_sales) {
                             <div class="font-bold m-b--35">Status - POS Month</div>
                             <ul class="dashboard-stat-list">
                                 <?php echo'<li>
-                                    TOTAL BILLS
-                                    <span class="pull-right"><b>'.$TOTBILLS.'</b> <small>BILLS</small></span>
+                                MONTH BILLS
+                                    <span class="pull-right"><b>'.$MTOTBILLS.'</b> <small>BILLS</small></span>
                                 </li>
                                 <li>
-                                    TOTAL QTY
-                                    <span class="pull-right"><b>'.$TOTQTY.'</b> <small>QTY</small></span>
+                                    MONTH QTY
+                                    <span class="pull-right"><b>'.$MTOTQTY.'</b> <small>QTY</small></span>
                                 </li>
                                 <li>
                                     MTD VALUE
-                                    <span class="pull-right"><b>₹'.number_format($TOTVALUE, 0, '.', ',').'</b> <small>Retail Price</small></span>
+                                    <span class="pull-right"><b>₹'.number_format($MTOTVALUE, 0, '.', ',').'</b> <small>Retail Price</small></span>
                                 </li>
                                                                 <li>
                                     YTD VALUE
@@ -401,6 +402,38 @@ $(document).ready(function(){
 
            
         </div>
+
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <!-- Bar Chart -->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>MONTH ON MONTH</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <canvas id="mom_line_chart" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- #END# Bar Chart -->
+            </div>
+
+           
+        </div>
+
         <div class="container-fluid">
             <div class="row clearfix">
                 <!-- Line Chart -->
@@ -428,10 +461,10 @@ $(document).ready(function(){
                 </div>
                 <!-- #END# Line Chart -->
                 <!-- Bar Chart -->
-                <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>MONTHLY BILLS</h2>
+                            <h2>TODAYS ITEMS</h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -446,10 +479,10 @@ $(document).ready(function(){
                             </ul>
                         </div>
                         <div class="body">
-                            <canvas id="current_month_bar_chart" height="150"></canvas>
+                            <canvas id="current_day_items_donut_chart" height="150"></canvas>
                         </div>
                     </div>
-                </div> -->
+                </div>
                 <!-- #END# Bar Chart -->
             </div>
 
@@ -591,7 +624,7 @@ foreach ($top_10_products as $row) {
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 
-<canvas id="topseller_pie_chart" width="400" height="400"></canvas>
+<canvas id="topseller_pie_chart" width="150" height="150"></canvas>
 
 <script>
     // Get the canvas element
@@ -658,9 +691,180 @@ foreach ($top_10_products as $row) {
                         }
                     }
                 }
+
             }
         }
     };
+
+    // Create a new Chart instance
+    var myChart = new Chart(ctx, config);
+</script>
+
+<?php
+// Initialize arrays to store labels and data
+$labels = [];
+$dataNetValue = [];
+$dataNetQty = [];
+
+// Loop through your database fetched data and populate the arrays
+foreach ($month_on_month_sales as $row) {
+    // Assuming $row->year and $row->month contain the year and month data
+    $labels[] = $row->year . '-' . str_pad($row->month, 2, '0', STR_PAD_LEFT); // Format year and month (e.g., "2024-03")
+    // Assuming $row->total_net_value contains the corresponding net value
+    $dataNetValue[] = $row->total_net_value;
+    // Assuming $row->total_net_qty contains the corresponding net quantity
+    $dataNetQty[] = $row->total_net_qty;
+}
+?>
+
+<script>
+    // Get the canvas element
+    var ctx = document.getElementById('mom_line_chart').getContext('2d');
+
+    // Data fetched from PHP
+    var data = {
+        labels: <?php echo json_encode($labels); ?>,
+        datasets: [{
+            label: 'Net Value',
+            borderColor: 'rgba(233, 30, 99, 0.75)',
+            backgroundColor: 'rgba(233, 30, 99, 0.2)',
+            pointBorderColor: 'rgba(233, 30, 99, 0)',
+            pointBackgroundColor: 'rgba(233, 30, 99, 0.9)',
+            fill: 'origin',
+            tension: 0.4,
+            data: <?php echo json_encode($dataNetValue); ?>
+        },
+        {
+            label: 'Net Qty',
+            borderColor: 'rgba(54, 162, 235, 0.75)',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            pointBorderColor: 'rgba(54, 162, 235, 0)',
+            pointBackgroundColor: 'rgba(54, 162, 235, 0.9)',
+            fill: 'origin',
+            tension: 0.4,
+            data: <?php echo json_encode($dataNetQty); ?>
+        }]
+    };
+
+    // Chart configuration
+    var config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            legend: true,
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Month'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Net Value / Net Qty'
+                    }
+                }]
+            }
+        }
+    };
+
+    // Create a new Chart instance
+    var myChart = new Chart(ctx, config);
+</script>
+
+
+<?php
+// Initialize arrays to store labels and data
+$labels = [];
+$data = [];
+
+// Loop through your database fetched data and populate the arrays
+foreach ($current_day_item_wise_sales as $row) {
+    // Assuming $row->pos_bill_date contains the month name (e.g., "January")
+    $labels[] = $row->item_name;
+    // Assuming $row->net_value contains the corresponding net value
+    $data[] = $row->total_qty;
+}
+?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
+<canvas id="topseller_pie_chart" width="150" height="150"></canvas>
+
+<script>
+    // Get the canvas element
+    var ctx = document.getElementById('current_day_items_donut_chart').getContext('2d');
+
+    // Data fetched from PHP
+    var data = {
+        labels: <?php echo json_encode($labels); ?>,
+        datasets: [{
+            label: 'Net Qty',
+            backgroundColor: [
+                '#ff6384',
+                '#36a2eb',
+                '#ffce56',
+                '#4bc0c0',
+                '#9966ff',
+                '#ff9f40',
+                '#ff6384',
+                '#36a2eb',
+                '#ffce56',
+                '#4bc0c0'
+            ],
+            borderColor: '#fff',
+            borderWidth: 5,
+            data: <?php echo json_encode($data); ?>
+        }]
+    };
+
+
+    // Chart configuration
+var config = {
+    type: 'doughnut', // Change chart type to doughnut
+    data: data,
+    options: {
+        responsive: true,
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Todays Items'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        var label = context.label || '';
+                        if (label) {
+                            label += ': ';
+                        }
+                        if (context.parsed) {
+                            label += context.parsed.toLocaleString();
+                        }
+                        return label;
+                    }
+                }
+            },
+            legend: {
+                display: false,
+                position: 'bottom',
+                labels: {
+                    font: {
+                        size: 12
+                    }
+                }
+            }
+        },
+        cutout: 120 // Adjust the cutout size to make it a donut chart
+    }
+};
+
 
     // Create a new Chart instance
     var myChart = new Chart(ctx, config);

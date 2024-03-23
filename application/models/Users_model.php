@@ -165,6 +165,20 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function current_day_item_wise_sales($data)
+	{
+
+		return $this->db->select('TZ_barcode, item_name, SUM(qty) as total_qty')
+			->where('pos_bill_date', $data['current_pos_date'])
+			->where('merchant_id', $data['merchant_id'])
+			->from('itemwise_sales')
+			->group_by('TZ_barcode')
+			->order_by('total_qty', 'DESC')
+			->get()
+			->result();
+	}
+
+
 	public function bill_wise_sales($data)
 	{
 
@@ -668,6 +682,14 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function month_on_month_sales($data) {
+		$this->db->select('YEAR(pos_bill_date) AS year, MONTH(pos_bill_date) AS month, SUM(net_qty) AS total_net_qty, SUM(net_value) AS total_net_value');
+		$this->db->from('daywise_sales');
+		$this->db->where('merchant_id', $data['merchant_id']); // Filter by merchant_id
+		$this->db->group_by('merchant_id, YEAR(pos_bill_date), MONTH(pos_bill_date)');
+		$query = $this->db->get();
+		return $query->result();
+	}
 	
 	public function all_customer_fetch($data)
 	{
