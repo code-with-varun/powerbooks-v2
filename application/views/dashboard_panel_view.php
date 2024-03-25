@@ -105,50 +105,50 @@ foreach ($pos_year_summary_fetch as $row) {
                             
 foreach ($pos_last_bill_fetch as $row) {
 	
-	$cust_name = $row->cust_name;
-    $cust_mobile = $row->cust_mobile;
-    $qty = $row->qty;
-    $to_pay = $row->to_pay;
-    $cash_pay = $row->cash_pay;
-    $other_pay = $row->other_pay;
-    $bill_no = $row->bill_no;
+	$last_cust_name = $row->cust_name;
+    $last_cust_mobile = $row->cust_mobile;
+    $last_qty = $row->qty;
+    $last_to_pay = $row->to_pay;
+    $last_cash_pay = $row->cash_pay;
+    $last_other_pay = $row->other_pay;
+    $last_bill_no = $row->bill_no;
 }
 
 if ($specific_day_wise_sales) {
     foreach ($specific_day_wise_sales as $row) {
-        $net_bills = $row->net_bills;
-        $net_qty = $row->net_qty;
-        $net_value = $row->net_value;
-        $cash_pay = $row->cash_pay;
-        $card_pay = $row->card_pay;
-        $other_pay = $row->other_pay;
+        $today_net_bills = $row->net_bills;
+        $today_net_qty = $row->net_qty;
+        $today_net_value = $row->net_value;
+        $today_cash_pay = $row->cash_pay;
+        $today_card_pay = $row->card_pay;
+        $today_other_pay = $row->other_pay;
     }
 } else {
     // No rows returned, set all values to 0
-    $net_bills = 0;
-    $net_qty = 0;
-    $net_value = 0;
-    $cash_pay = 0;
-    $card_pay = 0;
-    $other_pay = 0;
+    $today_net_bills = 0;
+    $today_net_qty = 0;
+    $today_net_value = 0;
+    $today_cash_pay = 0;
+    $today_card_pay = 0;
+    $today_other_pay = 0;
 }
 ?>
                             <ul class="dashboard-stat-list">
                                 <li>
-                                QTY : (<?php echo $qty;?>) | BILL NO 
-                                    <span class="pull-right"><b><?php echo $bill_no;?></b></span>
+                                QTY : (<?php echo $last_qty;?>) | BILL NO 
+                                    <span class="pull-right"><b><?php echo $last_bill_no;?></b></span>
                                 </li>
                                 <li>
                                     CUSTOMER 
-                                    <span class="pull-right"><b><?php echo $cust_mobile.' | '.$cust_name;?></b></span>
+                                    <span class="pull-right"><b><?php echo $last_cust_mobile.' | '.$last_cust_name;?></b></span>
                                 </li>
                                 <li>
                                     NET BILL AMOUNT
-                                    <span class="pull-right"><b><?php echo $to_pay;?></b></span>
+                                    <span class="pull-right"><b><?php echo $last_to_pay;?></b></span>
                                 </li>
                                 <li>
                                     PAYMENT
-                                    <span class="pull-right"><b><?php echo 'Cash: '.$cash_pay.' | Online: '.$other_pay;?></b></span>
+                                    <span class="pull-right"><b><?php echo 'Cash: '.$last_cash_pay.' | Online: '.$last_other_pay;?></b></span>
                                 </li>
                                 
                                 
@@ -165,21 +165,21 @@ if ($specific_day_wise_sales) {
                             <ul class="dashboard-stat-list">
                                 <li>
                                  NET BILLS | QTY 
-                                    <span class="pull-right"><b><?php echo $net_bills.' Bills | '.$net_qty.' Qty'; ?></b></span>
+                                    <span class="pull-right"><b><?php echo $today_net_bills.' Bills | '.$today_net_qty.' Qty'; ?></b></span>
                                 </li>
                                 <li>
                                     NET VALUE
-                                    <span class="pull-right"><b><?php echo $net_value;?></b></span>
+                                    <span class="pull-right"><b><?php echo $today_net_value;?></b></span>
                                 </li>
                                 <li>
                                     NET CASH
-                                    <span class="pull-right"><b><?php echo $cash_pay ;?></b></span>
+                                    <span class="pull-right"><b><?php echo $today_cash_pay ;?></b></span>
                                 </li>
                                 
                                 <li>
                                     OTHERS
                                     
-                                    <span class="pull-right"><b><?php echo 'Card: '.$card_pay.' | Online: '.$other_pay;?></b></span>
+                                    <span class="pull-right"><b><?php echo 'Card: '.$today_card_pay.' | Online: '.$today_other_pay;?></b></span>
                                 </li>
                                 
                                 
