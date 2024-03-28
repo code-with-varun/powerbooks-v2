@@ -235,6 +235,25 @@ if ($specific_day_wise_sales) {
     $cash_pay = 0;
     $card_pay = 0;
     $other_pay = 0;
+
+    $data = array(
+        'gross_bills' => 0,
+        'gross_qty' => 0,
+        'gross_value' => 0,
+        'return_bills' => 0,
+        'return_qty' => 0,
+        'return_value' => 0,
+        'net_bills' => 0,
+        'net_qty' => 0,
+        'net_value' => 0,
+        'cash_pay' => 0,
+        'card_pay' => 0,
+        'other_pay' => 0,
+        'merchant_id' => $data['merchant_id'],
+        'pos_bill_date' => $data['current_pos_date']
+    );
+
+    $this->db->insert('daywise_sales', $data);
 }
 //echo $this->db->last_query();
 $avg_ticket_size = round($net_value / ($net_bills != 0 ? $net_bills : 1), 2); // Round to 2 decimal places
