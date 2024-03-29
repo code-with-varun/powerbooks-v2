@@ -136,6 +136,37 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_table_footer_view');
 	}
 	
+	public function customer_crm($one=null)
+	{
+		$data['customer_rid']=$customer_rid=$one;
+		if($customer_rid=='')
+		{
+			redirect('customers', 'location');
+		}
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['user_type'] = $sessdata['pbk_user_type'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if($data['user_type']=="STAFF")
+		{
+			redirect('dashboard', 'location');
+		}
+
+
+		$specific_customer_by_id_fetch = $this->Users_model->specific_customer_by_id_fetch($data);
+		$billwise_insights = $this->Users_model->billwise_insights($data);
+		$itemwise_insights = $this->Users_model->itemwise_insights($data);
+		
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_crm_view',['specific_customer_by_id_fetch' => $specific_customer_by_id_fetch,
+		'billwise_insights' => $billwise_insights,
+		'itemwise_insights' => $itemwise_insights,
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_footer_view');
+	}
 	public function options_master()
 	{
 
@@ -959,6 +990,7 @@ class Dashboard extends CI_Controller
 		if (isset($_POST['customer_mobile'])) {
 			$idata['cust_mobile']=$data['cust_mobile'] = ucwords($this->input->post('customer_mobile'));
 			$idata['cust_name']=$data['cust_name'] = strtoupper($this->input->post('customer_name'));
+			$data['source'] = strtoupper($this->input->post('customer_source'));
 			$data['cust_email'] = strtolower($this->input->post('customer_email'));
 			$data['cust_address'] = ucwords($this->input->post('customer_address'));
 			$idata['card_pay'] = $this->input->post('card');
@@ -1733,7 +1765,7 @@ $i=$i+1;
 											<div class="col-sm-4">
 											<div class="form-line">
 												
-												<input type="text" list="customer" id="customer_mobile" name="customer_mobile" value="0000000000" onfocus="this.select(); onchange="customer_found();" class="form-control" autofocus required>
+												<input type="text" list="customer" id="customer_mobile" name="customer_mobile" value="1000000000" onfocus="this.select(); onchange="customer_found();" class="form-control" autofocus required>
 												
 												<datalist id="customer">';
 												$all_customer_fetch = $this->Users_model->all_customer_fetch($data);

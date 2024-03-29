@@ -102,7 +102,8 @@ foreach ($pos_year_summary_fetch as $row) {
                             <div class="font-bold m-b--35">LAST BILL</div>
                             
 <?php
-                            
+
+if ($pos_last_bill_fetch) {                            
 foreach ($pos_last_bill_fetch as $row) {
 	
 	$last_cust_name = $row->cust_name;
@@ -112,6 +113,15 @@ foreach ($pos_last_bill_fetch as $row) {
     $last_cash_pay = $row->cash_pay;
     $last_other_pay = $row->other_pay;
     $last_bill_no = $row->bill_no;
+}}
+else{
+    $last_cust_name = '';
+    $last_cust_mobile = '';
+    $last_qty = 0;
+    $last_to_pay = 0;
+    $last_cash_pay =0;
+    $last_other_pay =0;
+    $last_bill_no = '';
 }
 
 if ($specific_day_wise_sales) {

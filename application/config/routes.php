@@ -74,7 +74,8 @@ $route['check-customer'] = 'Dashboard/check_customer';
 $route['messages'] = 'Home/messages';
 
 $route['activate/(:any)/(:any)'] = 'Home/account_activate/$1/$2';
-
+$route['crm'] = 'Dashboard/customer_crm';
+$route['crm/(:any)'] = 'Dashboard/customer_crm/$1';
 // super admin routes
 $route['options-master'] = 'Dashboard/options_master';
 $route['new-options'] = 'Dashboard/new_options';

@@ -394,6 +394,88 @@ class Users_model extends CI_Model
 			->result();		
 	}
 
+	public function specific_customer_by_id_fetch($data)
+	{
+		
+		return $this->db->select('*')
+			->where('rid', $data['customer_rid'])
+			->where('merchant_id', $data['merchant_id'])
+			->get('customer_base')
+			->result();		
+	}
+
+	public function billwise_insights($data) {
+		// Get cust_mobile from customer_base table using rid
+		$this->db->select('cust_mobile');
+		$this->db->where('rid', $data['customer_rid']);
+		$query = $this->db->get('customer_base');
+	
+		if ($query->num_rows() > 0) {
+			$customer_row = $query->row();
+			$cust_mobile = $customer_row->cust_mobile;
+	
+			// Get insights summary from billwise_sales table
+			$this->db->select('SUM(qty) AS total_qty, COUNT(bill_no) AS total_bills, SUM(to_pay) AS total_to_pay, AVG(to_pay) AS avg_to_pay')
+			->where('cust_mobile', $cust_mobile)
+			->where('merchant_id', $data['merchant_id']);
+			$query = $this->db->get('billwise_sales');
+	
+			if ($query->num_rows() > 0) {
+				return $query->result();
+			} else {
+				// No data found
+				return false;
+			}
+		} else {
+			// No customer found with given rid
+			return false;
+		}
+	}
+	
+	public function itemwise_insights($data) {
+		// Fetch cust_mobile using rid from customer_base table
+		$this->db->select('cust_mobile');
+		$this->db->where('rid', $data['customer_rid']);
+		$query = $this->db->get('customer_base');
+	
+		if ($query->num_rows() > 0) {
+			$customer_row = $query->row();
+			$cust_mobile = $customer_row->cust_mobile;
+	
+			// Fetch bill_no using cust_mobile from billwise_sales table
+			$this->db->select('bill_no')
+			->where('cust_mobile', $cust_mobile)
+			->where('merchant_id', $data['merchant_id']);
+			$bill_query = $this->db->get('billwise_sales');
+	
+			if ($bill_query->num_rows() > 0) {
+				$bill_numbers = $bill_query->result_array();
+	
+				// Fetch insights summary from itemwise_sales table
+				$this->db->select('TZ_barcode,item_name, SUM(qty) AS itotal_qty, SUM(net_amount) AS itotal_net_amount')
+				->where_in('bill_no', array_column($bill_numbers, 'bill_no'))
+				->where('merchant_id', $data['merchant_id'])
+				->group_by('TZ_barcode')
+				->order_by('net_amount desc');
+				
+				$query = $this->db->get('itemwise_sales');
+	
+				if ($query->num_rows() > 0) {
+					return $query->result();
+				} else {
+					// No data found for insights summary
+					return false;
+				}
+			} else {
+				// No bill numbers found for the customer
+				return false;
+			}
+		} else {
+			// No customer found with the given rid
+			return false;
+		}
+	}
+	
 
 	public function stock_balance_check($data)
 	{
@@ -794,6 +876,16 @@ class Users_model extends CI_Model
 			->get()
 			->result();
 	}
+	public function options_customer_source($data)
+	{
+
+		return $this->db->select('*')
+			->where('option_key', 'CUSTOMER SOURCE')
+			->where('merchant_id', $data['merchant_id'])
+			->from('options_master')
+			->get()
+			->result();
+	}
 	public function options_business_model()
 	{
 
@@ -1002,6 +1094,7 @@ public function temp_inward_delete($data)
 		return $this->db->set('cust_name', $data['cust_name'])
 			->set('cust_email', $data['cust_email'])
 			->set('cust_address', $data['cust_address'])
+			->set('source', $data['customer_source'])
 			->where('cust_mobile', $data['cust_mobile'])
 			->where('merchant_id', $data['merchant_id'])
 			->update('customer_base');

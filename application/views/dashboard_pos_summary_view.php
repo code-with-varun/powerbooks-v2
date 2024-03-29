@@ -68,7 +68,7 @@ $TOTNET=round($TOTNET,0);
                                                 <label for="door_no" class="col-sm-2 control-label">Mobile</label>
                                                 <div class="col-sm-2">
                                                     <div class="form-line">
-                                                    <input type="number" id="customer_mobile" name="customer_mobile" value="0000000000" onfocus="this.select();" onblur="customer_check();" class="form-control" autofocus required inputmode="numeric" pattern="\d*" style="-moz-appearance: textfield;">
+                                                    <input type="number" id="customer_mobile" name="customer_mobile" value="1000000000" onfocus="this.select();" onblur="customer_check();" class="form-control" autofocus required inputmode="numeric" pattern="\d*" style="-moz-appearance: textfield;">
 
                                                     </div>
                                                 </div>
@@ -93,10 +93,32 @@ $TOTNET=round($TOTNET,0);
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-											<div class="form-group">
+
+                                            <div class="form-group">
+                                                <label for="area" class="col-sm-2 control-label">Source</label>
+                                                <div class="col-sm-4">
+                                                    <div class="form-line">
+                                                    <select  id="customer_source" name="customer_source" class="form-control">
+																	<option value="" selected disabled>Please Select</option>
+                                                                    <?php
+                                                                    $options_customer_source = $this->Users_model->options_customer_source($data);
+																	foreach ($options_customer_source as $row) 
+                                                        {
+
+                                                        $value=$row->option_value;
+                                                        echo '<option value="'.$value.'">'.$value.'</option>'; 
+                                                        
+                                                        }
+                                                        
+																	
+																	
+																	?>
+																
+																	</select> 
+                                                    </div>
+                                                </div>
                                                 <label for="area" class="col-sm-2 control-label">Billing Staff</label>
-                                                <div class="col-sm-2">
+                                                <div class="col-sm-4">
                                                     <div class="form-line">
                                                     <select  id="staff_id" name="staff_id" class="form-control" required>
 																	<option value="" selected disabled>Please Select</option>';
@@ -115,8 +137,12 @@ $TOTNET=round($TOTNET,0);
 																	</select> 
                                                     </div>
                                                 </div>
-												<label for="city" class="col-sm-1 control-label">Promo/Offer</label>
-                                                <div class="col-sm-3">
+                                            </div>
+                                            
+											<div class="form-group">
+                                               
+												<label for="city" class="col-sm-2 control-label">Promo/Offer</label>
+                                                <div class="col-sm-4">
                                                     <div class="form-line">
                                                     <select  id="promo_offer" name="promo_offer" onchange="update_discount();" class="form-control">
 																	<option value="" selected disabled>Please Select</option>';
@@ -133,8 +159,8 @@ $TOTNET=round($TOTNET,0);
 																	</select> 
                                                     </div>
                                                 </div>
-												<label for="state" class="col-sm-1 control-label">Discount</label>
-												<div class="col-sm-3">
+												<label for="state" class="col-sm-2 control-label">Discount</label>
+												<div class="col-sm-4">
                                                     <div class="form-line">
                                                     <input type="number" name="discount_logic" id="discount_logic" onkeyup="update_discount();" class="form-control" min="0" value="0" disabled>
                                                     </div>

@@ -45,36 +45,42 @@ $onboarding= $sessdata['pbk_onboarding'];
                                 <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                     <thead>
                                         <tr>
-											
-                                            <th>Customer Name</th>
                                             <th>Mobile Number</th>
+                                            <th>Customer Name</th>
                                             <th>Email</th>
                                             <th>Address</th>
+                                            <th>Source</th>
+                                            
 											
                                         </tr>
                                     </thead>
                                     <tfoot>
 										<tr>
 											
-                                        <th>Customer Name</th>
+                                        
                                             <th>Mobile Number</th>
+                                            <th>Customer Name</th>
                                             <th>Email</th>
                                             <th>Address</th>
+                                            <th>Source</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
 										<?php foreach ($all_customer_fetch as $row) 
 										{
                                             $cust_name=$row->cust_name;
+                                            $cust_rid=$row->rid;
 										$cust_mobile=$row->cust_mobile;
 										$cust_email=$row->cust_email;
                                         $cust_address=$row->cust_address;
+                                        $source=$row->source;
 										echo' <tr>
 										
+                                        <td><a href="crm/'.$cust_rid.'">'.$cust_mobile.'</a></td>
 										<td>'.$cust_name.'</td>
-										<td>'.$cust_mobile.'</td>
 										<td>'.$cust_email.'</td>
 										<td>'.$cust_address.'</td>
+                                        <td>'.$source.'</td>
 										</tr>';
 										}
 
