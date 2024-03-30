@@ -232,7 +232,7 @@ $data['merchant_id']=$merchant_id;
                             <button type="button" onclick="changeQuantity(-1)">-</button>
                             <input type="number" min="1" style="width: 50px;" name="quantity" id="quantity" value="1" required>
                             <button type="button" onclick="changeQuantity(1)">+</button>
-                            <button type="button" onclick="addItem()" class="btn bg-green waves-effect" id="addItemButton">Add Item</button>
+                            <button type="submit" class="btn bg-green waves-effect" >Add Item</button>
                         </div>
                     </form>
                 </h5>
@@ -286,7 +286,7 @@ if (!empty($product_fetch_by_division_category)) {
                                  <button type="button" onclick="changeQuantity(-1)">-</button>
                                  <input type="number" min="1" style="width: 50px;" name="quantity" id="quantity" value="1" required>
                                  <button type="button" onclick="changeQuantity(1)">+</button>
-                                 <button type="button" onclick="addItem()" class="btn bg-green waves-effect" id="addItemButton">Add Item</button>
+                                 <button type="submit" class="btn bg-green waves-effect" >Add Item</button>
                              </div>
                          </form>
                      </h5>
@@ -300,7 +300,7 @@ if (!empty($product_fetch_by_division_category)) {
    
 }
 ?>
-
+<!-- 
 <script>
     var submitting = false; // Flag to track whether form submission is in progress
 
@@ -309,13 +309,13 @@ if (!empty($product_fetch_by_division_category)) {
             return; // If submission is already in progress, do nothing
         }
         
-        var button = document.getElementById("addItemButton");
+        var button = document.getElementByClass("addItemButton");
         button.disabled = true; // Disable the button to prevent multiple clicks
         submitting = true; // Set flag to indicate form submission is in progress
 
         document.getElementById("addToCartForm").submit();
     }
-</script>
+</script> -->
 
 </div>
 <!-- Product Items End -->

@@ -1676,7 +1676,7 @@ $i=$i+1;
 			{
 				$data['sku']=$row->sku;
 				$data['item_name']=$row->item_name;
-				echo $data['item_description']=$row->item_description;
+				$data['item_description']=$row->item_description;
 			}
 			if($this->input->post('retail_price')!=''){
 				$cat_div = explode('|-|',$this->input->post('retail_price'));
