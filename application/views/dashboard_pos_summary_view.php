@@ -65,8 +65,12 @@ $TOTNET=round($TOTNET,0);
 									   <input type="hidden" id="discount2" name="discount" >';
                                        ?>
 											 <div class="form-group">
-                                                <label for="door_no" class="col-sm-2 control-label">Mobile</label>
-                                                <div class="col-sm-2">
+                                                <label for="door_no" class="col-sm-2 control-label" data-toggle="modal"  data-target="#addressBookModal">
+                                                Mobile
+                                                </label>
+                                                    <!-- Button to trigger modal -->
+    
+                                                <div class="col-sm-3">
                                                     <div class="form-line">
                                                     <input type="number" id="customer_mobile" name="customer_mobile" value="1000000000" onfocus="this.select();" onblur="customer_check();" class="form-control" autofocus required inputmode="numeric" pattern="\d*" style="-moz-appearance: textfield;">
 
@@ -79,7 +83,7 @@ $TOTNET=round($TOTNET,0);
                                                     </div>
                                                 </div>
 												<label for="landmark" class="col-sm-1 control-label">Email</label>
-												<div class="col-sm-3">
+												<div class="col-sm-2">
                                                     <div class="form-line">
                                                     <input type="email" id="customer_email" name="customer_email" onkeyup="newcust_email();" class="form-control">
                                                     </div>
@@ -189,12 +193,14 @@ $TOTNET=round($TOTNET,0);
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-offset-2 col-sm-10">
-                                                    <button type="button" onclick="submit_payment();" class="btn btn-success">Checkout</button>
+                                                    <button type="button" onclick="submit_payment();" id="paysubmit_Button" class="btn btn-success">Checkout</button>
 													<a href="billing-pos"><button type="button" class="btn btn-danger">Back</button></a>
                                                 </div>
                                             </div>
                                            
                                         </form>
+
+
 
                                         <?php
                                     //      echo' <hr>Bill Value : <bold style="color:green;"><input type="number" id="bill_value" value="'.$TOTNET.'" style="width:15%" disabled>  </bold> 
@@ -214,6 +220,90 @@ $TOTNET=round($TOTNET,0);
             </div>
         </div>
     </section>
+
+<!-- Address Book Modal -->
+<div class="modal fade" id="addressBookModal" tabindex="-1" role="dialog" aria-labelledby="addressBookModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addressBookModalLabel">Address Book</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- DataTable to display address book entries -->
+                <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                    <thead>
+                                        <tr>
+                                            <th>Mobile Number</th>
+                                            <th>Customer Name</th>
+                                            <th>Email</th>
+                                            <th>Address</th>
+                                            <th>Source</th>
+                                            
+											
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+										<tr>
+											
+                                        
+                                            <th>Mobile Number</th>
+                                            <th>Customer Name</th>
+                                            <th>Email</th>
+                                            <th>Address</th>
+                                            <th>Source</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+										<?php foreach ($all_customer_fetch as $row) 
+										{
+                                            $cust_name=$row->cust_name;
+                                            $cust_rid=$row->rid;
+										$cust_mobile=$row->cust_mobile;
+										$cust_email=$row->cust_email;
+                                        $cust_address=$row->cust_address;
+                                        $source=$row->source;
+										echo' <tr>
+										
+                                        <td onclick="selectCustomer(\'' . $cust_mobile . '\', \'' . $cust_name . '\', \'' . $cust_email . '\', \'' . $cust_address . '\')">' . $cust_mobile . '</td>
+										<td>'.$cust_name.'</td>
+										<td>'.$cust_email.'</td>
+										<td>'.$cust_address.'</td>
+                                        <td>'.$source.'</td>
+										</tr>';
+										}
+
+										?>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to handle selection of a customer from address book
+    function selectCustomer(customerMobile,customerName,customerEmail,customerAddress) {
+        // Set the selected customer mobile as the value of customer_mobile input field
+        document.getElementById("customer_mobile").value = customerMobile;
+        document.getElementById("customer_name").value = customerName;
+        document.getElementById("customer_email").value = customerEmail;
+        document.getElementById("customer_address").value = customerAddress;
+
+        // Close the modal
+        $('#addressBookModal').modal('hide');
+         // Set focus on the staff_id input field
+    document.getElementById("staff_id").focus();
+    }
+
+   
+</script>
+
 
 <script>
 document.getElementById("customer_mobile").addEventListener("focus", function() {
@@ -298,9 +388,14 @@ function update_discount(){
                                                     
     }
 
+    var submittingPayment = false; // Flag to track whether payment submission is in progress
 
 function submit_payment() 
 {
+
+    if (submittingPayment) {
+            return; // If payment submission is already in progress, do nothing
+        }
     // Get input values
     var customerMobile = document.getElementById("customer_mobile").value;
     var customerName = document.getElementById("customer_name").value;
@@ -319,7 +414,12 @@ function submit_payment()
     }
 
     // If validation passes, proceed with form submission
-    document.forms["payment_form"].submit();
+        var button = document.getElementById("paysubmit_Button");
+        button.disabled = true; // Disable the button to prevent multiple clicks
+        submittingPayment = true; // Set flag to indicate payment submission is in progress
+
+        document.getElementById("payment_form").submit();
+          
 }
 
 

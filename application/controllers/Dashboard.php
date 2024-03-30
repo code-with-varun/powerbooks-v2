@@ -1694,10 +1694,16 @@ $i=$i+1;
 	}
 	public function pos_summary()
 	{
+		
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		$all_customer_fetch = $this->Users_model->all_customer_fetch($data);
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_menus_view');
-		$this->load->view('dashboard_pos_summary_view');
+		$this->load->view('dashboard_pos_summary_view',[
+			'all_customer_fetch'=>$all_customer_fetch,
+		]);
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_table_footer_view');
 	

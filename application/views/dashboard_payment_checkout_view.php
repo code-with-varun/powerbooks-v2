@@ -242,9 +242,9 @@ $data['merchant_id']= $sessdata['pbk_merchant_id'];
 								
 								  <div class="modal-footer">
 									<hr>  
-									  <button type="button"  onclick="checkout_now();"class="btn bg-green waves-effect">
-									  <i class="material-icons">check</i> <span>Checkout</span>
-									  </button>
+									<button type="button" onclick="checkoutNow();" class="btn bg-green waves-effect" id="checkoutButton">
+        <i class="material-icons">check</i> <span>Checkout</span>
+    </button>
 									  </form>
 									  <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
 									
@@ -254,12 +254,12 @@ $data['merchant_id']= $sessdata['pbk_merchant_id'];
 						  </div>
 					 ';
 					 echo '<script>
-					 function checkout_now() {
-						//window.location.href = "'.base_url().'settings";
-						document.getElementById("checkout").submit();		
-					 }
-		 
-		 </script>';
+    function checkoutNow() {
+        var button = document.getElementById("checkoutButton");
+        button.disabled = true; // Disable the button to prevent multiple clicks
+        document.getElementById("checkout").submit();
+    }
+</script>';
 
 		  echo "<script>
 		var customer_mobile = document.getElementById('customer_mobile');

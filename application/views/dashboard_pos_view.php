@@ -216,7 +216,7 @@ $data['merchant_id']=$merchant_id;
        
     echo '
     <div class="col-md-3">
-        <div class="card" onclick="loadProducts(\'' . $item_img . '\')">
+        <div class="card" >
             <center>
                 <a href="#">
                     <img class="card-img-top" src="' . $item_img . '" alt="' . $item_name . '" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
@@ -225,14 +225,14 @@ $data['merchant_id']=$merchant_id;
             <div class="card-body">
                 <h5 class="card-title" style="padding: 10px;">' . $rid . '<br> <small> ' . $sku . '</small><br>
                     <strong style="color: green; font-size: 18px; padding-top: 5px;">₹' . $retail_price . '</strong>
-                    <form action="' . base_url() . 'add-to-cart" method="POST">
+                    <form id="addToCartForm" action="' . base_url() . 'add-to-cart" method="POST">
                         <input type="hidden" value="' . $retail_price . '|-|' . $tax_slab . '" name="retail_price">
                         <input type="hidden" value="' . $rid . '" name="TZ_barcode">
                         <div>
                             <button type="button" onclick="changeQuantity(-1)">-</button>
                             <input type="number" min="1" style="width: 50px;" name="quantity" id="quantity" value="1" required>
                             <button type="button" onclick="changeQuantity(1)">+</button>
-                            <button type="submit" class="btn bg-green waves-effect">Add Item</button>
+                            <button type="button" onclick="addItem()" class="btn bg-green waves-effect" id="addItemButton">Add Item</button>
                         </div>
                     </form>
                 </h5>
@@ -270,7 +270,7 @@ if (!empty($product_fetch_by_division_category)) {
          // Rest of your code for displaying product card
          echo '
          <div class="col-md-3">
-             <div class="card" onclick="loadProducts(\'' . $item_img . '\')">
+             <div class="card" >
                  <center>
                      <a href="#">
                          <img class="card-img-top" src="' . $item_img . '" alt="' . $item_name . '" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
@@ -279,14 +279,14 @@ if (!empty($product_fetch_by_division_category)) {
                  <div class="card-body">
                      <h5 class="card-title" style="padding: 10px;">' . $rid . '<br> <small> ' . $sku . '</small><br>
                          <strong style="color: green; font-size: 18px; padding-top: 5px;">₹' . $retail_price . '</strong>
-                         <form action="' . base_url() . 'add-to-cart" method="POST">
+                         <form id="addToCartForm"  action="' . base_url() . 'add-to-cart" method="POST">
                              <input type="hidden" value="' . $retail_price . '|-|' . $tax_slab . '" name="retail_price">
                              <input type="hidden" value="' . $rid . '" name="TZ_barcode">
                              <div>
                                  <button type="button" onclick="changeQuantity(-1)">-</button>
                                  <input type="number" min="1" style="width: 50px;" name="quantity" id="quantity" value="1" required>
                                  <button type="button" onclick="changeQuantity(1)">+</button>
-                                 <button type="submit" class="btn bg-green waves-effect">Add Item</button>
+                                 <button type="button" onclick="addItem()" class="btn bg-green waves-effect" id="addItemButton">Add Item</button>
                              </div>
                          </form>
                      </h5>
@@ -300,6 +300,22 @@ if (!empty($product_fetch_by_division_category)) {
    
 }
 ?>
+
+<script>
+    var submitting = false; // Flag to track whether form submission is in progress
+
+    function addItem() {
+        if (submitting) {
+            return; // If submission is already in progress, do nothing
+        }
+        
+        var button = document.getElementById("addItemButton");
+        button.disabled = true; // Disable the button to prevent multiple clicks
+        submitting = true; // Set flag to indicate form submission is in progress
+
+        document.getElementById("addToCartForm").submit();
+    }
+</script>
 
 </div>
 <!-- Product Items End -->
