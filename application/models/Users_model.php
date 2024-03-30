@@ -417,6 +417,7 @@ class Users_model extends CI_Model
 			// Get insights summary from billwise_sales table
 			$this->db->select('SUM(qty) AS total_qty, COUNT(bill_no) AS total_bills, SUM(to_pay) AS total_to_pay, AVG(to_pay) AS avg_to_pay')
 			->where('cust_mobile', $cust_mobile)
+			->where('isvoid', 0)
 			->where('merchant_id', $data['merchant_id']);
 			$query = $this->db->get('billwise_sales');
 	
@@ -445,6 +446,7 @@ class Users_model extends CI_Model
 			// Fetch bill_no using cust_mobile from billwise_sales table
 			$this->db->select('bill_no')
 			->where('cust_mobile', $cust_mobile)
+			->where('isvoid', 0)
 			->where('merchant_id', $data['merchant_id']);
 			$bill_query = $this->db->get('billwise_sales');
 	
@@ -1119,6 +1121,14 @@ public function temp_inward_delete($data)
 			->update('user_details');
 	}
 	
+	public function void_status_update($data)
+	{
+		return $this->db->set('isvoid', $data['isvoid'])
+			->where('bill_no', $data['bill_no'])
+			->where('merchant_id', $data['merchant_id'])
+			->update('billwise_sales');
+	}
+
 	public function specific_staff_manager_fetch($data)
 	{
 
@@ -1171,61 +1181,72 @@ public function temp_inward_delete($data)
 
 
 	public function updateDaywiseSummary($merchantId) {
-        $this->db->trans_start(); // Start transaction
-
-        $this->db->select("
-            COUNT(*) AS gross_bills,
-            SUM(qty) AS gross_qty,
-            SUM(to_pay) AS gross_value,
-            SUM(CASE WHEN bill_no LIKE 'R%' THEN 1 ELSE 0 END) AS return_bills,
-            SUM(CASE WHEN bill_no LIKE 'R%' THEN qty ELSE 0 END) AS return_qty,
-            SUM(CASE WHEN bill_no LIKE 'R%' THEN to_pay ELSE 0 END) AS return_value,
-            COUNT(CASE WHEN bill_no LIKE 'S%' THEN 1 ELSE NULL END) AS net_bills,
-            SUM(CASE WHEN bill_no LIKE 'S%' THEN qty ELSE 0 END) AS net_qty,
-            SUM(CASE WHEN bill_no LIKE 'S%' THEN to_pay ELSE 0 END) AS net_value,
-            SUM(cash_pay) AS cash_pay,
-            SUM(card_pay) AS card_pay,
-            SUM(other_pay) AS other_pay,
-            merchant_id,
-            pos_bill_date
-        ");
-        $this->db->from('billwise_sales');
-        $this->db->where('pos_bill_date IS NOT NULL', null, false);
-        $this->db->where('merchant_id', $merchantId);
-        $this->db->group_by('merchant_id, pos_bill_date');
-
-        $query = $this->db->get();
-
-        // Iterate through the results and update or insert into daywise_sales
-        foreach ($query->result_array() as $data) {
-            $this->db->where('merchant_id', $data['merchant_id']);
-            $this->db->where('pos_bill_date', $data['pos_bill_date']);
-
+		$this->db->trans_start(); // Start transaction
+	
+		$this->db->select("
+			COUNT(*) AS gross_bills,
+			SUM(qty) AS gross_qty,
+			SUM(to_pay) AS gross_value,
+			SUM(CASE WHEN bill_no LIKE 'R%' THEN 1 ELSE 0 END) AS return_bills,
+			SUM(CASE WHEN bill_no LIKE 'R%' THEN qty ELSE 0 END) AS return_qty,
+			SUM(CASE WHEN bill_no LIKE 'R%' THEN to_pay ELSE 0 END) AS return_value,
+			COUNT(CASE WHEN bill_no LIKE 'S%' THEN 1 ELSE NULL END) AS net_bills,
+			SUM(CASE WHEN bill_no LIKE 'S%' THEN qty ELSE 0 END) AS net_qty,
+			SUM(CASE WHEN bill_no LIKE 'S%' THEN to_pay ELSE 0 END) AS net_value,
+			SUM(cash_pay) AS cash_pay,
+			SUM(card_pay) AS card_pay,
+			SUM(other_pay) AS other_pay,
+			merchant_id,
+			pos_bill_date
+		");
+		$this->db->from('billwise_sales');
+		$this->db->where('pos_bill_date IS NOT NULL', null, false);
+		$this->db->where('merchant_id', $merchantId);
+		$this->db->where('isvoid', 0);
+		$this->db->group_by('merchant_id, pos_bill_date');
+	
+		$query = $this->db->get();
+	
+		// Check if there are no records in billwise_sales
+		// if ($query->num_rows() == 0) {
+			// Handle the case where there are no records
+			// For example, you may want to insert default values into daywise_sales
+			// You can insert default values here and then exit the method
+			// For now, I'll just return true to indicate success
+		// 	return true;
+		// }
+	
+		// Iterate through the results and update or insert into daywise_sales
+		foreach ($query->result_array() as $data) {
+			$this->db->where('merchant_id', $data['merchant_id']);
+			$this->db->where('pos_bill_date', $data['pos_bill_date']);
+	
 			// Check if a record already exists for the given merchant_id and pos_bill_date
 			$this->db->where('merchant_id', $data['merchant_id']);
 			$this->db->where('pos_bill_date', $data['pos_bill_date']);
 			$existingRecord = $this->db->get('daywise_sales')->row_array();
-
+	
 			if ($existingRecord) {
-			// Update existing record
-			$this->db->where('merchant_id', $data['merchant_id']);
-			$this->db->where('pos_bill_date', $data['pos_bill_date']);
-			$this->db->update('daywise_sales', $data);
+				// Update existing record
+				$this->db->where('merchant_id', $data['merchant_id']);
+				$this->db->where('pos_bill_date', $data['pos_bill_date']);
+				$this->db->update('daywise_sales', $data);
 			} else {
-			// Insert a new record
-			$this->db->insert('daywise_sales', $data);
+				// Insert a new record
+				$this->db->insert('daywise_sales', $data);
 			}
-        }
-
-        $this->db->trans_complete(); // Complete transaction
-
-        if ($this->db->trans_status() === FALSE) {
-            // Handle transaction failure if needed
-            return false;
-        }
-
-        return true;
-    }
+		}
+	
+		$this->db->trans_complete(); // Complete transaction
+	
+		if ($this->db->trans_status() === FALSE) {
+			// Handle transaction failure if needed
+			return false;
+		}
+	
+		return true;
+	}
+	
 
 	
 

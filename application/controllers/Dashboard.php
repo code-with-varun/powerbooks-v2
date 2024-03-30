@@ -982,6 +982,22 @@ class Dashboard extends CI_Controller
 			
 	}
 
+	public function void_update()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+
+		$data['bill_no'] = $this->input->post('bill_no');
+		$data['isvoid'] = $this->input->post('isvoid');
+		if($data['isvoid']==''){$data['isvoid']=0;}
+	
+		$staff_status_update = $this->Users_model->void_status_update($data);
+
+		redirect('daywise-sales', 'location');
+			
+	}
+
 	public function bill_checkout()
 	{
 		$sessdata = $this->session->userdata('pbk_sess');
@@ -1235,6 +1251,7 @@ $i=$i+1;
 					<th>CUSTOMER</th>
 					<th>MOBILE</th>
 					<th>STAFF</th>
+					<th>VOID</th>
 				  
 				</tr>
 			</thead>
@@ -1261,7 +1278,10 @@ $i=$i+1;
 					$cust_name = $row->cust_name;
 					$cust_mobile = $row->cust_mobile;
 					$rposdate = $row->pos_bill_date;
-
+					$isvoid = $row->isvoid;
+					
+					if($isvoid==1){$bgtext='<span class="badge bg-red">Void Bill</span>';$lstatus="CHECKED";}
+        		 else{$bgtext='';$lstatus="";}
 					
 					echo '
 					<tr>   
@@ -1281,6 +1301,15 @@ $i=$i+1;
 					<td>'.$cust_name.'</td>
 					<td>'.$cust_mobile.'</td>
 					<td>'.$staff_id.'</td>
+					<td>'.$bgtext.'<form action="void-bill-update" id="'.$rbill_no.'staff_form" method="post">
+                                            <input type="hidden" name="bill_no" value="'.$rbill_no.'">
+											<input type="hidden" name="merchant_id" value="'.$data['merchant_id'].'">
+											
+											<div class="switch">
+											<label><input type="checkbox" '.$lstatus.' id="status_changer" name="isvoid" onchange="this.form.submit();" value="1" ><span class="lever"></span></label>
+												</div>
+											</form>
+                                            </td>
 					
 					
 					
