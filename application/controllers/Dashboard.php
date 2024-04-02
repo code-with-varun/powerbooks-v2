@@ -1243,6 +1243,7 @@ $i=$i+1;
 					<th>PROMO</th>
 					<th>OFFER</th>
 					<th>DISCOUNT</th>
+					<th>PAID</th>
 					<th>CASH</th>
 					<th>CARD</th>
 					<th>OTHER</th>
@@ -1273,6 +1274,7 @@ $i=$i+1;
 					$staff_id = $row->staff_id;
 					$card_pay = $row->card_pay;
 					$other_pay = $row->other_pay;
+					$to_pay = $row->to_pay;
 					$cash_tendered = $row->cash_tendered;
 					$balance_return = $row->balance_return;
 					$cust_name = $row->cust_name;
@@ -1293,6 +1295,7 @@ $i=$i+1;
 					<td>'.$promo_offer.'</td>
 					<td>'.$discount_logic.'</td>
 					<td>'.$discount.'</td>
+					<td>'.$to_pay.'</td>
 					<td>'.$cash_pay.'</td>
 					<td>'.$card_pay.'</td>
 					<td>'.$other_pay.'</td>
