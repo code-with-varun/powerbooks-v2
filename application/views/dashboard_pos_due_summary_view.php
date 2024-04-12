@@ -8,13 +8,15 @@ $onboarding= $sessdata['pbk_onboarding'];
 $merchant_id= $sessdata['pbk_merchant_id'];
 $data['merchant_id']=$merchant_id;
 
-$temp_bill_summary_fetch = $this->Users_model->temp_bill_summary_fetch($data);
 
 foreach ($config_master_fetch as $row)
 {
     $due_date_billing = $row->due_date_billing;
     $current_pos_date = $row->current_pos_date;
 }
+
+$temp_bill_summary_fetch = $this->Users_model->temp_bill_summary_fetch($data);
+
 			
 if(!empty($temp_bill_summary_fetch))
 {
@@ -177,7 +179,23 @@ $TOTNET=round($TOTNET,0);
                                                     </div>
                                                 </div>
                                             </div>
-                                           
+                                            <?php if($due_date_billing == 1): ?>
+                                                <div class="form-group">
+                                                    <label for="due_date" class="col-sm-2 control-label">Due Date</label>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-line">
+                                                            <input type="date" name="due_date" id="due_date" min="<?= $current_pos_date ?>" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <label for="due_in_days" class="col-sm-2 control-label">Due Days</label>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-line">
+                                                            <input type="number" name="due_in_days" id="due_in_days" class="form-control" value="0" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+
 
 											<div class="form-group">
                                                 <label for="pincode" class="col-sm-2 control-label">Card</label>
@@ -398,12 +416,7 @@ function update_discount(){
 
     var submittingPayment = false; // Flag to track whether payment submission is in progress
 
-function submit_payment() 
-{
-
-    if (submittingPayment) {
-            return; // If payment submission is already in progress, do nothing
-        }
+function submit_payment() {
     // Get input values
     var customerMobile = document.getElementById("customer_mobile").value;
     var customerName = document.getElementById("customer_name").value;
@@ -411,26 +424,30 @@ function submit_payment()
     var to_pay = parseFloat(document.getElementById("to_pay").value);
 
     // Perform basic form validation
-    if (!customerMobile || !customerName || !staffId || to_pay > 0) {
+    if (!customerMobile || !customerName || !staffId) {
         // Display an error message or handle validation failure as needed
-        if (to_pay > 0) {
-            alert("Collect proper bill amount");
-        } else {
-            alert("Customer Mobile, Name, Staff are required");
-        }
+        alert("Customer Mobile, Name, and Staff are required");
         return;
     }
 
-    // If validation passes, proceed with form submission
+    // Check if due_date element exists
+    var due_date = document.getElementById("due_date");
+    if (due_date && !due_date.value) {
+        alert("Enter proper Due Date");
+        return;
+    }
+
+    // Check if to_pay > 0
+    if (to_pay > 0) {
+        // Proceed with form submission
         var button = document.getElementById("paysubmit_Button");
         button.disabled = true; // Disable the button to prevent multiple clicks
         submittingPayment = true; // Set flag to indicate payment submission is in progress
-
         document.getElementById("payment_form").submit();
-          
+    } else {
+        alert("Collect proper bill amount");
+    }
 }
-
-
 
 
 

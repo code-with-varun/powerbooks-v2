@@ -80,8 +80,7 @@ if($onboarding=='YES')
 							</a>
 					</li>';
 		
-		}
-		if($user_type=='MANAGER' || $user_type=='ADMIN')
+		}		if($user_type=='MANAGER' || $user_type=='ADMIN')
 		{
 		echo'<!-- multy level -->
 			<li>
@@ -214,6 +213,18 @@ echo '<li>
 	  </li>';
 
 }
+
+if($user_type=='MANAGER' || $user_type=='ADMIN')
+{			
+echo '<li>
+				<a href="'.$base.'powerbooks-subscriptions">
+				<i class="material-icons">subscriptions</i>
+					<span>Subscriptions</span>
+					</a>
+			</li>';
+
+}
+
 
 }
 

@@ -38,6 +38,8 @@ $pos_status='';
 $invoice_print_type='';
 $membership='';
 $membership_billed='';
+$due_date_billing='';
+$pos_mode='';
 
 $admin_mobile='';
 
@@ -73,6 +75,8 @@ foreach ($config_master_fetch as $row)
 	$gst_tax_invoice=$row->gst_tax_invoice;
 	$direct_billing=$row->direct_billing;
 	$manage_stocks=$row->manage_stocks;
+    $due_date_billing=$row->due_date_billing;
+    $pos_mode=$row->pos_mode;
 	$pos_start_date=$row->pos_start_date;
 	$current_pos_date=$row->current_pos_date;
 	$pos_status=$row->pos_status;
@@ -401,6 +405,25 @@ foreach ($config_master_fetch as $row)
                                                 </div>
 												
 											</div>
+
+                                            <div class="form-group">
+
+											<label for="pos_mode" class="col-sm-2 control-label">POS Mode</label>
+                                                <div class="col-sm-4">
+												<div class="switch">
+														<label><input type="checkbox" <?php if($pos_mode=="YES"){echo "checked";} ?>  id="pos_mode" name="pos_mode" value="YES"><span class="lever"></span></label>
+													</div>
+                                                </div>
+
+												<label for="due_date_billing" class="col-sm-2 control-label">Due Date Billing</label>
+                                                <div class="col-sm-4">
+												<div class="switch">
+												<label><input type="checkbox" <?php if($due_date_billing==1){echo "checked";} ?>  id="due_date_billing" name="due_date_billing" value="1"><span class="lever"></span></label>
+													</div>
+                                                </div>
+												
+											</div>
+
 											<div class="form-group">
 
 											<label for="gst_tax_invoice" class="col-sm-2 control-label">GST/TAX Invoice</label>

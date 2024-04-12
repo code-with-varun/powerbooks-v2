@@ -785,6 +785,18 @@ class Users_model extends CI_Model
 			->result();
 	}
 
+	public function all_subscriptions_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('cust_name',$data['pb_subscriber'])
+			->where('isvoid', 0)
+			->from('billwise_sales')
+			->get()
+			->result();
+	}
+
+
 	public function vendor_supplier_fetch($data)
 	{
 
@@ -1096,7 +1108,7 @@ public function temp_inward_delete($data)
 		return $this->db->set('cust_name', $data['cust_name'])
 			->set('cust_email', $data['cust_email'])
 			->set('cust_address', $data['cust_address'])
-			->set('source', $data['customer_source'])
+			->set('source', $data['source'])
 			->where('cust_mobile', $data['cust_mobile'])
 			->where('merchant_id', $data['merchant_id'])
 			->update('customer_base');
@@ -1168,6 +1180,8 @@ public function temp_inward_delete($data)
 			->set('pan', $data['pan'])
 			->set('gstin', $data['gstin'])
 			->set('auto_day_end', $data['auto_day_end'])
+			->set('pos_mode', $data['pos_mode'])
+			->set('due_date_billing', $data['due_date_billing'])
 			->set('staging_invoice', $data['staging_invoice'])
 			->set('billing_group', $data['billing_group'])
 			->set('gst_tax_invoice', $data['gst_tax_invoice'])
@@ -1208,13 +1222,13 @@ public function temp_inward_delete($data)
 		$query = $this->db->get();
 	
 		// Check if there are no records in billwise_sales
-		// if ($query->num_rows() == 0) {
+		if ($query->num_rows() == 0) {
 			// Handle the case where there are no records
 			// For example, you may want to insert default values into daywise_sales
 			// You can insert default values here and then exit the method
 			// For now, I'll just return true to indicate success
-		// 	return true;
-		// }
+			return true;
+		}
 	
 		// Iterate through the results and update or insert into daywise_sales
 		foreach ($query->result_array() as $data) {
@@ -1246,6 +1260,10 @@ public function temp_inward_delete($data)
 	
 		return true;
 	}
+	
+	
+	
+	
 	
 
 	
@@ -1524,6 +1542,13 @@ public function temp_inward_delete($data)
 
 		return $this->db->insert('customer_base', $data);
 	}
+
+	public function new_pb_customer_insert($data)
+	{
+
+		return $this->db->insert('customer_base', $data);
+	}
+
 
 	public function new_promo_insert($data)
 	{

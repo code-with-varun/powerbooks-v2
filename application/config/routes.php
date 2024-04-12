@@ -24,6 +24,7 @@ $route['billing'] = 'Dashboard/billing';
 $route['onboarding'] = 'Dashboard/onboarding';
 $route['staffing'] = 'Dashboard/staffing';
 $route['customers'] = 'Dashboard/customers';
+$route['powerbooks-subscriptions'] = 'Dashboard/powerbooks_subscriptions';
 $route['update-staff'] = 'Dashboard/staffing_status';
 $route['void-bill-update'] = 'Dashboard/void_update';
 

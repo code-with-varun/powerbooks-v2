@@ -136,6 +136,37 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_table_footer_view');
 	}
 	
+	public function powerbooks_subscriptions()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['user_type'] = $sessdata['pbk_user_type'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		if($data['user_type']=="STAFF")
+		{
+			redirect('dashboard', 'location');
+		}
+
+		$config_master_fetch = $this->Users_model->config_master_fetch($data);
+		foreach ($config_master_fetch as $row) {
+			$company_name = $row->company_name;
+			
+			
+		}
+		$data['pb_subscriber']=$data['merchant_id'].'-'.$company_name;
+		$all_subscriptions_fetch = $this->Users_model->all_subscriptions_fetch($data);
+		
+
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_powerbooks_subscriptions_view',['all_subscriptions_fetch' => $all_subscriptions_fetch,
+		
+		]);
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_table_footer_view');
+	}
 	public function customer_crm($one=null)
 	{
 		$data['customer_rid']=$customer_rid=$one;
@@ -1014,12 +1045,14 @@ class Dashboard extends CI_Controller
 			$idata['cash_tendered'] = $this->input->post('cash');
 			$idata['qty'] = $this->input->post('qty');
 			$idata['balance_return'] = $this->input->post('balance_return');
+			if($idata['balance_return']>0){$idata['balance_return']=0;}
 			$idata['cash_pay'] = $idata['cash_tendered']+$idata['balance_return'];
 			$idata['bill_amt'] = $this->input->post('bill_amt');
 			$idata['discount_logic'] = $this->input->post('discount_logic');
 			$idata['promo_offer'] = $this->input->post('promo_offer');
 			$idata['discount'] = $this->input->post('discount');
 			$idata['to_pay'] = $idata['bill_amt']-$idata['discount'];
+			$idata['due_date'] = $this->input->post('due_date');
 			$idata['staff_id'] = $this->input->post('staff_id');
 
 			
@@ -1243,7 +1276,7 @@ $i=$i+1;
 					<th>PROMO</th>
 					<th>OFFER</th>
 					<th>DISCOUNT</th>
-					<th>PAID</th>
+					<th>NET</th>
 					<th>CASH</th>
 					<th>CARD</th>
 					<th>OTHER</th>
@@ -1729,13 +1762,31 @@ $i=$i+1;
 		
 		$sessdata = $this->session->userdata('pbk_sess');
 		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		$config_master_fetch = $this->Users_model->config_master_fetch($data);
+
+		
+foreach ($config_master_fetch as $row)
+{
+    $due_date_billing = $row->due_date_billing;
+    $current_pos_date = $row->current_pos_date;
+}
+
 		$all_customer_fetch = $this->Users_model->all_customer_fetch($data);
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_menus_view');
-		$this->load->view('dashboard_pos_summary_view',[
+		if($due_date_billing == 1)
+		{$this->load->view('dashboard_pos_due_summary_view',[
 			'all_customer_fetch'=>$all_customer_fetch,
-		]);
+			'config_master_fetch'=>$config_master_fetch,
+			
+		]);}
+
+		else{$this->load->view('dashboard_pos_summary_view',[
+			'all_customer_fetch'=>$all_customer_fetch,
+			'config_master_fetch'=>$config_master_fetch,
+			
+		]);}
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_table_footer_view');
 	
@@ -2465,9 +2516,8 @@ $i=$i+1;
 
 		$sessdata = $this->session->userdata('pbk_sess');
 		
-		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
-		$mdata['merchant_id'] = $sessdata['pbk_merchant_id'];
-
+		$mdata['merchant_id']=$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
 		$data['company_name'] = ucwords($this->input->post('company_name'));
 		$data['brand_name'] = ucwords($this->input->post('brand_name'));
 		$data['business_structure'] = $this->input->post('business_structure');
@@ -2497,11 +2547,29 @@ $i=$i+1;
 		$data['gst_tax_invoice'] = $this->input->post('gst_tax_invoice');
 		if($data['gst_tax_invoice']==''){$data['gst_tax_invoice']='NO';}
 		$data['auto_day_end'] = $this->input->post('auto_day_end');
+		$data['due_date_billing'] = $this->input->post('due_date_billing');
+		$data['pos_mode'] = $this->input->post('pos_mode');
 		$data['direct_billing'] = $this->input->post('direct_billing');
 		$data['pos_start_date'] = $this->input->post('pos_start_date');
 		$data['current_pos_date'] = $this->input->post('pos_start_date');
 		$data['manage_stocks'] = $this->input->post('manage_stocks');
 		if($data['manage_stocks']==''){$data['manage_stocks']='NO';}
+		if($data['pos_mode']==''){$data['pos_mode']='NO';}
+		if($data['due_date_billing']==''){$data['due_date_billing']=0;}
+
+		
+
+
+		$cdata['cust_mobile'] = $data['business_phone'];
+		$cdata['cust_name']= $data['merchant_id'].'-'.$data['company_name'];
+		$cdata['cust_email'] = strtolower($this->input->post('customer_email'));
+		$cdata['cust_address'] = $data['door_no'].','.
+								$data['street'].','.
+								$data['landmark'].','.
+								$data['area'].','.
+								$data['city'].','.
+								$data['state'].','.
+								$data['pincode'];
 
 		$check_merchant_config = $this->Users_model->check_merchant_config($data);
 		if ($check_merchant_config == 1)
@@ -2513,6 +2581,7 @@ $i=$i+1;
 		{
 			$new_onboard_config_insert = $this->Users_model->new_onboard_config_insert($data);
 			$onboarding_update = $this->Users_model->onboarding_update($mdata);
+			$new_pb_customer_insert = $this->Users_model->new_pb_customer_insert($cdata);
 		}
 		
 

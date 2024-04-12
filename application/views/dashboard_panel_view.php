@@ -107,6 +107,8 @@ if ($pos_last_bill_fetch) {
 foreach ($pos_last_bill_fetch as $row) {
 	
 	$last_cust_name = $row->cust_name;
+    if (strlen($last_cust_name) > 15) {
+        $last_cust_name = substr($last_cust_name, 0, 10).'..';}
     $last_cust_mobile = $row->cust_mobile;
     $last_qty = $row->qty;
     $last_to_pay = $row->to_pay;
