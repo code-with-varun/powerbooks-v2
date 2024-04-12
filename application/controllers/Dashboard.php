@@ -2570,6 +2570,7 @@ foreach ($config_master_fetch as $row)
 								$data['city'].','.
 								$data['state'].','.
 								$data['pincode'];
+		$cdata['merchant_id']='765428';
 
 		$check_merchant_config = $this->Users_model->check_merchant_config($data);
 		if ($check_merchant_config == 1)

@@ -102,7 +102,7 @@ class Home extends CI_Controller {
 $to =$mdata['eid'];
 
 //email subject
-$subject = 'Powerbook Account Activation Merchant ID - '.$mdata['merchant_id']; 
+$subject = 'Powerbooks Account Activation Merchant ID - '.$mdata['merchant_id']; 
 
 $htmlContent = '
 <CENTER><br>
@@ -120,7 +120,7 @@ $htmlContent = '
 <tr>
 <td style="text-align:left; padding:50px;">
 
-Congratulations!,<br><br> Your Powerbook Account has been Created.<br>
+Congratulations!,<br><br> Your Powerbooks Account has been Created.<br>
  Please click the below  link to activate your account.<br><br>
 
   
