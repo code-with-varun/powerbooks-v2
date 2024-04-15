@@ -157,6 +157,13 @@ class Dashboard extends CI_Controller
 		$data['pb_subscriber']=$data['merchant_id'].'-'.$company_name;
 		$all_subscriptions_fetch = $this->Users_model->all_subscriptions_fetch($data);
 		
+		// foreach ($all_subscriptions_fetch as $row) {
+
+		// 	$data['bill_no'] = $row->bill_no;
+		// 	$data['paid'] = $row->to_pay;
+		
+		// }
+		$all_stripe_payment_fetch = $this->Users_model->all_stripe_payment_fetch($data);
 
 		$this->load->view('dashboard_header_view');
 		$this->load->view('dashboard_menus_view');
@@ -1100,6 +1107,7 @@ class Dashboard extends CI_Controller
 			$idata['rsino'] = $MRID + 1;
 			
 			$idata['bill_no'] = $data['bill_prefix'].$idata['rsino'];
+			$idata['inv_ref_no']=md5($idata['bill_no']);
 				
 			$new_bill_insert = $this->Users_model->new_bill_insert($idata);
 			$new_itemwise_insert = $this->Users_model->new_itemwise_insert($idata);
@@ -1322,7 +1330,7 @@ $i=$i+1;
 					<tr>   
 					<td>'.$i.'</td>
 					<td>'.$rposdate.'</td>
-					<td>'.$rbill_no.'</td>
+					<td><a href="invoice-link/'.md5($rbill_no).'" target="new">'.$rbill_no.'</a></td>
 					<td>'.$rqty.'</td>
 					<td>'.$bill_amt.'</td>
 					<td>'.$promo_offer.'</td>

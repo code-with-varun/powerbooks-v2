@@ -68,7 +68,9 @@ $onboarding= $sessdata['pbk_onboarding'];
 					$rbill_no = $row->bill_no;
 					
 					$bill_amt = $row->bill_amt;
+                    $is_paid = $row->is_paid;
 					$to_pay = $row->to_pay;
+                    $sino = $row->sino;
 					$cust_name = $row->cust_name;
 					$rposdate = $row->pos_bill_date;
                     $due_date = $row->due_date;
@@ -83,7 +85,24 @@ $onboarding= $sessdata['pbk_onboarding'];
 					<td>'.$to_pay.'</td>
 					<td>'.$due_date.'</td>
 					
-					<td> Pay Now </td>
+					<td>';
+                    
+                    if($is_paid==1){
+echo '<span class="badge bg-green">Paid</span>';
+                    }
+                    else{
+                    echo'<form method ="POST" action="stripe-checkout">
+<input type="hidden" name="merchant_id" value="'.$merchant_id.'">
+<input type="hidden" name="bill_no" value="'.$rbill_no.'">
+<input type="hidden" name="sino" value="'.$sino.'">
+<input type="hidden" name="to_pay" value="'.$to_pay.'"> 
+<input type="hidden" name="item_name" value="Powerbooks Subscription - ('.$cust_name.') '.$rbill_no.'">
+                    <button type="submit" class="btn btn-info">Pay Now</button>
+                    
+                    </form>';
+                    }
+                    
+                    echo '</td>
 					
 					
 					

@@ -77,6 +77,9 @@ $route['check-customer'] = 'Dashboard/check_customer';
 $route['messages'] = 'Home/messages';
 
 $route['activate/(:any)/(:any)'] = 'Home/account_activate/$1/$2';
+
+$route['invoice-link/(:any)'] = 'Pdfcontroller/pb_invoices/$1';
+
 $route['crm'] = 'Dashboard/customer_crm';
 $route['crm/(:any)'] = 'Dashboard/customer_crm/$1';
 // super admin routes
@@ -86,6 +89,9 @@ $route['add-new-options'] = 'Dashboard/add_new_options';
 
 
 $route['pay-page'] = 'Payments/index';
+
+$route['stripe-checkout'] = 'Payments/create_checkout_session';
+$route['stripe-success/(:any)/(:any)/(:any)'] = 'Payments/success/$1/$2/$3';
 
 $route['billing-pos'] = 'Dashboard/pos_billing';
 // $route['billing-pos/(:any)/(:any)'] = 'Dashboard/billing_pos/$1/$2';

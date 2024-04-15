@@ -494,6 +494,17 @@ class Users_model extends CI_Model
 		}
 	}
 
+	public function specific_bill_fetch($data)
+	{
+
+		return $this->db->select('*')
+			->where('inv_ref_no', $data['inv_ref_no'])
+			->where('merchant_id', $data['merchant_id'])
+			->from('billwise_sales')
+			->get()
+			->result();
+	}
+
 	public function temp_bill_check($data)
 	{
 		
@@ -794,6 +805,18 @@ class Users_model extends CI_Model
 			->from('billwise_sales')
 			->get()
 			->result();
+		
+	}
+
+	public function all_stripe_payment_fetch()
+	{
+
+		return $this->db->select('*')
+			
+			->from('stripe_payments')
+			->get()
+			->result();
+		
 	}
 
 
@@ -1060,6 +1083,8 @@ public function temp_inward_delete($data)
 	
 	}
 
+
+
 // ALL UPDATE QUERIES
 
 	public function account_activation_update($data)
@@ -1139,6 +1164,15 @@ public function temp_inward_delete($data)
 			->where('bill_no', $data['bill_no'])
 			->where('merchant_id', $data['merchant_id'])
 			->update('billwise_sales');
+	}
+
+	public function new_stripe_payments_update($insertData)
+	{   
+		return $this->db->set('is_paid', 1)
+			->set('paid_on', date('Y-m-d'))
+			->where('sino', $insertData['sino'])
+			->update('billwise_sales');
+			
 	}
 
 	public function specific_staff_manager_fetch($data)
@@ -1562,6 +1596,13 @@ public function temp_inward_delete($data)
 
 		return $this->db->insert('billwise_sales', $data);
 	}
+	
+	public function new_stripe_payments_insert($data)
+	{
+
+		return $this->db->insert('stripe_payments', $data);
+	}
+	
 	public function new_walkin_insert($data)
 	{
 
