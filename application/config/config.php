@@ -546,11 +546,3 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 
-
-if (!empty($_SERVER['HTTPS'])) 
-{
-  //echo 'https is enabled';
-  $config['base_url'] = 'https://apps.1lybio.in/'.getenv('PROJECT_PATH');
- 
-
-}

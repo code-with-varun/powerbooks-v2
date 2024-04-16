@@ -6,6 +6,9 @@ class Home extends CI_Controller {
 	public function index()
 	{
 		$this->load->view('home-view');
+        $bbr=$_ENV['PROJECT_PATH'];
+$BBURL="https://apps.1lybio.in/".$bbr;
+$this->config->set_item('base_url',$BBURL);
 	}
 
 	public function sign_in()
