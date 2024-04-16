@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 if (!empty($_SERVER['HTTPS'])) 
 {
   //echo 'https is enabled';
-  $config['base_url'] = "https://1lybio.in/".$_ENV['PROJECT_PATH'];
+  $config['base_url'] = "https://1lybio.in/".getenv('PROJECT_PATH');
  
 
 }
