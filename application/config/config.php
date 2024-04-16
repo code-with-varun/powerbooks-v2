@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 if (!empty($_SERVER['HTTPS'])) 
 {
   //echo 'https is enabled';
-  $config['base_url'] = 'https://apps.1lybio.in/'.getenv('PROJECT_PATH');
+  $config['base_url'] = 'https://apps.1lybio.in/';
  
 
 }
@@ -544,3 +544,13 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+
+
+if (!empty($_SERVER['HTTPS'])) 
+{
+  //echo 'https is enabled';
+  $config['base_url'] = 'https://apps.1lybio.in/'.getenv('PROJECT_PATH');
+ 
+
+}
