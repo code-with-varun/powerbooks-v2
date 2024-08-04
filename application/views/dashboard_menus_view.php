@@ -186,6 +186,11 @@ if($onboarding=='YES')
 							<span>Day Open/Close</span>
 						</a>
 					</li>
+					<li>
+						<a href="'.$base.'day-reopen">
+							<span>Day Reopen</span>
+						</a>
+					</li>
 					<!--
 					<li>
 						<a href="'.$base.'backups">

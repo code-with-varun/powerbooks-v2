@@ -53,6 +53,8 @@ $route['BWS-reporter'] = 'Dashboard/BWS_reporter';
 $route['DWS-reporter'] = 'Dashboard/DWS_reporter';
 
 $route['day-open-close'] = 'Dashboard/day_open_close';
+$route['day-reopen'] = 'Dashboard/day_reopen';
+$route['reopen-pos'] = 'Dashboard/reopen_pos_day';
 $route['update-pos'] = 'Dashboard/pos_update';
 $route['stock-balance'] = 'Dashboard/stock_balance';
 $route['tax-register'] = 'Dashboard/tax_register';

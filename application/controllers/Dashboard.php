@@ -723,6 +723,21 @@ class Dashboard extends CI_Controller
 		
 	}
 
+	public function reopen_pos_day()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+		
+		$data['pos_status'] = 'OPENED';
+		$data['current_pos_date'] = $this->input->post('reopen_date');
+
+	 	$current_posdate_update = $this->Users_model->current_posdate_update($data);
+		
+		redirect('dashboard', 'location');
+		
+	}
 	
 	public function staffing()
 	{
@@ -755,6 +770,20 @@ class Dashboard extends CI_Controller
 		$this->load->view('dashboard_top_view');
 		$this->load->view('dashboard_menus_view');
 		$this->load->view('dashboard_day_open_close_view');
+		$this->load->view('dashboard_bottom_view');
+		$this->load->view('dashboard_footer_view');
+	}
+	public function day_reopen()
+	{
+
+		$sessdata = $this->session->userdata('pbk_sess');
+		$data['eid'] = $sessdata['pbk_eid'];
+		$data['merchant_id'] = $sessdata['pbk_merchant_id'];
+	
+		$this->load->view('dashboard_header_view');
+		$this->load->view('dashboard_top_view');
+		$this->load->view('dashboard_menus_view');
+		$this->load->view('dashboard_day_reopen_view');
 		$this->load->view('dashboard_bottom_view');
 		$this->load->view('dashboard_footer_view');
 	}
